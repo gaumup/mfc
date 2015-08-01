@@ -1,0 +1,184 @@
+html,
+body {
+    font-family: Arial;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+p {
+    margin: 0;
+    padding: 0;
+}
+
+.mfc-video__wrapper {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+}
+    .mfc-video__content {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        margin: auto;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        overflow: hidden;
+    }
+    .mfc-video__content.mfc-video__loading {
+        background: url(../images/icon-loading.gif) no-repeat center center;
+    }
+
+    .block {
+        position: absolute;
+    }
+    .mfc-video__loading .block {
+        display: none;
+    }
+
+    .kaleidoscope__wrapper {
+        margin: auto;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        overflow: hidden;
+
+        width: auto;
+        height: 77%;
+
+        border-radius: 100%;
+        -moz-border-radius: 100%;
+        -webkit-border-radius: 100%;
+    }
+
+    /* scene 01 */
+        .scene-01 .img-placeholder-01 {
+            width: 45%;
+            height: 30%;
+            top: 0;
+            left: 0;
+        }
+        .scene-01 .img-placeholder-02 {
+            width: 35%;
+            height: 68%;
+            top: -100%;
+            left: 48%;
+        }
+        .scene-01 .anim-block-01 {
+            width: 14%;
+            height: 0;
+            top: 0;
+            right: 0;
+        }
+        .scene-01 .img-placeholder-03 {
+            width: 14%;
+            height: 15%;
+            top: 53%;
+            right: 0;
+        }
+        .scene-01 .anim-block-02 {
+            width: 45%;
+            height: 64%;
+            left: 0;
+            bottom: 0;
+            overflow: hidden;
+        }
+            .scene-01 .anim-block-02 .block__inner {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 45%;
+            }
+            .scene-01 .anim-block-02 .block__inner--alt {
+                top: auto;
+                bottom: 0;
+            }
+        .scene-01 .scale-block-01 {
+            width: 39%;
+            height: 64%;
+            right: 55%;
+            bottom: 0;
+            overflow: hidden;
+        }
+            .scene-01 .scale-block-01 .block__inner {
+                position: absolute;
+                top: 0;
+                right: -12%;
+                width: 5%;
+                height: 100%;
+            }
+        .scene-01 .static-block-01 {
+            width: 52%;
+            height: 26%;
+            right: 0;
+            bottom: 0;
+        }
+        .scene-01 .anim-block-03 {
+            width: 0;
+            height: 13%;
+            right: 0;
+            bottom: 0;
+        }
+
+    /* scene 02 */
+        .scene-02 .anim-block-01 {
+            width: 100%;
+            height: 83%;
+            top: 0;
+            left: -100%; /* -100% -> 0 */
+        }
+        .scene-02 .img-placeholder-01 {
+            width: 19%;
+            height: 83%;
+            top: 0;
+            right: -19%; /* -19% -> 0 */
+            overflow: hidden;
+            background: #000;
+            z-index: 2;
+        }
+            .scene-02 .img-placeholder-01 .block__inner {
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: 90%;
+                height: 100%;
+                background-repeat: repeat;
+                background-size: contain;
+            }
+        .scene-02 .anim-block-02 {
+            width: 0; /* 0 -> 100% */
+            height: 13%;
+            bottom: 0;
+            right: 0;
+        }
+        .scene-02 .kaleidoscope-text {
+            font-weight: bold;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            color: #fff;
+            text-align: center;
+            vertical-align: middle;
+            text-transform: uppercase;
+        }
+        .scene-02 .kaleidoscope-sentence {
+            text-transform: uppercase;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 1%;
+            font-weight: bold;
+            color: #fff;
+        }
+
+
