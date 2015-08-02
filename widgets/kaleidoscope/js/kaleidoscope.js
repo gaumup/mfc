@@ -57,7 +57,7 @@
                     return val + suffix in window;
                 })[ 0 ] + suffix;
 
-            return window[ rAF ]    || function( callback ) {
+            return window[ rAF ] || function( callback ) {
                 window.setTimeout( function() {
                     callback( +new Date() );
                 }, 1000 / 60 );
@@ -65,8 +65,8 @@
         })( window );
 
         function animate() {
-            var time = new Date().getTime() * [ '.0000', s ].join( '' );
-            auto_x = Math.sin( Math.sqrt(time) ) * document.body.clientWidth;
+            var time = new Date().getTime() * [ '.000', s ].join( '' );
+            auto_x = Math.sin( time ) * document.body.clientWidth;
             auto_y++;
 
             move( auto_x, auto_y );
@@ -74,22 +74,22 @@
         }
 
         function move( x, y ) {
-            $image.css( 'background-position', [ -x + "px", -y + "px" ].join( ' ' ) );
+            $image.css( 'background-position', [ x + "px", y + "px" ].join( ' ' ) );
         }
 
-        // Timer to check for inactivity
-        // var t = 1;
-        // (function timer(t) {
-        //     setTimeout( function() {
-        //         t = 5000;
-        //         if ( auto && !auto_throttle ) {
-        //             animate();
-        //             auto_throttle = true;
-        //         } else {
-        //             auto = true;
-        //         }
-        //     }, t );
-        // })();
+        //Timer to check for inactivity
+        var t = 1;
+        (function timer(t) {
+            setTimeout( function() {
+                t = 5000;
+                if ( auto && !auto_throttle ) {
+                    animate();
+                    auto_throttle = true;
+                } else {
+                    auto = true;
+                }
+            }, t );
+        })();
     }
 
     //export as jQuery function

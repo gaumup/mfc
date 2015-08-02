@@ -1,0 +1,423 @@
+<!doctype html public "✰">
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title dir="ltr">Kaleidos: CSS3 Kaleidoscope Effects</title>
+
+    <meta name="viewport" content="width=device-width">
+
+    <style type="text/css">
+        .kaleidoscope__wrapper {
+            width: 500px;
+            height: 500px;
+            margin: auto;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            overflow: hidden;
+            border-radius: 100%;
+            -webkit-border-radius: 100%;
+            transform: rotate(-30deg);
+            -webkit-transform: rotate(-30deg);
+        }
+        .kaleidoscope {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #204D88;
+        }
+        .tile {
+            width: 250px;
+            height: 250px;
+            position: absolute;
+            overflow: hidden;
+        }
+            .t0 {
+                top: 0;
+                left: 0;
+            }
+            .t2 {
+                top: 0;
+                left: 0;
+                transform-origin: right bottom;
+                -webkit-transform-origin: right bottom;
+                transform: rotate(90deg);
+                -webkit-transform: rotate(90deg);
+            }
+            .t1 {
+                top: 0;
+                right: 0;
+            }
+            .t3 {
+                top: 0;
+                right: 0;
+                transform-origin: left bottom;
+                -webkit-transform-origin: left bottom;
+                transform: rotate(90deg);
+                -webkit-transform: rotate(90deg);
+            }
+            .t4 {
+                bottom: 0;
+                right: 0;
+            }
+            .t6 {
+                bottom: 0;
+                right: 0;
+                transform-origin: left top;
+                -webkit-transform-origin: left top;
+                transform: rotate(90deg);
+                -webkit-transform: rotate(90deg);
+            }
+            .t5 {
+                bottom: 0;
+                left: 0;
+            }
+            .t7 {
+                bottom: 0;
+                left: 0;
+                transform-origin: right top;
+                -webkit-transform-origin: right top;
+                transform: rotate(90deg);
+                -webkit-transform: rotate(90deg);
+            }
+
+        .tile .tile-helper {
+            position: absolute;
+            width: 200%;
+            height: 100%;
+            overflow: hidden;
+        }
+            .tile .image {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+            }
+            .tile.t0 .tile-helper,
+            .tile.t2 .tile-helper,
+            .tile.t5 .tile-helper,
+            .tile.t7 .tile-helper {
+                right: 0;
+            }
+            .tile.t1 .tile-helper,
+            .tile.t3 .tile-helper,
+            .tile.t4 .tile-helper,
+            .tile.t6 .tile-helper {
+                left: 0;
+            }
+            .tile.t0 .tile-helper,
+            .tile.t2 .tile-helper {
+                transform-origin: right bottom;
+                -webkit-transform-origin: right bottom;
+                transform: rotate(45deg);
+                -webkit-transform: rotate(45deg);
+            }
+                .tile.t0 .image,
+                .tile.t2 .image {
+                    transform-origin: right bottom;
+                    -webkit-transform-origin: right bottom;
+                    transform: rotate(45deg) scale(-1, 1) translate(100%, 100%);
+                    -webkit-transform: rotate(45deg) scale(-1, 1) translate(100%, 100%);
+                }
+            .tile.t1 .tile-helper,
+            .tile.t3 .tile-helper {
+                transform-origin: left bottom;
+                -webkit-transform-origin: left bottom;
+                transform: rotate(-45deg);
+                -webkit-transform: rotate(-45deg);
+            }
+                .tile.t1 .image,
+                .tile.t3 .image {
+                    transform-origin: left bottom;
+                    -webkit-transform-origin: left bottom;
+                    transform: rotate(-45deg) translate(0, 100%);
+                    -webkit-transform: rotate(-45deg) translate(0, 100%);
+                }
+            .tile.t4 .tile-helper,
+            .tile.t6 .tile-helper {
+                transform-origin: left top;
+                -webkit-transform-origin: left top;
+                transform: rotate(45deg);
+                -webkit-transform: rotate(45deg);
+            }
+                .tile.t4 .image,
+                .tile.t6 .image {
+                    transform-origin: left top;
+                    -webkit-transform-origin: left top;
+                    transform: rotate(45deg) scale(1, -1);
+                    -webkit-transform: rotate(45deg) scale(1, -1);
+                }
+            .tile.t5 .tile-helper,
+            .tile.t7 .tile-helper {
+                transform-origin: right top;
+                -webkit-transform-origin: right top;
+                transform: rotate(-45deg);
+                -webkit-transform: rotate(-45deg);
+            }
+                .tile.t5 .image,
+                .tile.t7 .image {
+                    transform-origin: right top;
+                    -webkit-transform-origin: right top;
+                    transform: rotate(-45deg) scale(-1, -1) translate(100%, 0);
+                    -webkit-transform: rotate(-45deg) scale(-1, -1) translate(100%, 0);
+                }
+
+        .line {
+            position: absolute;
+            z-index: 999;
+            background: #f00;
+        }
+            .line-x {
+                width: 100%;
+                height: 1px;
+                top: 50%;
+                left: 0;
+            }
+            .line-y {
+                width: 1px;
+                height: 100%;
+                left: 50%;
+                top: 0;
+            }
+            .line-x-45,
+            .line-y-45 {
+                width: 141%;
+                height: 1px;
+                top: 0;
+                background: #fff;
+            }
+            .line-x-45 {
+                right: 0;
+                transform-origin: right top;
+                -webkit-transform-origin: right top;
+                transform: rotate(-45deg);
+                -webkit-transform: rotate(-45deg);
+            }
+            .line-y-45 {
+                left: 0;
+                transform-origin: 0 0;
+                -webkit-transform-origin: 0 0;
+                transform: rotate(45deg);
+                -webkit-transform: rotate(45deg);
+            }
+            .circle {
+                width: 100%;
+                height: 100%;
+                border: 1px solid #fff;
+                border-radius: 100%;
+                -webkit-border-radius: 100%;
+                position: absolute;
+                top: 0;
+                left: 0;
+                z-index: 999;
+            }
+
+        .tile .ct {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            left: -50%;
+            top: -50%;
+        }
+        .circle-tile {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 998;
+
+            background-size: 50%;
+            background-repeat: repeat;
+            /*background-image: url(../../images/idol-01.jpg);*/
+            background-position: right bottom;
+
+            transform-origin: center center;
+            -webkit-transform-origin: center center;
+            transform: rotate(45deg);
+            -webkit-transform: rotate(45deg);
+        }
+        .circle-tile.animating {
+            transition: transform 1s linear;
+            /*-webkit-transition: transform 0.75s linear;*/
+        }
+        .circle-tile.phase01 {
+            transform: rotate(0deg) translate(0, -30%);
+            -webkit-transform: rotate(0deg) translate(0, -30%);
+        }
+        .circle-tile.phase02 {
+            transform-origin: right center;
+            -webkit-transform-origin: right center;
+            transform: rotate(-35deg) translate(0, -30%);
+            -webkit-transform: rotate(-35deg) translate(0, -30%);
+        }
+        .circle-tile.phase03 {
+            transform-origin: right center;
+            -webkit-transform-origin: right center;
+            transform: rotate(-30deg) translate(-20%, -40%);
+            -webkit-transform: rotate(-30deg) translate(-20%, -40%);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="kaleidoscope__wrapper">
+        <!-- <div class="circle"></div>
+        <div class="line line-x"></div>
+        <div class="line line-y"></div>
+        <div class="line line-x-45"></div>
+        <div class="line line-y-45"></div> -->
+
+        <div class="kaleidoscope">
+            <div class="tile t0">
+                <div class="tile-helper">
+                    <div class="image">
+                        <div class="ct">
+                            <div class="circle-tile"></div>
+                        </div>
+                    </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="tile t1">
+                <div class="tile-helper">
+                    <div class="image">
+                        <div class="ct">
+                            <div class="circle-tile"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tile t2">
+                <div class="tile-helper">
+                    <div class="image">
+                        <div class="ct">
+                            <div class="circle-tile"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tile t3">
+                <div class="tile-helper">
+                    <div class="image">
+                        <div class="ct">
+                            <div class="circle-tile"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tile t4">
+                <div class="tile-helper">
+                    <div class="image">
+                        <div class="ct">
+                            <div class="circle-tile"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tile t5">
+                <div class="tile-helper">
+                    <div class="image">
+                        <div class="ct">
+                            <div class="circle-tile"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tile t6">
+                <div class="tile-helper">
+                    <div class="image">
+                        <div class="ct">
+                            <div class="circle-tile"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tile t7">
+                <div class="tile-helper">
+                    <div class="image">
+                        <div class="ct">
+                            <div class="circle-tile"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="../../js/jquery2.min.js"></script>
+    <script type="text/javascript">
+        (function($) {
+            $(document).ready(function() {
+                var delay = 500;
+                var s = 1000;
+                var kaleidoscope = $('.kaleidoscope').eq(0);
+                var c = $('.circle-tile') ;
+                var i = 1;
+                var theme = [
+                    '#204D88',
+                    '#2F285B',
+                    '#383B70',
+                    '#5C2E5D',
+                    '#404587',
+                    '#412A56',
+                    '#6B3571',
+                    '#454E9B',
+                    '#1D5A9D',
+                    '#432E71',
+                    '#FF79FE',
+                    '#650080',
+                    '#B901DF',
+                    '#1EB4CF',
+                    '#013186',
+                    '#0093B4',
+                    '#006188',
+                    '#9900F9',
+                    '#4F2660',
+                    '#008FFF'
+                ];
+                var timer = function() {
+                    c.css({
+                        backgroundImage: i < 10
+                            ? 'url(../../images/idol-0' + i + '.jpg)'
+                            : 'url(../../images/idol-' + i + '.jpg)'
+                    });
+                    kaleidoscope.css({
+                         backgroundColor: theme[i-1]
+                    });
+                    setTimeout(function() {
+                        c.addClass('animating');
+                        c.addClass('phase01');
+                    }, delay);
+                    setTimeout(function() {
+                        c.removeClass('phase01').addClass('phase02');
+                    }, s+delay);
+                    setTimeout(function() {
+                        c.removeClass('phase02').addClass('phase03');
+                    }, s*2+delay);
+                    setTimeout(function() {
+                        if ( i >= 20 ) { i = 1; }
+                        c.removeClass('phase03').removeClass('animating');
+                        i++;
+                        timer();
+                    }, s*3+delay);
+                }
+                timer();
+            });
+        })(jQuery);
+    </script>
+</body>
+</html>

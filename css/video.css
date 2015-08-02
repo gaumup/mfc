@@ -51,9 +51,15 @@ p {
         width: auto;
         height: 77%;
 
-        border-radius: 100%;
+        /*border-radius: 100%;
         -moz-border-radius: 100%;
         -webkit-border-radius: 100%;
+
+        -webkit-transform: rotate(30deg);
+        -moz-transform: rotate(30deg);
+        -ms-transform: rotate(30deg);
+        -o-transform: rotate(30deg);
+        transform: rotate(30deg); }*/
     }
 
     /* scene 01 */

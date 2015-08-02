@@ -438,7 +438,7 @@
                 fontColor: '#fff',
                 themeBgColor: '#23092D',
                 themeBgImg: 'images/idol-19.jpg',
-                themeBgKaleidoscope: 'images/idol-19.jpg',
+                themeBgKaleidoscope: 'images/idol-19-k.jpg',
             },
             {
                 text: 'n',
