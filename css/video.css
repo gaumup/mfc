@@ -31,13 +31,19 @@ p {
     .mfc-video__content.mfc-video__loading {
         background: url(../images/icon-loading.gif) no-repeat center center;
     }
-
-    .block {
+    .stage {
         position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
     }
-    .mfc-video__loading .block {
-        display: none;
-    }
+        .block {
+            position: absolute;
+        }
+        .mfc-video__loading .block {
+            display: none;
+        }
 
     .kaleidoscope__wrapper {
         margin: auto;
@@ -51,7 +57,7 @@ p {
         width: auto;
         height: 77%;
 
-        /*border-radius: 100%;
+        border-radius: 100%;
         -moz-border-radius: 100%;
         -webkit-border-radius: 100%;
 
@@ -59,7 +65,7 @@ p {
         -moz-transform: rotate(30deg);
         -ms-transform: rotate(30deg);
         -o-transform: rotate(30deg);
-        transform: rotate(30deg); }*/
+        transform: rotate(30deg);
     }
 
     /* scene 01 */
@@ -68,12 +74,18 @@ p {
             height: 30%;
             top: 0;
             left: 0;
+            /* just for demo */
+            background: url(../images/cover-alpha.png) no-repeat center center;
+            background-size: 150%;
         }
         .scene-01 .img-placeholder-02 {
             width: 35%;
             height: 68%;
             top: -100%;
             left: 48%;
+            /* just for demo */
+            background: url(../images/cover.png) no-repeat center center;
+            background-size: cover;
         }
         .scene-01 .anim-block-01 {
             width: 14%;
@@ -86,6 +98,9 @@ p {
             height: 15%;
             top: 53%;
             right: 0;
+            /* just for demo */
+            background: url(../images/cover.png) no-repeat center center;
+            background-size: 300%;
         }
         .scene-01 .anim-block-02 {
             width: 45%;
@@ -187,4 +202,178 @@ p {
             color: #fff;
         }
 
+    /* scene 03 */
+        .scene-03 .inline-block {
+            float: left;
+        }
+        /* part 1 */
+            .scene-03 .block {
+                color: #fff;
+                text-transform: uppercase;
+                text-align: center;
+                font-weight: bold;
+                font-size: 100%;
+                padding: 0 2%;
+                position: relative;
+                float: left;
+                margin: 0 2%;
+                box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                -webkit-box-sizing: border-box;
+            }
+            .scene-03 .block-space {
+                padding: 0;
+                margin: 0;
+            }
+            .scene-03 .sentence-row {
+                position: absolute;
+                width: 100%;
+                box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                -webkit-box-sizing: border-box;
+            }
+                .scene-03 .sentence-row.sentence-row-01 .block:first-child,
+                .scene-03 .sentence-row.sentence-row-02 .block:first-child,
+                .scene-03 .sentence-row.sentence-row-03 .block:first-child {
+                    margin-left: 0;
+                }
+                .scene-03 .sentence-row.sentence-row-01 .block:last-child,
+                .scene-03 .sentence-row.sentence-row-02 .block:last-child,
+                .scene-03 .sentence-row.sentence-row-03 .block:last-child {
+                    margin-right: 0;
+                    float: right;
+                }
+            .scene-03 .sentence-row.sentence-row-01,
+            .scene-03 .sentence-row.sentence-row-02 {
+                top: 0;
+                height: 25%;
+                padding: 0 0 2%;
+            }
+            .scene-03 .sentence-row.sentence-row-02 {
+                top: 25%;
+            }
+            .scene-03 .sentence-row.sentence-row-03 {
+                bottom: 0;
+                height: 50%;
+            }
+                .scene-03 .sentence-row .block span .scene-03__keyword {
+                    visibility: hidden;
+                    font-style: normal;
+                }
 
+        /* part 2 */
+            .scene-03 .word-block-wrapper {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin: auto;
+                width: 95%;
+                height: 25%;
+            }
+                .scene-03 .word-block {
+                    float: left;
+                    color: #fff;
+                    text-transform: uppercase;
+                    font-weight: bold;
+                    text-align: center;
+                    position: relative;
+                }
+                .scene-03 .word-block-01 {
+                    text-align: right;
+                    width: 42%;
+                }
+                .scene-03 .word-block-02 {
+                    width: 26%;
+                }
+                .scene-03 .word-block-03 {
+                    text-align: left;
+                    float: right;
+                    width: 32%;
+                }
+                    .scene-03 .word-block span {
+                        display: block;
+                    }
+                    .scene-03 hr {
+                        position: absolute;
+                        width: 100%;
+                        height: 2px;
+                        border: none;
+                        left: 0;
+                        z-index: 10;
+                        margin: 0;
+                        padding: 0;
+                    }
+                    .scene-03 .word-block-01 hr:nth-child(2),
+                    .scene-03 .word-block-02 hr:nth-child(2),
+                    .scene-03 .word-block-03 hr:nth-child(2) {
+                        top: 20%;
+                    }
+                    .scene-03 .word-block-01 hr:nth-child(3),
+                    .scene-03 .word-block-02 hr:nth-child(3),
+                    .scene-03 .word-block-03 hr:nth-child(3) {
+                        top: 40%;
+                    }
+                    .scene-03 .word-block-01 hr:nth-child(4),
+                    .scene-03 .word-block-02 hr:nth-child(4),
+                    .scene-03 .word-block-03 hr:nth-child(4) {
+                        top: 60%;
+                    }
+                    .scene-03 .word-block-01 hr:nth-child(5),
+                    .scene-03 .word-block-02 hr:nth-child(5),
+                    .scene-03 .word-block-03 hr:nth-child(5) {
+                        top: 80%;
+                    }
+
+        /* part 3 */
+            .scene-03 .mfc-banner-01 {
+                position: absolute;
+                top: 25%;
+                left: 0;
+                right: 0;
+                margin: auto;
+                width: 70%;
+                height: 25%;
+                text-align: center;
+                color: #fff;
+                font-style: italic;
+                font-weight: bold;
+            }
+            .scene-03 .mfc-big-day {
+                text-align: center;
+                color: #fff;
+                position: absolute;
+                top: 52%;
+                left: 0;
+                right: 0;
+                margin: auto;
+                width: 100%;
+                height: 8%;
+            }
+            .scene-03 .mfc-brand {
+            }
+                .scene-03 .mfc-logo {
+                    position: absolute;
+                    bottom: 15%;
+                    left: 0;
+                    right: 0;
+                    margin: auto;
+                    width: 8%;
+                    height: 16%;
+                    background: #ccc;
+                    display: block;
+                    background: url(../images/logo.png) no-repeat center center;
+                    background-size: contain;
+                }
+                .scene-03 .mfc-copyright {
+                    position: absolute;
+                    bottom: 10%;
+                    left: 0;
+                    right: 0;
+                    margin: auto;
+                    text-align: center;
+                    color: #fff;
+                    width: 100%;
+                    height: 5%;
+                }

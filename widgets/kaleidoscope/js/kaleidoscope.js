@@ -66,14 +66,14 @@
 
         function animate() {
             var time = new Date().getTime() * [ '.000', s ].join( '' );
-            auto_x = Math.sin( time ) * document.body.clientWidth;
+            auto_x = Math.sin( Math.sqrt(time) ) * document.body.clientWidth;
             auto_y++;
 
             move( auto_x, auto_y );
             if ( auto ) requestAnimFrame( animate );
         }
 
-        function move( x, y ) {
+        function move( x, y, a) {
             $image.css( 'background-position', [ x + "px", y + "px" ].join( ' ' ) );
         }
 

@@ -1,13 +1,16 @@
 /* .mfc-video__content--theme-01 */
     .mfc-video__content--theme-01 .color-style-default {
-        background: #ccc;
+        background-color: #666;
     }
     .mfc-video__content--theme-01 .color-style-01 {
-        background: #D80420;
+        background-color: #D80420;
     }
     .mfc-video__content--theme-01 .color-style-02 {
-        background: #E0DCDD;
+        background-color: #E0DCDD;
     }
     .mfc-video__content--theme-01 .color-style-03 {
-        background: #4C8589;
+        background-color: #4C8589;
+    }
+    .mfc-video__content--theme-01 .color-style-04 {
+        background-color: #000;
     }

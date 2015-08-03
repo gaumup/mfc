@@ -1,1 +1,64 @@
-{}
+{
+    "name": "MFC",
+    "cover": "",
+    "message": [
+        {
+            "text": "I",
+            "fontSize": "60%",
+            "fontColor": "#fff",
+            "themeBgColor": "#23092D",
+            "themeBgImg": "images/idol-19.jpg",
+            "themeBgKaleidoscope": "images/idol-19.jpg",
+            "themeSound": ""
+        },
+        {
+            "text": "n",
+            "fontSize": "80%",
+            "fontColor": "#fff",
+            "themeBgColor": "#311036",
+            "themeBgImg": "images/idol-07.jpg",
+            "themeBgKaleidoscope": "images/idol-07.jpg",
+            "themeSound": ""
+        },
+        {
+            "text": "t",
+            "fontSize": "50%",
+            "fontColor": "#fff",
+            "themeBgColor": "#1E214C",
+            "themeBgImg": "images/idol-05.jpg",
+            "themeBgKaleidoscope": "images/idol-05.jpg",
+            "themeSound": ""
+        },
+        {
+            "text": "e",
+            "fontSize": "50%",
+            "fontColor": "#fff",
+            "themeBgColor": "#242860",
+            "themeBgImg": "images/idol-08.jpg",
+            "themeBgKaleidoscope": "images/idol-08.jpg",
+            "themeSound": ""
+        },
+        {
+            "text": "R",
+            "fontSize": "75%",
+            "fontColor": "#fff",
+            "themeBgColor": "#06616E",
+            "themeBgImg": "images/idol-16.jpg",
+            "themeBgKaleidoscope": "images/idol-16.jpg",
+            "themeSound": ""
+        },
+        {
+            "text": "n",
+            "fontSize": "78%",
+            "fontColor": "#fff",
+            "themeBgColor": "#073664",
+            "themeBgImg": "images/idol-09.jpg",
+            "themeBgKaleidoscope": "images/idol-09.jpg",
+            "themeSound": ""
+        }
+    ],
+    "sentence": {
+        "phase": "In a word, love is {keyword}",
+        "keyword": "love"
+    }
+}

@@ -7,6 +7,11 @@
         MFC.Video.init( $('#mfc-video') );
     });
 
+    //MFC namespace
+    var ns = 'MFC_';
+    var Pattern = window[ns + 'Pattern'];
+    var Helpers = window[ns + 'Helpers'];
+
     //MFC Video class
     var MFC = {};
     MFC.Video = {};
@@ -14,21 +19,32 @@
     };
     MFC.Video.init = function($video) {
         //set video dimension with ratio 2:1
-            var windowHeight = $(window).height();
-            var videoHeight = $video.width()/2;
-            if ( videoHeight > windowHeight ) {
-                $video.css({
-                    width: windowHeight*2,
-                    height: windowHeight
+            var _setVideoHeightLazy = Helpers.throttle( function(e) {
+                //video size
+                var windowHeight = $(window).height();
+                var videoHeight = $video.width()/2;
+                if ( videoHeight > windowHeight ) {
+                    $video.css({
+                        width: windowHeight*2,
+                        height: windowHeight
+                    });
+                }
+                else {
+                    $video.css({ height: videoHeight });
+                }
+
+                //kaleidoscope wrapper size
+                $('.kaleidoscope__wrapper').each(function() {
+                    var $this = $(this);
+                    $this.css({ width: $this.height() });
                 });
-            }
-            else {
-                $video.css({ height: videoHeight });
-            }
+            }, 250 );
+            _setVideoHeightLazy();
+            $(window).on( 'resize', _setVideoHeightLazy );
 
         //apply pub/sub to 'MFC.Video'
             Pattern.Mediator.installTo(MFC.Video);
-            MFC.Video.sub( 'MFC.Video:init', MFC.Video.playScene02 );
+            MFC.Video.sub( 'MFC.Video:init', MFC.Video.playScene01 );
             MFC.Video.sub( 'MFC.Video.scene01:completed', MFC.Video.playScene02 );
             MFC.Video.sub( 'MFC.Video.scene02:completed', MFC.Video.playScene03 );
 
@@ -39,23 +55,22 @@
          */
 
         //1- load config
-            $.get( 'config.json', function(response) {
-                $.extend( true, MFC.Video.config, response );
-                $video.removeClass('mfc-video__loading');
-                MFC.Video.pub( 'MFC.Video:init', $video );
-            } );
+            $.getJSON( 'config.json')
+                .done(function(response) {
+                    $.extend( true, MFC.Video.config, response );
+                    $video.removeClass('mfc-video__loading');
+                    MFC.Video.pub( 'MFC.Video:init', $video );
+                })
+                .fail(function() {})
+                .always(function() {});
     };
 
     MFC.Video.playScene01 = function($video) {
         //html template
         var _template = (function () {/*
-            <div class="block img-placeholder img-placeholder-01 color-style-03" id="scene-01__img-placeholder-01">
-                <!-- dynamic loading 'img' -->
-            </div>
+            <div class="block img-placeholder img-placeholder-01 color-style-03" id="scene-01__img-placeholder-01"></div>
 
-            <div class="block img-placeholder img-placeholder-02 color-style-03" id="scene-01__img-placeholder-02">
-                <!-- dynamic loading 'img' -->
-            </div>
+            <div class="block img-placeholder img-placeholder-02 color-style-03" id="scene-01__img-placeholder-02"></div>
 
             <div class="block anim-block-01 color-style-01" id="scene-01__anim-block-01"></div>
 
@@ -78,7 +93,7 @@
 
             <div class="block anim-block-03 color-style-03" id="scene-01__anim-block-03"></div>
         */}).toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1];
-        $('#scene-01').html( _template );
+        var stage = $('#scene-01').html( _template );
 
         //blocks
         var imgPlaceHolder01 = $('#scene-01__img-placeholder-01');
@@ -200,7 +215,7 @@
             );
             imgPlaceHolder01.velocity(
                 {
-                    width: 0
+                    left: '-100%'
                 },
                 {
                     duration: t1,
@@ -212,7 +227,7 @@
             );
             animBlock01.velocity(
                 {
-                    width: 0
+                    right: '-100%'
                 },
                 {
                     duration: t1/2,
@@ -244,6 +259,7 @@
             var d8 = $.Deferred(); //anim block at bottom disappear
             $.when( d1, d2, d3, d4, d5, d6, d7, d8 ).done(function() {
                 MFC.Video.pub( 'MFC.Video.scene01:completed' );
+                stage.empty();
             });
             //animate
             var t1 = 800;
@@ -418,7 +434,7 @@
                 <p id="scene-02__kaleidoscope-sentence" class="kaleidoscope-sentence"></p>
             </div>
         */}).toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1];
-        $('#scene-02').html( _template );
+        var stage = $('#scene-02').html( _template );
 
         //blocks
         var animBlock01 = $('#scene-02__anim-block-01');
@@ -431,76 +447,11 @@
         var kaleidoscopeTextHeight = kaleidoscopeText.height();
         var kaleidoscopeSentence = $('#scene-02__kaleidoscope-sentence');
         var kaleidoscopeSentenceHeight = kaleidoscopeSentence.height();
-        var arrTxt = [ //dummy
-            {
-                text: 'I',
-                fontSize: '60%',
-                fontColor: '#fff',
-                themeBgColor: '#23092D',
-                themeBgImg: 'images/idol-19.jpg',
-                themeBgKaleidoscope: 'images/idol-19-k.jpg',
-            },
-            {
-                text: 'n',
-                fontSize: '80%',
-                fontColor: '#fff',
-                themeBgColor: '#311036',
-                themeBgImg: 'images/idol-07.jpg',
-                themeBgKaleidoscope: 'images/idol-07.jpg',
-                themeSound: ''
-            },
-            {
-                text: 't',
-                fontSize: '50%',
-                fontColor: '#fff',
-                themeBgColor: '#1E214C',
-                themeBgImg: 'images/idol-05.jpg',
-                themeBgKaleidoscope: 'images/idol-05.jpg',
-                themeSound: ''
-            },
-            {
-                text: 'e',
-                fontSize: '50%',
-                fontColor: '#fff',
-                themeBgColor: '#242860',
-                themeBgImg: 'images/idol-08.jpg',
-                themeBgKaleidoscope: 'images/idol-08.jpg',
-                themeSound: ''
-            },
-            {
-                text: 'R',
-                fontSize: '115%',
-                fontColor: '#fff',
-                themeBgColor: '#06616E',
-                themeBgImg: 'images/idol-16.jpg',
-                themeBgKaleidoscope: 'images/idol-16.jpg',
-                themeSound: ''
-            },
-            {
-                text: 'o',
-                fontSize: '78%',
-                fontColor: '#fff',
-                themeBgColor: '#073664',
-                themeBgImg: 'images/idol-09.jpg',
-                themeBgKaleidoscope: 'images/idol-09.jpg',
-                themeSound: ''
-            },
-        ];
+        var arrTxt = MFC.Video.config.message;
 
         MFC.Video.sub( 'MFC.Video.scene02:start', function() {
             //init kaleidoscope & text inside
             kaleidoscopeWrapper.css({ width: kaleidoscopeWrapper.height() })
-            kaleidoscope.kaleidescope({
-                src: ''
-            });
-            //text inside kaleidoscope
-            kaleidoscopeText
-                .text( arrTxt[0].text )
-                .css({
-                    fontSize: parseInt(kaleidoscopeTextHeight)*parseInt(arrTxt[0].fontSize)/100 + 'px',
-                    color: arrTxt[0].fontColor,
-                    lineHeight: kaleidoscopeTextHeight + 'px'
-                });
             //sentence at bottom
             kaleidoscopeSentence
                 .empty()
@@ -508,22 +459,14 @@
                     fontSize: parseInt(kaleidoscopeSentenceHeight)*.9 + 'px',
                     lineHeight: kaleidoscopeSentenceHeight + 'px'
                 });
-            //set theme
-            animBlock01.add(animBlock02).css({
-                backgroundColor: arrTxt[0].themeBgColor
-            });
-            imgPlaceHolder01.css({
-                backgroundImage: 'url(' + arrTxt[0].themeBgImg + ')'
-            });
-            kaleidoscope.find('> .tile > .image').css({
-                backgroundImage: 'url(' + arrTxt[0].themeBgKaleidoscope + ')'
-            });
+
+            MFC.Video.pub( 'MFC.Video.scene02:initKaleidoscopeLoop' );
 
             var d1 = $.Deferred(); //block contains kaleidoscope
             var d2 = $.Deferred(); //block contains img on the right
             var d3 = $.Deferred(); //block at the bottom
             $.when( d1, d2, d3 ).done(function(v1, v2, v3 ) {
-                // MFC.Video.pub( 'MFC.Video.scene02:animCompleted' );
+                //TODO...
             });
             var t1 = 500;
             animBlock01.velocity(
@@ -565,37 +508,56 @@
             );
         } );
 
-        MFC.Video.sub( 'MFC.Video.scene02:animCompleted', function() {
-            var i = 1;
-            var kaleidoscopeTextIntv = setInterval(function() {
-                if ( i == arrTxt.length - 1 ) {
-                    setTimeout(function() {
-                        kaleidoscopeSentence.append( arrTxt[i-1].text );
-                    }, 2000);
-                    clearInterval(kaleidoscopeTextIntv);
-                }
-                kaleidoscopeSentence.append( arrTxt[i-1].text );
-                kaleidoscopeText
-                    .text( arrTxt[i].text )
-                    .css({
-                        fontSize: parseInt(kaleidoscopeTextHeight)*parseInt(arrTxt[i].fontSize)/100 + 'px',
-                        lineHeight: kaleidoscopeTextHeight + 'px',
-                        color: arrTxt[i].fontColor
+        MFC.Video.sub( 'MFC.Video.scene02:initKaleidoscopeLoop', function() {
+            //init kaleidoscope for text loop
+            kaleidoscope.kaleidescope();
+
+            var i = 0;
+            var t = 1;
+            var kaleidoscopeTextIntv = function() {
+                setTimeout(function() {
+                    if ( t == 1 ) { t = 2000; }
+                    //load new text to kaleidoscope
+                    kaleidoscopeText
+                        .text( arrTxt[i].text )
+                        .css({
+                            fontSize: parseInt(kaleidoscopeTextHeight)*parseInt(arrTxt[i].fontSize)/100 + 'px',
+                            lineHeight: kaleidoscopeTextHeight + 'px',
+                            color: arrTxt[i].fontColor
+                        });
+
+                    //change theme color
+                    animBlock01.add(animBlock02).css({
+                        backgroundColor: arrTxt[i].themeBgColor
+                    });
+                    imgPlaceHolder01.css({
+                        backgroundImage: 'url(' + arrTxt[i].themeBgImg + ')'
+                    });
+                    kaleidoscope.find('> .tile > .image').css({
+                        backgroundImage: 'url(' + arrTxt[i].themeBgKaleidoscope + ')'
                     });
 
-                //change theme color
-                animBlock01.add(animBlock02).css({
-                    backgroundColor: arrTxt[i].themeBgColor
-                });
-                imgPlaceHolder01.css({
-                    backgroundImage: 'url(' + arrTxt[i].themeBgImg + ')'
-                });
-                kaleidoscope.find('> .tile > .image').css({
-                    backgroundImage: 'url(' + arrTxt[i].themeBgKaleidoscope + ')'
-                });
+                    //update text to sentence at bottom
+                    if ( i > 0 ) {
+                        kaleidoscopeSentence.append( arrTxt[i-1].text );
+                    }
 
-                i++;
-            }, 2000);
+                    if ( i == arrTxt.length - 1 ) { //last word
+                        setTimeout(function() {
+                            kaleidoscopeSentence.append( arrTxt[i].text );
+                        }, t);
+                        setTimeout(function() {
+                            MFC.Video.pub( 'MFC.Video.scene02:completed' );
+                            stage.empty();
+                        }, t + 500);
+                    }
+                    else { //do the loop
+                        setTimeout(kaleidoscopeTextIntv, t);
+                        i++;
+                    }
+                }, t);
+            }
+            kaleidoscopeTextIntv();
         } );
 
         //do something before start scene 02
@@ -603,7 +565,226 @@
         MFC.Video.pub( 'MFC.Video.scene02:start' );
     };
     MFC.Video.playScene03 = function() {
+        //html template
+        var _templatePart01 = (function () {/*
+            <div class="sentence-row sentence-row-01"></div>
+            <div class="sentence-row sentence-row-02"></div>
+            <div class="sentence-row sentence-row-03"></div>
+        */}).toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1];
+        var _templatePart02 = (function () {/*
+            <div class="word-block-wrapper" id="scene-03__word-block-wrapper">
+                <div class="word-block word-block-01 color-style-03">
+                    <span>Message</span>
+                    <hr class="color-style-03" />
+                    <hr class="color-style-03" />
+                    <hr class="color-style-03" />
+                    <hr class="color-style-03" />
+                </div>
+                <div class="word-block word-block-02 color-style-04">
+                    <span>in the</span>
+                    <hr class="color-style-04" />
+                    <hr class="color-style-04" />
+                    <hr class="color-style-04" />
+                    <hr class="color-style-04" />
+                </div>
+                <div class="word-block word-block-03 color-style-01">
+                    <span>music</span>
+                    <hr class="color-style-01" />
+                    <hr class="color-style-01" />
+                    <hr class="color-style-01" />
+                    <hr class="color-style-01" />
+                </div>
+            </div>
+        */}).toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1];
+        var _templatePart03 = (function () {/*
+            <div class="mfc-banner-01 color-style-01" id="scene-03__mfc-banner-01">Sschh...Schubert!</div>
+            <div class="mfc-big-day" id="scene-03__mfc-big-day">13.09.2015</div>
+            <div class="mfc-brand">
+                <a class="mfc-logo" href="#" title=""></a>
+                <p class="mfc-copyright" id="scene-03__mfc-copyright">Music for Comunnity</p>
+            </div>
+        */}).toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1];
+        var stage = $('#scene-03').html(_templatePart01);
+        var sentence = MFC.Video.config.sentence;
 
-        //TODO
+        /*
+         * scene 03 - part 1
+         * - load pre-defined sentence into block words & spaces
+         * - delay for 3s before go to part 2
+         */
+        MFC.Video.sub( 'MFC.Video.scene03:startPart1', function() {
+            var $rows = $('.sentence-row');
+            var _preparingContent = Helpers.throttle( function() { //need responsively update
+                $rows.empty();
+                var stageWidth = stage.width();
+                var sentenceBreakdown = sentence.phase.split(' ');
+                var totalBlocks = sentenceBreakdown.length;
+                var rows = [ [], [], [] ];
+                var wordsPerRow = Math.round(totalBlocks/3); //excluding spacing
+                rows[0] = sentenceBreakdown.slice(0, wordsPerRow);
+                rows[1] = sentenceBreakdown.slice(wordsPerRow, wordsPerRow*2);
+                rows[2] = sentenceBreakdown.slice(wordsPerRow*2);
+                //ensure 3 rows: row's height: 25%, 25%, 50%
+                var _blockTpl = (function () {/*
+                    <div class="block"></div>
+                */}).toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1];
+                var _spaceBlock = (function(rowIndex, rowHeight, wordIndex) {
+                    return $(_blockTpl)
+                        .addClass('block-space')
+                        .addClass( wordIndex%2 == 0
+                            ? ( rowIndex%2 == 0 ? 'color-style-01' : 'color-style-02' )
+                            : ( rowIndex%2 == 0 ? 'color-style-02' : 'color-style-01' )
+                        )
+                        .css({
+                            height: rowHeight
+                        });
+                });
+                $.each(rows, function(rowIndex, words) {
+                    var rowHeight = $rows.eq(rowIndex).height();
+                    var initialFontSize = rowHeight;
+                    //generate word block and space block
+                    $.each(words, function(wordIndex, word) {
+                        //create word block
+                        var _block = $(_blockTpl)
+                            .html('<span>' + (function() {
+                                return word == '{keyword}'
+                                    ? '<em class="scene-03__keyword">' + sentence.keyword + '</em>'
+                                    : word;
+                            })() + '</span>')
+                            .addClass('color-style-03')
+                            .css({
+                                height: rowHeight,
+                                fontSize: rowHeight,
+                                lineHeight: rowHeight + 'px'
+                            });
+                        $rows.eq(rowIndex).append( _block );
+
+                        //create spacing
+                        if ( wordIndex < words.length - 1
+                            || ( words.length == 1 && rowIndex < 2 )
+                        ) {
+                            $rows.eq(rowIndex).append( _spaceBlock(rowIndex, rowHeight, wordIndex) );
+                        }
+                        if ( rowIndex == 1 && words.length == 1 ) {
+                            $rows.eq(rowIndex).prepend( _spaceBlock(rowIndex, rowHeight, wordIndex) );
+                        }
+                    });
+
+                    //ajust width/height, font-size
+                    var w = stageWidth;
+                    var rowBlocks = $rows.eq(rowIndex).find('.block');
+                    var rowBlockWords = $rows.eq(rowIndex).find('.block').filter(':not(.block-space)');
+                    var rowBlockSpaces = $rows.eq(rowIndex).find('.block-space');
+                    rowBlockWords.each(function() {
+                        w -= Math.ceil( $(this).outerWidth(true) );
+                    });
+                    //set space width
+                    if ( w <= 0 ) { //set space = 10%
+                        rowBlockSpaces.css({
+                            width: '10%' //TODO: going to make more accurate
+                        });
+                        if ( rowBlocks.length > 1 ) {
+                            var top = rowBlocks.eq(0).position().top;
+                            while ( rowBlocks.last().position().top > top ) {
+                                rowBlocks.css({ fontSize: (initialFontSize--) + 'px'  });
+                            }
+                        }
+                        else { //only 1 word block
+                            while ( rowBlocks.outerWidth() > stageWidth ) {
+                                rowBlocks.css({ fontSize: (initialFontSize--) + 'px'  });
+                            }
+                        }
+                    }
+                    else {
+                        rowBlockSpaces.css({
+                            width: Math.floor(w/rowBlockSpaces.length) + 'px'
+                        });
+                    }
+
+                    //exceptional for last row, 1 word block only
+                    if ( rowBlocks.length == 1 && rowIndex == 2 ) {
+                        rowBlocks.css({ width: '100%' });
+                    }
+
+                    //do some ajustment ensure blocks fit screen width
+                    if ( rowBlocks.length > 1 && rowIndex < 2 ) {
+
+                    }
+                });
+                //display keyword of the sentence
+                setTimeout(function() {
+                    $('.scene-03__keyword').css({ visibility: 'visible' });
+                }, 750);
+            }, 250 );
+            $(window).on( 'resize', _preparingContent );
+            _preparingContent();
+
+            setTimeout(function() {
+                MFC.Video.pub( 'MFC.Video.scene03:startPart2' );
+            }, 2000);
+        } );
+
+        /*
+         * scene 03 - part 2
+         * - load pre-defined sentence "Mesage in the music"
+         * - delay for 3s before go to part 3
+         */
+        MFC.Video.sub( 'MFC.Video.scene03:startPart2', function() {
+            stage.html(_templatePart02);
+
+            var wordBlockWrapper = $('#scene-03__word-block-wrapper');
+            var _preparingContent = Helpers.throttle( function() { //need responsively update
+                var wordBlockWrapperHeight = wordBlockWrapper.height();
+                $('#scene-03__word-block-wrapper .word-block').css({
+                    height: wordBlockWrapperHeight,
+                    fontSize: wordBlockWrapperHeight/2 + 'px',
+                    lineHeight: wordBlockWrapperHeight + 'px'
+                });
+            }, 250);
+            $(window).on( 'resize', _preparingContent );
+            _preparingContent();
+
+            setTimeout(function() {
+                MFC.Video.pub( 'MFC.Video.scene03:startPart3' );
+            }, 1500);
+        });
+
+        /*
+         * scene 03 - part 3
+         * - display the ending scene
+         */
+        MFC.Video.sub( 'MFC.Video.scene03:startPart3', function() {
+            stage.html(_templatePart03);
+
+            var banner = $('#scene-03__mfc-banner-01');
+            var bigDay = $('#scene-03__mfc-big-day');
+            var copyright = $('#scene-03__mfc-copyright');
+            var _preparingContent = Helpers.throttle( function() { //need responsively update
+
+                var bannerHeight = banner.height();
+                banner.css({
+                    fontSize: bannerHeight*.6 + 'px',
+                    lineHeight: bannerHeight + 'px'
+                });
+
+                var bigDayHeight = bigDay.height();
+                bigDay.css({
+                    fontSize: bigDayHeight*.7 + 'px',
+                    lineHeight: bigDayHeight + 'px'
+                });
+
+                var copyrightHeight = copyright.height();
+                copyright.css({
+                    fontSize: copyrightHeight*.75 + 'px',
+                    lineHeight: copyrightHeight + 'px'
+                });
+            }, 250);
+            $(window).on( 'resize', _preparingContent );
+            _preparingContent();
+        });
+
+        //do something before start scene 03
+        //...
+        MFC.Video.pub( 'MFC.Video.scene03:startPart1' );
     };
 })(jQuery);
