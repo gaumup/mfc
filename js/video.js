@@ -11,6 +11,9 @@
     var ns = 'MFC_';
     var Pattern = window[ns + 'Pattern'];
     var Helpers = window[ns + 'Helpers'];
+    // start matching after: comment start block => ! or @preserve => optional whitespace => newline
+    // stop matching before: last newline => optional whitespace => comment end block
+    var reCommentContents = /\/\*!?(?:\@preserve)?[ \t]*(?:\r\n|\n)([\s\S]*?)(?:\r\n|\n)[ \t]*\*\//;
 
     //MFC Video class
     var MFC = {};
@@ -67,7 +70,7 @@
 
     MFC.Video.playScene01 = function($video) {
         //html template
-        var _template = (function () {/*
+        var _template = (function() {/*
             <div class="block img-placeholder img-placeholder-01 color-style-03" id="scene-01__img-placeholder-01"></div>
 
             <div class="block img-placeholder img-placeholder-02 color-style-03" id="scene-01__img-placeholder-02"></div>
@@ -92,7 +95,8 @@
             <div class="block static-block-01 color-style-03" id="scene-01__static-block-01"></div>
 
             <div class="block anim-block-03 color-style-03" id="scene-01__anim-block-03"></div>
-        */}).toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1];
+        */}).toString().match(reCommentContents)[1];
+        alert(_template)
         var stage = $('#scene-01').html( _template );
 
         //blocks
@@ -416,7 +420,7 @@
     };
     MFC.Video.playScene02 = function() {
         //html template
-        var _template = (function () {/*
+        var _template = (function() {/*
             <div class="block anim-block-01 color-style-default" id="scene-02__anim-block-01">
                 <div class="kaleidoscope__wrapper scene-02__kaleidoscope-01">
                     <div class="kaleidoscope" id="scene-02__kaleidoscope"></div>
@@ -433,7 +437,7 @@
             <div class="block anim-block-02 color-style-default" id="scene-02__anim-block-02">
                 <p id="scene-02__kaleidoscope-sentence" class="kaleidoscope-sentence"></p>
             </div>
-        */}).toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1];
+        */}).toString().match(reCommentContents)[1];
         var stage = $('#scene-02').html( _template );
 
         //blocks
@@ -566,12 +570,12 @@
     };
     MFC.Video.playScene03 = function() {
         //html template
-        var _templatePart01 = (function () {/*
+        var _templatePart01 = (function() {/*
             <div class="sentence-row sentence-row-01"></div>
             <div class="sentence-row sentence-row-02"></div>
             <div class="sentence-row sentence-row-03"></div>
-        */}).toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1];
-        var _templatePart02 = (function () {/*
+        */}).toString().match(reCommentContents)[1];
+        var _templatePart02 = (function() {/*
             <div class="word-block-wrapper" id="scene-03__word-block-wrapper">
                 <div class="word-block word-block-01 color-style-03">
                     <span>Message</span>
@@ -595,15 +599,15 @@
                     <hr class="color-style-01" />
                 </div>
             </div>
-        */}).toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1];
-        var _templatePart03 = (function () {/*
+        */}).toString().match(reCommentContents)[1];
+        var _templatePart03 = (function() {/*
             <div class="mfc-banner-01 color-style-01" id="scene-03__mfc-banner-01">Sschh...Schubert!</div>
             <div class="mfc-big-day" id="scene-03__mfc-big-day">13.09.2015</div>
             <div class="mfc-brand">
                 <a class="mfc-logo" href="#" title=""></a>
                 <p class="mfc-copyright" id="scene-03__mfc-copyright">Music for Comunnity</p>
             </div>
-        */}).toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1];
+        */}).toString().match(reCommentContents)[1];
         var stage = $('#scene-03').html(_templatePart01);
         var sentence = MFC.Video.config.sentence;
 
@@ -746,7 +750,7 @@
 
             setTimeout(function() {
                 MFC.Video.pub( 'MFC.Video.scene03:startPart3' );
-            }, 1500);
+            }, 2000);
         });
 
         /*
