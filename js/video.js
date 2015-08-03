@@ -628,9 +628,9 @@
                 rows[1] = sentenceBreakdown.slice(wordsPerRow, wordsPerRow*2);
                 rows[2] = sentenceBreakdown.slice(wordsPerRow*2);
                 //ensure 3 rows: row's height: 25%, 25%, 50%
-                var _blockTpl = (function () {/*
+                var _blockTpl = (function() {/*
                     <div class="block"></div>
-                */}).toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1];
+                */}).toString().match(reCommentContents)[1];
                 var _spaceBlock = (function(rowIndex, rowHeight, wordIndex) {
                     return $(_blockTpl)
                         .addClass('block-space')
