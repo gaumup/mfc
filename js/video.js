@@ -96,7 +96,6 @@
 
             <div class="block anim-block-03 color-style-03" id="scene-01__anim-block-03"></div>
         */}).toString().match(reCommentContents)[1];
-        alert(_template)
         var stage = $('#scene-01').html( _template );
 
         //blocks
