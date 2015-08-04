@@ -93,7 +93,7 @@
     }
 
     //export as jQuery function
-    $.fn.kaleidescope = function(opts) {
+    $.fn.kaleidoscope = function(opts) {
         KaleidoscopeJS.init(this, opts);
     }
 })(jQuery);

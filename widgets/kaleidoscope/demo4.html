@@ -9,8 +9,8 @@
     <meta name="viewport" content="width=device-width">
 
     <style type="text/css">
-        .kaleidoscope__wrapper {
-            width: 80%;
+        .mfc__kaleidoscope-wrapper {
+            width: 40%;
             margin: auto;
             position: absolute;
             top: 0;
@@ -23,14 +23,14 @@
             transform: rotate(-30deg);
             -webkit-transform: rotate(-30deg);
         }
-        .kaleidoscope {
+        .mfc__kaleidoscope {
             position: absolute;
             width: 100%;
             height: 100%;
             overflow: hidden;
             background-color: #204D88;
         }
-        .tile {
+        .mfc__kaleidoscope-tile {
             width: 50%;
             height: 50%;
             position: absolute;
@@ -85,81 +85,81 @@
                 -webkit-transform: rotate(90deg);
             }
 
-        .tile .tile-helper {
+        .mfc__kaleidoscope-tile .tile-helper {
             position: absolute;
             width: 100%;
             height: 100%;
             overflow: hidden;
         }
-            .tile .image {
+            .mfc__kaleidoscope-tile .mfc__kaleidoscope-image {
                 position: absolute;
                 width: 100%;
                 height: 100%;
                 overflow: hidden;
             }
-            .tile.t0 .tile-helper,
-            .tile.t2 .tile-helper,
-            .tile.t5 .tile-helper,
-            .tile.t7 .tile-helper {
+            .mfc__kaleidoscope-tile.t0 .tile-helper,
+            .mfc__kaleidoscope-tile.t2 .tile-helper,
+            .mfc__kaleidoscope-tile.t5 .tile-helper,
+            .mfc__kaleidoscope-tile.t7 .tile-helper {
                 right: 0;
             }
-            .tile.t1 .tile-helper,
-            .tile.t3 .tile-helper,
-            .tile.t4 .tile-helper,
-            .tile.t6 .tile-helper {
+            .mfc__kaleidoscope-tile.t1 .tile-helper,
+            .mfc__kaleidoscope-tile.t3 .tile-helper,
+            .mfc__kaleidoscope-tile.t4 .tile-helper,
+            .mfc__kaleidoscope-tile.t6 .tile-helper {
                 left: 0;
             }
-            .tile.t0 .tile-helper,
-            .tile.t2 .tile-helper {
+            .mfc__kaleidoscope-tile.t0 .tile-helper,
+            .mfc__kaleidoscope-tile.t2 .tile-helper {
                 transform-origin: right bottom;
                 -webkit-transform-origin: right bottom;
                 transform: rotate(45deg);
                 -webkit-transform: rotate(45deg);
             }
-                .tile.t0 .image,
-                .tile.t2 .image {
+                .mfc__kaleidoscope-tile.t0 .mfc__kaleidoscope-image,
+                .mfc__kaleidoscope-tile.t2 .mfc__kaleidoscope-image {
                     transform-origin: right bottom;
                     -webkit-transform-origin: right bottom;
                     transform: rotate(45deg) scale(-1, 1) translate(100%, 100%);
                     -webkit-transform: rotate(45deg) scale(-1, 1) translate(100%, 100%);
                 }
-            .tile.t1 .tile-helper,
-            .tile.t3 .tile-helper {
+            .mfc__kaleidoscope-tile.t1 .tile-helper,
+            .mfc__kaleidoscope-tile.t3 .tile-helper {
                 transform-origin: left bottom;
                 -webkit-transform-origin: left bottom;
                 transform: rotate(-45deg);
                 -webkit-transform: rotate(-45deg);
             }
-                .tile.t1 .image,
-                .tile.t3 .image {
+                .mfc__kaleidoscope-tile.t1 .mfc__kaleidoscope-image,
+                .mfc__kaleidoscope-tile.t3 .mfc__kaleidoscope-image {
                     transform-origin: left bottom;
                     -webkit-transform-origin: left bottom;
                     transform: rotate(-45deg) translate(0, 100%);
                     -webkit-transform: rotate(-45deg) translate(0, 100%);
                 }
-            .tile.t4 .tile-helper,
-            .tile.t6 .tile-helper {
+            .mfc__kaleidoscope-tile.t4 .tile-helper,
+            .mfc__kaleidoscope-tile.t6 .tile-helper {
                 transform-origin: left top;
                 -webkit-transform-origin: left top;
                 transform: rotate(45deg);
                 -webkit-transform: rotate(45deg);
             }
-                .tile.t4 .image,
-                .tile.t6 .image {
+                .mfc__kaleidoscope-tile.t4 .mfc__kaleidoscope-image,
+                .mfc__kaleidoscope-tile.t6 .mfc__kaleidoscope-image {
                     transform-origin: left top;
                     -webkit-transform-origin: left top;
                     transform: rotate(45deg) scale(1, -1);
                     -webkit-transform: rotate(45deg) scale(1, -1);
                 }
-            .tile.t5 .tile-helper,
-            .tile.t7 .tile-helper {
+            .mfc__kaleidoscope-tile.t5 .tile-helper,
+            .mfc__kaleidoscope-tile.t7 .tile-helper {
                 transform-origin: right top;
                 -webkit-transform-origin: right top;
                 transform: rotate(-45deg);
                 -webkit-transform: rotate(-45deg);
             }
-                .tile.t5 .image,
-                .tile.t7 .image {
+                .mfc__kaleidoscope-tile.t5 .mfc__kaleidoscope-image,
+                .mfc__kaleidoscope-tile.t7 .mfc__kaleidoscope-image {
                     transform-origin: right top;
                     -webkit-transform-origin: right top;
                     transform: rotate(-45deg) scale(-1, -1) translate(100%, 0);
@@ -216,7 +216,7 @@
                 z-index: 999;
             }
 
-        .tile .ct {
+        .mfc__kaleidoscope-tile .ct {
             position: absolute;
             width: 200%;
             height: 200%;
@@ -315,17 +315,17 @@
 </head>
 
 <body>
-    <div class="kaleidoscope__wrapper">
+    <div class="mfc__kaleidoscope-wrapper">
         <!-- <div class="circle"></div>
         <div class="line line-x"></div>
         <div class="line line-y"></div>
         <div class="line line-x-45"></div>
         <div class="line line-y-45"></div> -->
 
-        <div class="kaleidoscope">
-            <div class="tile t0">
+        <div class="mfc__kaleidoscope">
+            <div class="mfc__kaleidoscope-tile t0">
                 <div class="tile-helper">
-                    <div class="image">
+                    <div class="mfc__kaleidoscope-image">
                         <div class="ct">
                             <div class="circle-tile"></div>
                         </div>
@@ -333,9 +333,9 @@
                 </div>
             </div>
 
-            <div class="tile t1">
+            <div class="mfc__kaleidoscope-tile t1">
                 <div class="tile-helper">
-                    <div class="image">
+                    <div class="mfc__kaleidoscope-image">
                         <div class="ct">
                             <div class="circle-tile"></div>
                         </div>
@@ -343,9 +343,9 @@
                 </div>
             </div>
 
-            <div class="tile t2">
+            <div class="mfc__kaleidoscope-tile t2">
                 <div class="tile-helper">
-                    <div class="image">
+                    <div class="mfc__kaleidoscope-image">
                         <div class="ct">
                             <div class="circle-tile"></div>
                         </div>
@@ -353,9 +353,9 @@
                 </div>
             </div>
 
-            <div class="tile t3">
+            <div class="mfc__kaleidoscope-tile t3">
                 <div class="tile-helper">
-                    <div class="image">
+                    <div class="mfc__kaleidoscope-image">
                         <div class="ct">
                             <div class="circle-tile"></div>
                         </div>
@@ -363,9 +363,9 @@
                 </div>
             </div>
 
-            <div class="tile t4">
+            <div class="mfc__kaleidoscope-tile t4">
                 <div class="tile-helper">
-                    <div class="image">
+                    <div class="mfc__kaleidoscope-image">
                         <div class="ct">
                             <div class="circle-tile"></div>
                         </div>
@@ -373,9 +373,9 @@
                 </div>
             </div>
 
-            <div class="tile t5">
+            <div class="mfc__kaleidoscope-tile t5">
                 <div class="tile-helper">
-                    <div class="image">
+                    <div class="mfc__kaleidoscope-image">
                         <div class="ct">
                             <div class="circle-tile"></div>
                         </div>
@@ -383,9 +383,9 @@
                 </div>
             </div>
 
-            <div class="tile t6">
+            <div class="mfc__kaleidoscope-tile t6">
                 <div class="tile-helper">
-                    <div class="image">
+                    <div class="mfc__kaleidoscope-image">
                         <div class="ct">
                             <div class="circle-tile"></div>
                         </div>
@@ -393,9 +393,9 @@
                 </div>
             </div>
 
-            <div class="tile t7">
+            <div class="mfc__kaleidoscope-tile t7">
                 <div class="tile-helper">
-                    <div class="image">
+                    <div class="mfc__kaleidoscope-image">
                         <div class="ct">
                             <div class="circle-tile"></div>
                         </div>
@@ -409,38 +409,40 @@
     <script type="text/javascript">
         (function($) {
             $(document).ready(function() {
-                $('.kaleidoscope__wrapper').css({
-                    height: $('.kaleidoscope__wrapper').width()
+                $('.mfc__kaleidoscope-wrapper').css({
+                    height: $('.mfc__kaleidoscope-wrapper').width()
                 });
 
+                var loop = 20;
                 var delay = 500;
                 var s = 1000;
-                var kaleidoscope = $('.kaleidoscope').eq(0);
+                var kaleidoscope = $('.mfc__kaleidoscope').eq(0);
                 var c = $('.circle-tile') ;
-                var i = 20;
+                var i = 7;
                 var theme = [
-                    '#204D88',
-                    '#2F285B',
-                    '#383B70',
-                    '#5C2E5D',
-                    '#404587',
-                    '#412A56',
-                    '#6B3571',
-                    '#454E9B',
-                    '#1D5A9D',
-                    '#432E71',
-                    '#FF79FE',
-                    '#650080',
-                    '#B901DF',
-                    '#1EB4CF',
-                    '#013186',
-                    '#0093B4',
-                    '#006188',
-                    '#9900F9',
-                    '#4F2660',
-                    '#008FFF'
+                    '#204D88', //1
+                    '#2F285B', //2
+                    '#383B70', //3
+                    '#5C2E5D', //4
+                    '#404587', //5
+                    '#412A56', //6
+                    '#6B3571', //7
+                    '#454E9B', //8
+                    '#1D5A9D', //9
+                    '#432E71', //10
+                    '#FF79FE', //11
+                    '#650080', //12
+                    '#B901DF', //13
+                    '#1EB4CF', //14
+                    '#013186', //15
+                    '#0093B4', //16
+                    '#006188', //17
+                    '#9900F9', //18
+                    '#4F2660', //19
+                    '#008FFF'  //20
                 ];
                 var timer = function() {
+                    if ( i > loop ) { return; }
                     c.css({
                         backgroundImage: i < 10
                             ? 'url(../../images/idol-0' + i + '.jpg)'
@@ -494,9 +496,13 @@
                         c.addClass('p11');
                     }, s*3+s/4+s/2+s/5+s/2+s/5+s/5+s/2+s/10+delay);
                     setTimeout(function() { //p11 duration = 1s = s
-                        // c.removeClass('p11');
-                        // c.addClass('p12');
+                        c.removeClass('p11');
+                        c.addClass('p12');
                     }, s*3+s/4+s/2+s/5+s/2+s/5+s/5+s/2+s/10+s+delay);
+                    setTimeout(function() { //p12 duration = 1s = s
+                        c.removeClass('p12').removeClass('animating');
+                        timer();
+                    }, s+s+s+s/4+s/2+s/5+s/2+s/5+s/5+s/2+s/10+s+s+delay);
                 }
                 timer();
             });

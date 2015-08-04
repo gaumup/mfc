@@ -1,0 +1,249 @@
+.mfc__kaleidoscope-wrapper {
+    width: 100%;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+}
+.mfc__kaleidoscope {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+.mfc__kaleidoscope-tile {
+    width: 50%;
+    height: 50%;
+    position: absolute;
+    overflow: hidden;
+}
+    .t0 {
+        top: 0;
+        left: 0;
+    }
+    .t2 {
+        top: 0;
+        left: 0;
+        transform-origin: right bottom;
+        -webkit-transform-origin: right bottom;
+        transform: rotate(90deg);
+        -webkit-transform: rotate(90deg);
+    }
+    .t1 {
+        top: 0;
+        right: 0;
+    }
+    .t3 {
+        top: 0;
+        right: 0;
+        transform-origin: left bottom;
+        -webkit-transform-origin: left bottom;
+        transform: rotate(90deg);
+        -webkit-transform: rotate(90deg);
+    }
+    .t4 {
+        bottom: 0;
+        right: 0;
+    }
+    .t6 {
+        bottom: 0;
+        right: 0;
+        transform-origin: left top;
+        -webkit-transform-origin: left top;
+        transform: rotate(90deg);
+        -webkit-transform: rotate(90deg);
+    }
+    .t5 {
+        bottom: 0;
+        left: 0;
+    }
+    .t7 {
+        bottom: 0;
+        left: 0;
+        transform-origin: right top;
+        -webkit-transform-origin: right top;
+        transform: rotate(90deg);
+        -webkit-transform: rotate(90deg);
+    }
+
+.mfc__kaleidoscope-tile .tile-helper {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+    .mfc__kaleidoscope-tile .mfc__kaleidoscope-image {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+    .mfc__kaleidoscope-tile.t0 .tile-helper,
+    .mfc__kaleidoscope-tile.t2 .tile-helper,
+    .mfc__kaleidoscope-tile.t5 .tile-helper,
+    .mfc__kaleidoscope-tile.t7 .tile-helper {
+        right: 0;
+    }
+    .mfc__kaleidoscope-tile.t1 .tile-helper,
+    .mfc__kaleidoscope-tile.t3 .tile-helper,
+    .mfc__kaleidoscope-tile.t4 .tile-helper,
+    .mfc__kaleidoscope-tile.t6 .tile-helper {
+        left: 0;
+    }
+    .mfc__kaleidoscope-tile.t0 .tile-helper,
+    .mfc__kaleidoscope-tile.t2 .tile-helper {
+        transform-origin: right bottom;
+        -webkit-transform-origin: right bottom;
+        transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+    }
+        .mfc__kaleidoscope-tile.t0 .mfc__kaleidoscope-image,
+        .mfc__kaleidoscope-tile.t2 .mfc__kaleidoscope-image {
+            transform-origin: right bottom;
+            -webkit-transform-origin: right bottom;
+            transform: rotate(45deg) scale(-1, 1) translate(100%, 100%);
+            -webkit-transform: rotate(45deg) scale(-1, 1) translate(100%, 100%);
+        }
+    .mfc__kaleidoscope-tile.t1 .tile-helper,
+    .mfc__kaleidoscope-tile.t3 .tile-helper {
+        transform-origin: left bottom;
+        -webkit-transform-origin: left bottom;
+        transform: rotate(-45deg);
+        -webkit-transform: rotate(-45deg);
+    }
+        .mfc__kaleidoscope-tile.t1 .mfc__kaleidoscope-image,
+        .mfc__kaleidoscope-tile.t3 .mfc__kaleidoscope-image {
+            transform-origin: left bottom;
+            -webkit-transform-origin: left bottom;
+            transform: rotate(-45deg) translate(0, 100%);
+            -webkit-transform: rotate(-45deg) translate(0, 100%);
+        }
+    .mfc__kaleidoscope-tile.t4 .tile-helper,
+    .mfc__kaleidoscope-tile.t6 .tile-helper {
+        transform-origin: left top;
+        -webkit-transform-origin: left top;
+        transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+    }
+        .mfc__kaleidoscope-tile.t4 .mfc__kaleidoscope-image,
+        .mfc__kaleidoscope-tile.t6 .mfc__kaleidoscope-image {
+            transform-origin: left top;
+            -webkit-transform-origin: left top;
+            transform: rotate(45deg) scale(1, -1);
+            -webkit-transform: rotate(45deg) scale(1, -1);
+        }
+    .mfc__kaleidoscope-tile.t5 .tile-helper,
+    .mfc__kaleidoscope-tile.t7 .tile-helper {
+        transform-origin: right top;
+        -webkit-transform-origin: right top;
+        transform: rotate(-45deg);
+        -webkit-transform: rotate(-45deg);
+    }
+        .mfc__kaleidoscope-tile.t5 .mfc__kaleidoscope-image,
+        .mfc__kaleidoscope-tile.t7 .mfc__kaleidoscope-image {
+            transform-origin: right top;
+            -webkit-transform-origin: right top;
+            transform: rotate(-45deg) scale(-1, -1) translate(100%, 0);
+            -webkit-transform: rotate(-45deg) scale(-1, -1) translate(100%, 0);
+        }
+
+.mfc__kaleidoscope-tile .ct {
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    left: -100%;
+    top: -100%;
+}
+.circle-tile {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 998;
+
+    background-size: 52%;
+    background-repeat: repeat;
+    background-position: right bottom;
+
+    transform-origin: center center;
+    -webkit-transform-origin: center center;
+
+    transform: translate(0, 20%) scale(-1, 1) rotate(3deg);
+    -webkit-transform: translate(0, 20%) scale(-1, 1) rotate(3deg);
+}
+.circle-tile.animating {
+    transition-property: transform;
+    transition-duration: 1s;
+    transition-timing-function: linear;
+    transition-delay: 0s;
+}
+.circle-tile.p1 {
+    transform: translate(6%, 26%) scale(-1, 1) rotate(16deg);
+    -webkit-transform: translate(6%, 26%) scale(-1, 1) rotate(16deg);
+}
+.circle-tile.p2 {
+    transform: translate(2%, 36%) scale(-1, 1) rotate(35deg);
+    -webkit-transform: translate(2%, 36%) scale(-1, 1) rotate(35deg);
+}
+.circle-tile.p3 {
+    transform: translate(-3%, 37%) scale(-1, 1) rotate(47deg);
+    -webkit-transform: translate(-3%, 37%) scale(-1, 1) rotate(47deg);
+}
+.circle-tile.p4 {
+    transition: transform .25s linear;
+    -webkit-transition: -webkit-transform .25s linear;
+
+    transform: translate(-3%, 37%) scale(-1, 1) rotate(47deg);
+    -webkit-transform: translate(-3%, 37%) scale(-1, 1) rotate(47deg);
+}
+.circle-tile.p5 {
+    transition: transform .5s linear;
+    -webkit-transition: -webkit-transform .5s linear;
+
+    transform: translate(10%, -19%) scale(-1, 1) rotate(-20deg);
+    -webkit-transform: translate(10%, -19%) scale(-1, 1) rotate(-20deg);
+}
+.circle-tile.p6 {
+    transition: transform .2s linear;
+    -webkit-transition: -webkit-transform .2s linear;
+
+    transform: translate(36%, 6%) scale(-1, 1) rotate(-45deg);
+    -webkit-transform: translate(36%, 6%) scale(-1, 1) rotate(-45deg);
+}
+.circle-tile.p7 {
+    transition: transform .5s linear;
+    -webkit-transition: -webkit-transform .5s linear;
+
+    transform: translate(22%, -34%) scale(-1, 1) rotate(-75deg);
+    -webkit-transform: translate(22%, -34%) scale(-1, 1) rotate(-75deg);
+}
+.circle-tile.p8 {
+    transition: transform .2s linear;
+    -webkit-transition: -webkit-transform .2s linear;
+
+    transform: translate(28%, -25%) scale(-1, 1) rotate(-90deg);
+    -webkit-transform: translate(28%, -25%) scale(-1, 1) rotate(-90deg);
+}
+.circle-tile.p9 {
+    transition: transform .5s linear;
+    -webkit-transition: -webkit-transform .5s linear;
+
+    transform: translate(15%, -40%) scale(-1, 1) rotate(-90deg);
+    -webkit-transform: translate(15%, -40%) scale(-1, 1) rotate(-90deg);
+}
+.circle-tile.p10 {
+    transition: transform 0s linear;
+    -webkit-transition: -webkit-transform 0s linear;
+
+    transform: translate(80%, 13%) scale(-1, 1) rotate(-90deg);
+}
+.circle-tile.p11 {
+    transform: translate(65%, -26%) scale(-1, 1) rotate(-65deg);
+}
+.circle-tile.p12 {
+    transform: translate(55%, 3%) scale(-1, 1) rotate(-37deg);
+}

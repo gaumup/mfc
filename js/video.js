@@ -70,7 +70,7 @@
 
     MFC.Video.playScene01 = function($video) {
         //html template
-        var _template = (function() {/*
+        var _template = (function() {/*!
             <div class="block img-placeholder img-placeholder-01 color-style-03" id="scene-01__img-placeholder-01"></div>
 
             <div class="block img-placeholder img-placeholder-02 color-style-03" id="scene-01__img-placeholder-02"></div>
@@ -86,9 +86,7 @@
 
             <div class="block scale-block-01" id="scene-01__scale-block-01">
                 <div class="block__inner color-style-03">
-                    <div class="kaleidoscope__wrapper scene-01__kaleidoscope-01">
-                        <div class="kaleidoscope" id="scene-01__kaleidoscope"></div>
-                    </div>
+                    <div class="kaleidoscope" id="scene-01__kaleidoscope"></div>
                 </div>
             </div>
 
@@ -116,6 +114,16 @@
          * - hidden block at bottom-left move left, display ~40% width
          */
         MFC.Video.sub( 'MFC.Video.scene01:startPart1', function() {
+            //set cover image to img placeholder block
+            imgPlaceHolder01
+                .css({
+                    backgroundImage: 'url(' + MFC.Video.config.cover.imageAlpha + ')'
+                });
+            imgPlaceHolder02.add(imgPlaceHolder03)
+                .css({
+                    backgroundImage: 'url(' + MFC.Video.config.cover.image + ')'
+                });
+
             var d1 = $.Deferred(); //2 blocks at bottom-left
             var d2 = $.Deferred(); //hidden block at bottom-left
             var d3 = $.Deferred(); //anim block at top-right
@@ -319,13 +327,16 @@
                         queue: false,
                         complete: function() {
                             var kaleidoscope = $('#scene-01__kaleidoscope');
-                            var kaleidoscopeWrapper = kaleidoscope.parent();
-                            kaleidoscopeWrapper.css({ width: kaleidoscopeWrapper.height() })
-                            kaleidoscope.kaleidescope({
-                                src: '',
-                                opacity: 1,
-                                opacityAnim: 800
+                            var kaleidoscopeApi = kaleidoscope.mfcKaleidos({
+                                delay: 100,
+                                duration: 500
                             });
+                            //set theme color/img
+                            kaleidoscopeApi.updateImg(
+                                kaleidoscope,
+                                MFC.Video.config.cover.image,
+                                MFC.Video.config.cover.bgColor
+                            );
                             d2.resolve();
                         }
                     }
@@ -419,11 +430,9 @@
     };
     MFC.Video.playScene02 = function() {
         //html template
-        var _template = (function() {/*
+        var _template = (function() {/*!
             <div class="block anim-block-01 color-style-default" id="scene-02__anim-block-01">
-                <div class="kaleidoscope__wrapper scene-02__kaleidoscope-01">
-                    <div class="kaleidoscope" id="scene-02__kaleidoscope"></div>
-                </div>
+                <div class="kaleidoscope" id="scene-02__kaleidoscope"></div>
                 <p id="scene-02__kaleidoscope-text" class="kaleidoscope-text"></p>
             </div>
 
@@ -445,16 +454,12 @@
         var imgPlaceHolder01 = $('#scene-02__img-placeholder-01 > .block__inner');
         var animBlock02 = $('#scene-02__anim-block-02');
         var kaleidoscope = $('#scene-02__kaleidoscope');
-        var kaleidoscopeWrapper = kaleidoscope.parent();
         var kaleidoscopeText = $('#scene-02__kaleidoscope-text');
-        var kaleidoscopeTextHeight = kaleidoscopeText.height();
         var kaleidoscopeSentence = $('#scene-02__kaleidoscope-sentence');
         var kaleidoscopeSentenceHeight = kaleidoscopeSentence.height();
         var arrTxt = MFC.Video.config.message;
 
         MFC.Video.sub( 'MFC.Video.scene02:start', function() {
-            //init kaleidoscope & text inside
-            kaleidoscopeWrapper.css({ width: kaleidoscopeWrapper.height() })
             //sentence at bottom
             kaleidoscopeSentence
                 .empty()
@@ -463,6 +468,7 @@
                     lineHeight: kaleidoscopeSentenceHeight + 'px'
                 });
 
+            //init kaleidoscope & text inside
             MFC.Video.pub( 'MFC.Video.scene02:initKaleidoscopeLoop' );
 
             var d1 = $.Deferred(); //block contains kaleidoscope
@@ -512,32 +518,51 @@
         } );
 
         MFC.Video.sub( 'MFC.Video.scene02:initKaleidoscopeLoop', function() {
-            //init kaleidoscope for text loop
-            kaleidoscope.kaleidescope();
-
             var i = 0;
             var t = 1;
+            var _ajustKaleidoscopeFont = Helpers.throttle(function() {
+                //word in kaleidoscope
+                var _kHeight = kaleidoscope.height();
+                var _height = _kHeight*parseInt(arrTxt[i].fontSize)/100;
+                kaleidoscopeText.css({
+                    fontSize: _height + 'px',
+                    lineHeight: _kHeight + 'px',
+                });
+
+                //sentence
+                kaleidoscopeSentenceHeight = kaleidoscopeSentence.height();
+                kaleidoscopeSentence.css({
+                    fontSize: kaleidoscopeSentenceHeight + 'px',
+                    lineHeight: kaleidoscopeSentenceHeight + 'px',
+                });
+            }, 250);
+            $(window).on( 'resize', _ajustKaleidoscopeFont );
+            var kaleidoscopeApi;
             var kaleidoscopeTextIntv = function() {
                 setTimeout(function() {
-                    if ( t == 1 ) { t = 2000; }
-                    //load new text to kaleidoscope
-                    kaleidoscopeText
-                        .text( arrTxt[i].text )
-                        .css({
-                            fontSize: parseInt(kaleidoscopeTextHeight)*parseInt(arrTxt[i].fontSize)/100 + 'px',
-                            lineHeight: kaleidoscopeTextHeight + 'px',
-                            color: arrTxt[i].fontColor
+                    if ( t == 1 ) { //1st time, init kaleidoscope
+                        kaleidoscopeApi = kaleidoscope.mfcKaleidos({
+                            delay: 200,
+                            duration: 600
                         });
+                        t = 3000;
+                    }
+                    //set theme color/img
+                    kaleidoscopeApi.updateImg(
+                        kaleidoscope,
+                        arrTxt[i].themeBgKaleidoscope,
+                        arrTxt[i].themeBgKaleidoscopeColor
+                    );
+                    //load new text to kaleidoscope
+                    kaleidoscopeText.text( arrTxt[i].text );
+                    _ajustKaleidoscopeFont();
 
-                    //change theme color
+                    //set theme color
                     animBlock01.add(animBlock02).css({
                         backgroundColor: arrTxt[i].themeBgColor
                     });
                     imgPlaceHolder01.css({
                         backgroundImage: 'url(' + arrTxt[i].themeBgImg + ')'
-                    });
-                    kaleidoscope.find('> .tile > .image').css({
-                        backgroundImage: 'url(' + arrTxt[i].themeBgKaleidoscope + ')'
                     });
 
                     //update text to sentence at bottom
@@ -569,12 +594,12 @@
     };
     MFC.Video.playScene03 = function() {
         //html template
-        var _templatePart01 = (function() {/*
+        var _templatePart01 = (function() {/*!
             <div class="sentence-row sentence-row-01"></div>
             <div class="sentence-row sentence-row-02"></div>
             <div class="sentence-row sentence-row-03"></div>
         */}).toString().match(reCommentContents)[1];
-        var _templatePart02 = (function() {/*
+        var _templatePart02 = (function() {/*!
             <div class="word-block-wrapper" id="scene-03__word-block-wrapper">
                 <div class="word-block word-block-01 color-style-03">
                     <span>Message</span>
@@ -599,7 +624,7 @@
                 </div>
             </div>
         */}).toString().match(reCommentContents)[1];
-        var _templatePart03 = (function() {/*
+        var _templatePart03 = (function() {/*!
             <div class="mfc-banner-01 color-style-01" id="scene-03__mfc-banner-01">Sschh...Schubert!</div>
             <div class="mfc-big-day" id="scene-03__mfc-big-day">13.09.2015</div>
             <div class="mfc-brand">
@@ -628,7 +653,7 @@
                 rows[1] = sentenceBreakdown.slice(wordsPerRow, wordsPerRow*2);
                 rows[2] = sentenceBreakdown.slice(wordsPerRow*2);
                 //ensure 3 rows: row's height: 25%, 25%, 50%
-                var _blockTpl = (function() {/*
+                var _blockTpl = (function() {/*!
                     <div class="block"></div>
                 */}).toString().match(reCommentContents)[1];
                 var _spaceBlock = (function(rowIndex, rowHeight, wordIndex) {
