@@ -47,7 +47,7 @@
 
         //apply pub/sub to 'MFC.Video'
             Pattern.Mediator.installTo(MFC.Video);
-            MFC.Video.sub( 'MFC.Video:init', MFC.Video.playScene01 );
+            MFC.Video.sub( 'MFC.Video:init', MFC.Video.playScene03 );
             MFC.Video.sub( 'MFC.Video.scene01:completed', MFC.Video.playScene02 );
             MFC.Video.sub( 'MFC.Video.scene02:completed', MFC.Video.playScene03 );
 
@@ -74,7 +74,7 @@
 
                     //init soundmanager2 widgets
                     soundManager.setup({
-                        url: 'swf',
+                        url: 'widgets/soundmanager2/swf',
                         flashVersion: 9, // optional: shiny features (default = 8)
                         // optional: ignore Flash where possible, use 100% HTML5 mode
                         preferFlash: false,
@@ -87,7 +87,7 @@
                                         autoLoad: true,
                                         autoPlay: false,
                                         onload: function() {
-                                            //this.play();
+                                            // this.play();
                                             MFC.Video.pub( 'MFC.Video.sound:load' );
                                         },
                                         volume: 100
