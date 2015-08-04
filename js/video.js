@@ -47,7 +47,7 @@
 
         //apply pub/sub to 'MFC.Video'
             Pattern.Mediator.installTo(MFC.Video);
-            MFC.Video.sub( 'MFC.Video:init', MFC.Video.playScene03 );
+            MFC.Video.sub( 'MFC.Video:init', MFC.Video.playScene01 );
             MFC.Video.sub( 'MFC.Video.scene01:completed', MFC.Video.playScene02 );
             MFC.Video.sub( 'MFC.Video.scene02:completed', MFC.Video.playScene03 );
 
