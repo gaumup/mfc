@@ -61,10 +61,44 @@
             $.getJSON( 'config.json')
                 .done(function(response) {
                     $.extend( true, MFC.Video.config, response );
-                    $video.removeClass('mfc-video__loading');
-                    MFC.Video.pub( 'MFC.Video:init', $video );
+
+                    //preload sound
+                    var soundLoaded = 0;
+                    MFC.Video.sub( 'MFC.Video.sound:load', function() {
+                        soundLoaded++;
+                        if ( soundLoaded == MFC.Video.config.sound.total ) {
+                            $video.removeClass('mfc-video__loading');
+                            MFC.Video.pub( 'MFC.Video:init', $video );
+                        }
+                    } );
+
+                    //init soundmanager2 widgets
+                    soundManager.setup({
+                        url: 'swf',
+                        flashVersion: 9, // optional: shiny features (default = 8)
+                        // optional: ignore Flash where possible, use 100% HTML5 mode
+                        preferFlash: false,
+                        onready: function() {
+                            $.each(MFC.Video.config.sound.files, function(key, sounds) {
+                                $.each(sounds, function(_subkey, _sound) {
+                                    soundManager.createSound({
+                                        id: key + '_' + _subkey,
+                                        url: _sound,
+                                        autoLoad: true,
+                                        autoPlay: false,
+                                        onload: function() {
+                                            //this.play();
+                                            MFC.Video.pub( 'MFC.Video.sound:load' );
+                                        },
+                                        volume: 100
+                                    });
+                                });
+                            });
+                        }
+                    });
                 })
-                .fail(function() {})
+                .fail(function() {
+                })
                 .always(function() {});
     };
 
@@ -95,6 +129,7 @@
             <div class="block anim-block-03 color-style-03" id="scene-01__anim-block-03"></div>
         */}).toString().match(reCommentContents)[1];
         var stage = $('#scene-01').html( _template );
+        var sound = soundManager.getSoundById('scene01_sound01');
 
         //blocks
         var imgPlaceHolder01 = $('#scene-01__img-placeholder-01');
@@ -114,6 +149,9 @@
          * - hidden block at bottom-left move left, display ~40% width
          */
         MFC.Video.sub( 'MFC.Video.scene01:startPart1', function() {
+            //play sound
+            sound.play();
+
             //set cover image to img placeholder block
             imgPlaceHolder01
                 .css({
@@ -271,6 +309,7 @@
             $.when( d1, d2, d3, d4, d5, d6, d7, d8 ).done(function() {
                 MFC.Video.pub( 'MFC.Video.scene01:completed' );
                 stage.empty();
+                sound.stop();
             });
             //animate
             var t1 = 800;
@@ -447,6 +486,7 @@
             </div>
         */}).toString().match(reCommentContents)[1];
         var stage = $('#scene-02').html( _template );
+        var sound;
 
         //blocks
         var animBlock01 = $('#scene-02__anim-block-01');
@@ -543,10 +583,15 @@
                     if ( t == 1 ) { //1st time, init kaleidoscope
                         kaleidoscopeApi = kaleidoscope.mfcKaleidos({
                             delay: 200,
-                            duration: 600
+                            duration: 400
                         });
-                        t = 3000;
+                        t = 2000;
                     }
+
+                    //get/play sound
+                    if ( sound !== undefined ) { sound.stop(); }
+                    sound = soundManager.getSoundById( arrTxt[i].themeSound ).play();
+
                     //set theme color/img
                     kaleidoscopeApi.updateImg(
                         kaleidoscope,
@@ -577,6 +622,7 @@
                         setTimeout(function() {
                             MFC.Video.pub( 'MFC.Video.scene02:completed' );
                             stage.empty();
+                            sound.stop();
                         }, t + 500);
                     }
                     else { //do the loop
@@ -633,6 +679,7 @@
             </div>
         */}).toString().match(reCommentContents)[1];
         var stage = $('#scene-03').html(_templatePart01);
+        var sound = soundManager.getSoundById('scene03_sound01');
         var sentence = MFC.Video.config.sentence;
 
         /*
@@ -641,6 +688,7 @@
          * - delay for 3s before go to part 2
          */
         MFC.Video.sub( 'MFC.Video.scene03:startPart1', function() {
+            sound.play();
             var $rows = $('.sentence-row');
             var _preparingContent = Helpers.throttle( function() { //need responsively update
                 $rows.empty();
@@ -758,6 +806,8 @@
          * - delay for 3s before go to part 3
          */
         MFC.Video.sub( 'MFC.Video.scene03:startPart2', function() {
+            sound.stop();
+            sound = soundManager.getSoundById('scene03_sound02').play();
             stage.html(_templatePart02);
 
             var wordBlockWrapper = $('#scene-03__word-block-wrapper');
@@ -782,6 +832,8 @@
          * - display the ending scene
          */
         MFC.Video.sub( 'MFC.Video.scene03:startPart3', function() {
+            sound.stop();
+            sound = soundManager.getSoundById('scene03_sound03').play();
             stage.html(_templatePart03);
 
             var banner = $('#scene-03__mfc-banner-01');

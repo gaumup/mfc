@@ -5,6 +5,28 @@
         "imageAlpha": "images/cover-alpha.png",
         "bgColor": "#ECF0F3"
     },
+    "sound": {
+        "total": 10,
+        "files": {
+            "scene01": {
+                "sound01": "sound/Sym2 I1.wav"
+            },
+            "scene02": {},
+            "scene03": {
+                "sound01": "sound/Sym1 I1.wav",
+                "sound02": "sound/Sym2 I3.wav",
+                "sound03": "sound/Sym6 I8.wav"
+            },
+            "message": {
+                "sound01": "sound/Sym1 I1.wav",
+                "sound02": "sound/Sym2 I2.wav",
+                "sound03": "sound/Sym2 I3.wav",
+                "sound04": "sound/Sym6 I8.wav",
+                "sound05": "sound/Sym8 I1.wav",
+                "sound06": "sound/Sym8 I3.wav"
+            }
+        }
+    },
     "message": [
         {
             "text": "I",
@@ -14,7 +36,7 @@
             "themeBgImg": "images/idol-07.jpg",
             "themeBgKaleidoscope": "images/idol-07.jpg",
             "themeBgKaleidoscopeColor": "#6B3571",
-            "themeSound": ""
+            "themeSound": "message_sound01"
         },
         {
             "text": "n",
@@ -24,7 +46,7 @@
             "themeBgImg": "images/idol-08.jpg",
             "themeBgKaleidoscope": "images/idol-08.jpg",
             "themeBgKaleidoscopeColor": "#454E9B",
-            "themeSound": ""
+            "themeSound": "message_sound02"
         },
         {
             "text": "t",
@@ -34,7 +56,7 @@
             "themeBgImg": "images/idol-05.jpg",
             "themeBgKaleidoscope": "images/idol-05.jpg",
             "themeBgKaleidoscopeColor": "#404587",
-            "themeSound": ""
+            "themeSound": "message_sound03"
         },
         {
             "text": "e",
@@ -44,7 +66,7 @@
             "themeBgImg": "images/idol-14.jpg",
             "themeBgKaleidoscope": "images/idol-14.jpg",
             "themeBgKaleidoscopeColor": "#1EB4CF",
-            "themeSound": ""
+            "themeSound": "message_sound04"
         },
         {
             "text": "R",
@@ -54,7 +76,7 @@
             "themeBgImg": "images/idol-16.jpg",
             "themeBgKaleidoscope": "images/idol-16.jpg",
             "themeBgKaleidoscopeColor": "#0093B4",
-            "themeSound": ""
+            "themeSound": "message_sound05"
         },
         {
             "text": "n",
@@ -64,7 +86,7 @@
             "themeBgImg": "images/idol-09.jpg",
             "themeBgKaleidoscope": "images/idol-09.jpg",
             "themeBgKaleidoscopeColor": "#1D5A9D",
-            "themeSound": ""
+            "themeSound": "message_sound06"
         }
     ],
     "sentence": {
