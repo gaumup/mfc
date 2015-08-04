@@ -9,21 +9,21 @@
         "total": 10,
         "files": {
             "scene01": {
-                "sound01": "sound/Sym2 I1.wav"
+                "sound01": "sound/Sym2 I1.mp3"
             },
             "scene02": {},
             "scene03": {
-                "sound01": "sound/Sym6 I8.wav",
-                "sound02": "sound/Sym2 I3.wav",
-                "sound03": "sound/Sym1 I1.wav"
+                "sound01": "sound/Sym6 I8.mp3",
+                "sound02": "sound/Sym2 I3.mp3",
+                "sound03": "sound/Sym1 I1.mp3"
             },
             "message": {
-                "sound01": "sound/Sym1 I1.wav",
-                "sound02": "sound/Sym2 I2.wav",
-                "sound03": "sound/Sym2 I3.wav",
-                "sound04": "sound/Sym6 I8.wav",
-                "sound05": "sound/Sym8 I1.wav",
-                "sound06": "sound/Sym8 I3.wav"
+                "sound01": "sound/Sym1 I1.mp3",
+                "sound02": "sound/Sym2 I2.mp3",
+                "sound03": "sound/Sym2 I3.mp3",
+                "sound04": "sound/Sym6 I8.mp3",
+                "sound05": "sound/Sym8 I1.mp3",
+                "sound06": "sound/Sym8 I3.mp3"
             }
         }
     },
