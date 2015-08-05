@@ -20,6 +20,19 @@
     MFC.Video = {};
     MFC.Video.config = {
     };
+    MFC.Video.soundManager = soundManager;
+    MFC.Video.imageManager = (function() {
+        var store = {};
+        var _set = function(id, value) {
+            store[id] = value;
+        }
+        var _get = function(id) { return store[id]; }
+
+        return {
+            set: _set,
+            get: _get
+        }
+    })();
     MFC.Video.init = function($video) {
         //set video dimension with ratio 2:1
             var _setVideoHeightLazy = Helpers.throttle( function(e) {
@@ -52,54 +65,125 @@
             MFC.Video.sub( 'MFC.Video.scene02:completed', MFC.Video.playScene03 );
 
         /*
-         * 1- load 'config'
-         * 2- preparing assets: images, sounds => preloading (show loading during this step)
-         * 3- start playing video
+         * 1- load 'config' -> publish 'MFC.Video.config:ready'
+         * 2- preparing assets: images, sounds => preloading (show loading during this step) -> publish 'MFC.Video:ready'
+         * 3- start playing video -> publish 'MFC.Video:init'
          */
 
         //1- load config
             $.getJSON( 'config.json')
                 .done(function(response) {
                     $.extend( true, MFC.Video.config, response );
-
-                    //preload sound
-                    var soundLoaded = 0;
-                    MFC.Video.sub( 'MFC.Video.sound:load', function() {
-                        soundLoaded++;
-                        if ( soundLoaded == MFC.Video.config.sound.total ) {
-                            $video.removeClass('mfc-video__loading');
-                            MFC.Video.pub( 'MFC.Video:init', $video );
-                        }
-                    } );
-
-                    //init soundmanager2 widgets
-                    soundManager.setup({
-                        url: 'widgets/soundmanager2/swf',
-                        flashVersion: 9, // optional: shiny features (default = 8)
-                        // optional: ignore Flash where possible, use 100% HTML5 mode
-                        preferFlash: false,
-                        onready: function() {
-                            $.each(MFC.Video.config.sound.files, function(key, sounds) {
-                                $.each(sounds, function(_subkey, _sound) {
-                                    soundManager.createSound({
-                                        id: key + '_' + _subkey,
-                                        url: _sound,
-                                        autoLoad: true,
-                                        autoPlay: false,
-                                        onload: function() {
-                                            // this.play();
-                                            MFC.Video.pub( 'MFC.Video.sound:load' );
-                                        },
-                                        volume: 100
-                                    });
-                                });
-                            });
-                        }
-                    });
+                    MFC.Video.pub( 'MFC.Video.config:ready' );
                 })
                 .fail(function() {
                 })
                 .always(function() {});
+
+        //2- preparing assets: images and sounds
+            var loadingProgress = $('#mfc-loading-progress');
+            MFC.Video.sub( 'MFC.Video.config:ready', function() {
+                var loadingProgressText = loadingProgress.find('> span').eq(0);
+                var loadingProgressHeight;
+                var _setLoadingProgressFont = Helpers.throttle(function() {
+                    loadingProgressHeight = loadingProgress.height();
+                    loadingProgress.css({
+                        fontSize: loadingProgressHeight*.11 + 'px',
+                        lineHeight: loadingProgressHeight + 'px'
+                    }).removeClass('hidden');
+                }, 250);
+                _setLoadingProgressFont();
+                $(window).on( 'resize', _setLoadingProgressFont );
+
+                var overallProgress = 0;
+                var _setLoadingProgress = function(type) {
+                    loadingProgressText.text( Math.round( (++overallProgress/totalAssets)*100 ) );
+                }
+
+                //preparing assets: images + sounds
+                var isAllImagesLoaded = false;
+                var isAllSoundLoaded = false;
+                var totalAssets = MFC.Video.config.images.total + MFC.Video.config.sound.total;
+                MFC.Video.sub( 'MFC.Video.assets:load', function() {
+                    if ( isAllImagesLoaded && isAllSoundLoaded ) {
+                        MFC.Video.pub( 'MFC.Video:ready' );
+                    }
+                } );
+
+                //preload image
+                var imageLoad = 0;
+                MFC.Video.sub( 'MFC.Video.image:load', function() {
+                    imageLoad++;
+                    _setLoadingProgress();
+                    if ( imageLoad == MFC.Video.config.images.total ) {
+                        isAllImagesLoaded = true;
+                        MFC.Video.pub( 'MFC.Video.assets:load' );
+                    }
+                } );
+                //load images
+                $.each(MFC.Video.config.images.files, function(key, images) {
+                    $.each(images, function(_subkey, _image) {
+                        var _img = new Image();
+                        _img.onload = function() {
+                            MFC.Video.pub( 'MFC.Video.image:load' );
+                        }
+                        _img.src = _image;
+                        MFC.Video.imageManager.set( key + '_' + _subkey, _image );
+                    });
+                });
+
+                //preload sound
+                var soundLoaded = 0;
+                MFC.Video.sub( 'MFC.Video.sound:load', function() {
+                    soundLoaded++;
+                    _setLoadingProgress();
+                    if ( soundLoaded == MFC.Video.config.sound.total ) {
+                        isAllSoundLoaded = true;
+                        MFC.Video.pub( 'MFC.Video.assets:load' );
+                    }
+                } );
+                //init soundmanager2 widgets + load sound
+                soundManager.setup({
+                    url: 'widgets/soundmanager2/swf',
+                    flashVersion: 9, // optional: shiny features (default = 8)
+                    // optional: ignore Flash where possible, use 100% HTML5 mode
+                    preferFlash: false,
+                    onready: function() {
+                        $.each(MFC.Video.config.sound.files, function(key, sounds) {
+                            $.each(sounds, function(_subkey, _sound) {
+                                soundManager.createSound({
+                                    id: key + '_' + _subkey,
+                                    url: _sound,
+                                    autoLoad: true,
+                                    autoPlay: false,
+                                    onload: function() {
+                                        // this.play();
+                                        MFC.Video.pub( 'MFC.Video.sound:load' );
+                                    },
+                                    volume: 100
+                                });
+                            });
+                        });
+                    }
+                });
+            } );
+
+        //3- start playing video
+            MFC.Video.sub( 'MFC.Video:ready', function() {
+                loadingProgress.velocity(
+                    {
+                        opacity: 0
+                    },
+                    {
+                        duration: 800,
+                        complete: function() {
+                            loadingProgress.remove();
+                            $video.removeClass('mfc-video__loading');
+                            MFC.Video.pub( 'MFC.Video:init', $video );
+                        }
+                    }
+                )
+            } );
     };
 
     MFC.Video.playScene01 = function($video) {
@@ -155,11 +239,11 @@
             //set cover image to img placeholder block
             imgPlaceHolder01
                 .css({
-                    backgroundImage: 'url(' + MFC.Video.config.cover.imageAlpha + ')'
+                    backgroundImage: 'url(' + MFC.Video.imageManager.get( MFC.Video.config.cover.imageAlpha ) + ')'
                 });
             imgPlaceHolder02.add(imgPlaceHolder03)
                 .css({
-                    backgroundImage: 'url(' + MFC.Video.config.cover.image + ')'
+                    backgroundImage: 'url(' + MFC.Video.imageManager.get( MFC.Video.config.cover.image ) + ')'
                 });
 
             var d1 = $.Deferred(); //2 blocks at bottom-left
@@ -373,7 +457,7 @@
                             //set theme color/img
                             kaleidoscopeApi.updateImg(
                                 kaleidoscope,
-                                MFC.Video.config.cover.image,
+                                MFC.Video.imageManager.get( MFC.Video.config.cover.image ),
                                 MFC.Video.config.cover.bgColor
                             );
                             d2.resolve();
@@ -435,14 +519,14 @@
                 );
             });
             $.when( d2, d6 ).done(function() {
-                var _delay = 2000;
+                var _delay = 1000;
                 scaleBlock01Wrapper.velocity(
                     {
                         left: '100%'
                     },
                     {
                         delay: _delay,
-                        duration: t1/2,
+                        duration: t1/3,
                         complete: function() {
                             d7.resolve();
                         }
@@ -454,7 +538,7 @@
                     },
                     {
                         delay: _delay,
-                        duration: t1/2,
+                        duration: t1/3,
                         complete: function() {
                             d8.resolve();
                         }
@@ -595,7 +679,7 @@
                     //set theme color/img
                     kaleidoscopeApi.updateImg(
                         kaleidoscope,
-                        arrTxt[i].themeBgKaleidoscope,
+                        MFC.Video.imageManager.get( arrTxt[i].themeBgKaleidoscope ),
                         arrTxt[i].themeBgKaleidoscopeColor
                     );
                     //load new text to kaleidoscope
@@ -607,7 +691,7 @@
                         backgroundColor: arrTxt[i].themeBgColor
                     });
                     imgPlaceHolder01.css({
-                        backgroundImage: 'url(' + arrTxt[i].themeBgImg + ')'
+                        backgroundImage: 'url(' + MFC.Video.imageManager.get( arrTxt[i].themeBgImg ) + ')'
                     });
 
                     //update text to sentence at bottom
@@ -833,7 +917,11 @@
          */
         MFC.Video.sub( 'MFC.Video.scene03:startPart3', function() {
             sound.stop();
-            sound = soundManager.getSoundById('scene03_sound03').play();
+            soundManager.play( 'scene03_sound03', {
+                onfinish: function() {
+                    sound.destruct();
+                }
+            } );
             stage.html(_templatePart03);
 
             var banner = $('#scene-03__mfc-banner-01');

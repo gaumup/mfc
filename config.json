@@ -1,10 +1,5 @@
 {
     "name": "MFC",
-    "cover": {
-        "image": "images/cover.png",
-        "imageAlpha": "images/cover-alpha.png",
-        "bgColor": "#ECF0F3"
-    },
     "sound": {
         "total": 10,
         "files": {
@@ -27,14 +22,39 @@
             }
         }
     },
+    "images": {
+        "total": 9,
+        "files": {
+            "logo": {
+                "normal": "images/logo.png"
+            },
+            "cover": {
+                "normal": "images/cover.png",
+                "alpha": "images/cover-alpha.png"
+            },
+            "message": {
+                "idol01": "images/idol-07.jpg",
+                "idol02": "images/idol-08.jpg",
+                "idol03": "images/idol-05.jpg",
+                "idol04": "images/idol-14.jpg",
+                "idol05": "images/idol-16.jpg",
+                "idol06": "images/idol-09.jpg"
+            }
+        }
+    },
+    "cover": {
+        "image": "cover_normal",
+        "imageAlpha": "cover_alpha",
+        "bgColor": "#ECF0F3"
+    },
     "message": [
         {
             "text": "I",
             "fontSize": "90%",
             "fontColor": "#fff",
             "themeBgColor": "#311036",
-            "themeBgImg": "images/idol-07.jpg",
-            "themeBgKaleidoscope": "images/idol-07.jpg",
+            "themeBgImg": "message_idol01",
+            "themeBgKaleidoscope": "message_idol01",
             "themeBgKaleidoscopeColor": "#6B3571",
             "themeSound": "message_sound01"
         },
@@ -43,8 +63,8 @@
             "fontSize": "95%",
             "fontColor": "#fff",
             "themeBgColor": "#242860",
-            "themeBgImg": "images/idol-08.jpg",
-            "themeBgKaleidoscope": "images/idol-08.jpg",
+            "themeBgImg": "message_idol02",
+            "themeBgKaleidoscope": "message_idol02",
             "themeBgKaleidoscopeColor": "#454E9B",
             "themeSound": "message_sound02"
         },
@@ -53,8 +73,8 @@
             "fontSize": "60%",
             "fontColor": "#fff",
             "themeBgColor": "#1E214C",
-            "themeBgImg": "images/idol-05.jpg",
-            "themeBgKaleidoscope": "images/idol-05.jpg",
+            "themeBgImg": "message_idol03",
+            "themeBgKaleidoscope": "message_idol03",
             "themeBgKaleidoscopeColor": "#404587",
             "themeSound": "message_sound03"
         },
@@ -63,8 +83,8 @@
             "fontSize": "100%",
             "fontColor": "#fff",
             "themeBgColor": "#147982",
-            "themeBgImg": "images/idol-14.jpg",
-            "themeBgKaleidoscope": "images/idol-14.jpg",
+            "themeBgImg": "message_idol04",
+            "themeBgKaleidoscope": "message_idol04",
             "themeBgKaleidoscopeColor": "#1EB4CF",
             "themeSound": "message_sound04"
         },
@@ -73,8 +93,8 @@
             "fontSize": "100%",
             "fontColor": "#fff",
             "themeBgColor": "#06616E",
-            "themeBgImg": "images/idol-16.jpg",
-            "themeBgKaleidoscope": "images/idol-16.jpg",
+            "themeBgImg": "message_idol05",
+            "themeBgKaleidoscope": "message_idol05",
             "themeBgKaleidoscopeColor": "#0093B4",
             "themeSound": "message_sound05"
         },
@@ -83,8 +103,8 @@
             "fontSize": "98%",
             "fontColor": "#fff",
             "themeBgColor": "#073664",
-            "themeBgImg": "images/idol-09.jpg",
-            "themeBgKaleidoscope": "images/idol-09.jpg",
+            "themeBgImg": "message_idol06",
+            "themeBgKaleidoscope": "message_idol06",
             "themeBgKaleidoscopeColor": "#1D5A9D",
             "themeSound": "message_sound06"
         }
