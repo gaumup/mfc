@@ -2,8 +2,6 @@
 
 (function($) {
     $(document).ready(function() {
-
-        //TODO
         MFC.Video.init( $('#mfc-video') );
     });
 
@@ -71,6 +69,18 @@
          */
 
         //1- load config
+            var loadingProgress = $('#mfc-loading-progress');
+            var loadingProgressText = loadingProgress.find('> span').eq(0);
+            var loadingProgressHeight;
+            var _setLoadingProgressFont = Helpers.throttle(function() {
+                loadingProgressHeight = loadingProgress.height();
+                loadingProgress.css({
+                    fontSize: loadingProgressHeight*.11 + 'px',
+                    lineHeight: loadingProgressHeight + 'px'
+                }).removeClass('hidden');
+            }, 250);
+            _setLoadingProgressFont();
+            $(window).on( 'resize', _setLoadingProgressFont );
             $.getJSON( 'config.json')
                 .done(function(response) {
                     $.extend( true, MFC.Video.config, response );
@@ -81,20 +91,7 @@
                 .always(function() {});
 
         //2- preparing assets: images and sounds
-            var loadingProgress = $('#mfc-loading-progress');
             MFC.Video.sub( 'MFC.Video.config:ready', function() {
-                var loadingProgressText = loadingProgress.find('> span').eq(0);
-                var loadingProgressHeight;
-                var _setLoadingProgressFont = Helpers.throttle(function() {
-                    loadingProgressHeight = loadingProgress.height();
-                    loadingProgress.css({
-                        fontSize: loadingProgressHeight*.11 + 'px',
-                        lineHeight: loadingProgressHeight + 'px'
-                    }).removeClass('hidden');
-                }, 250);
-                _setLoadingProgressFont();
-                $(window).on( 'resize', _setLoadingProgressFont );
-
                 var overallProgress = 0;
                 var _setLoadingProgress = function(type) {
                     loadingProgressText.text( Math.round( (++overallProgress/totalAssets)*100 ) );
