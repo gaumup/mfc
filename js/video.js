@@ -2,7 +2,7 @@
 
 (function($) {
     $(document).ready(function() {
-        MFC.Video.init( $('#mfc-video') );
+        MFC.Video.init( $('#mfc-video'), 'config.json' );
     });
 
     //MFC namespace
@@ -31,7 +31,7 @@
             get: _get
         }
     })();
-    MFC.Video.init = function($video) {
+    MFC.Video.init = function($video, $configUrl) {
         //set video dimension with ratio 2:1
             var _setVideoHeightLazy = Helpers.throttle( function(e) {
                 //video size
@@ -81,7 +81,7 @@
             }, 250);
             _setLoadingProgressFont();
             $(window).on( 'resize', _setLoadingProgressFont );
-            $.getJSON( 'config.json')
+            $.getJSON($configUrl)
                 .done(function(response) {
                     $.extend( true, MFC.Video.config, response );
                     MFC.Video.pub( 'MFC.Video.config:ready' );
