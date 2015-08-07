@@ -1,0 +1,10 @@
+{
+    "name": "MFC",
+    "logo": "images/logo.png",
+    "image": "images/cover.png",
+    "idol": {
+        "image": "images/cover.png",
+        "color": "#ffffff"
+    },
+    "sentence": "Can you feel the love tonight"
+}
