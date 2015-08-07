@@ -1,3 +1,15 @@
+@font-face {
+    font-family: 'Noto Sans Regular';
+    src: url('../fonts/notosans-regular-webfont.eot');
+    src: url('../fonts/notosans-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/notosans-regular-webfont.woff2') format('woff2'),
+         url('../fonts/notosans-regular-webfont.woff') format('woff'),
+         url('../fonts/notosans-regular-webfont.ttf') format('truetype'),
+         url('../fonts/notosans-regular-webfont.svg#noto_sansregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
 html,
 body {
     font-family: Arial;
@@ -5,13 +17,65 @@ body {
     margin: 0;
     padding: 0;
 }
+* {
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;
+}
 p {
     margin: 0;
     padding: 0;
 }
+p,
+span,
+div,
+em,
+strong {
+    cursor: default;
+}
 .hidden {
     display: none;
 }
+.logs {
+    width: 100%;
+    font-size: 12px;
+    color: #fff;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    max-height: 100%;
+    overflow: auto;
+    color: #666;
+}
+.mfc-control-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1000000;
+    width: 10%;
+}
+    .mfc-play-btn {
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        width: 25%;
+        height: 25%;
+    }
+    .mfc-play-btn.playing {
+        top: 0;
+        bottom: auto;
+        right: 10%;
+        left: auto;
+        width: 10%;
+        height: auto;
+    }
+    .mfc-stop-btn {
+        right: 0;
+    }
 .mfc-video__wrapper {
     position: absolute;
     width: 100%;
@@ -21,6 +85,8 @@ p {
 }
     .mfc-video__content {
         position: absolute;
+        z-index: 1000;
+        background: #000;
         width: 100%;
         height: 100%;
         margin: auto;
@@ -29,6 +95,9 @@ p {
         top: 0;
         bottom: 0;
         overflow: hidden;
+    }
+    .mfc-video__content.mfc-video__loading {
+        z-index: 1;
     }
         .mfc-loading-progress {
             position: absolute;
@@ -94,6 +163,17 @@ p {
             background-position: center center;
             background-size: 150%;
         }
+            .scene-01 .img-alpha-layer {
+                position: absolute;
+                top: 0;
+                left: 0;
+                opacity: 0.5;
+                -moz-opacity: 0.5;
+                filter: alpha(opacity=50);
+                z-index: 1;
+                width: 100%;
+                height: 100%;
+            }
         .scene-01 .img-placeholder-02 {
             width: 35%;
             height: 68%;
@@ -235,18 +315,18 @@ p {
                 text-transform: uppercase;
                 text-align: center;
                 font-weight: bold;
-                font-size: 100%;
                 padding: 0 2%;
+                margin: 0 2%;
                 position: relative;
                 float: left;
-                margin: 0 2%;
-                box-sizing: border-box;
-                -moz-box-sizing: border-box;
-                -webkit-box-sizing: border-box;
             }
             .scene-03 .block-space {
+                width: 0;
                 padding: 0;
                 margin: 0;
+                background-repeat: no-repeat;
+                background-position: center center;
+                background-size: contain;
             }
             .scene-03 .sentence-row {
                 position: absolute;
@@ -264,7 +344,6 @@ p {
                 .scene-03 .sentence-row.sentence-row-02 .block:last-child,
                 .scene-03 .sentence-row.sentence-row-03 .block:last-child {
                     margin-right: 0;
-                    float: right;
                 }
             .scene-03 .sentence-row.sentence-row-01,
             .scene-03 .sentence-row.sentence-row-02 {
@@ -283,6 +362,9 @@ p {
                     visibility: hidden;
                     font-style: normal;
                 }
+                .scene-03 .sentence-row .block span .scene-03__keyword.visible {
+                    visibility: visible;
+                }
 
         /* part 2 */
             .scene-03 .word-block-wrapper {
@@ -296,6 +378,7 @@ p {
                 height: 25%;
             }
                 .scene-03 .word-block {
+                    font-family: 'Noto Sans Regular';
                     float: left;
                     color: #fff;
                     text-transform: uppercase;
@@ -351,6 +434,7 @@ p {
 
         /* part 3 */
             .scene-03 .mfc-banner-01 {
+                font-family: 'Noto Sans Regular';
                 position: absolute;
                 top: 25%;
                 left: 0;
@@ -364,8 +448,9 @@ p {
                 font-weight: bold;
             }
             .scene-03 .mfc-big-day {
+                font-family: 'Noto Sans Regular';
                 text-align: center;
-                color: #fff;
+                color: #dfdfdf;
                 position: absolute;
                 top: 52%;
                 left: 0;
@@ -390,13 +475,14 @@ p {
                     background-size: contain;
                 }
                 .scene-03 .mfc-copyright {
+                    font-family: 'Noto Sans Regular';
                     position: absolute;
                     bottom: 10%;
                     left: 0;
                     right: 0;
                     margin: auto;
                     text-align: center;
-                    color: #fff;
+                    color: #dfdfdf;
                     width: 100%;
                     height: 5%;
                 }

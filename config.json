@@ -23,14 +23,13 @@
         }
     },
     "images": {
-        "total": 9,
+        "total": 8,
         "files": {
             "logo": {
                 "normal": "images/logo.png"
             },
             "cover": {
-                "normal": "images/cover.png",
-                "alpha": "images/cover-alpha.png"
+                "normal": "images/cover.png"
             },
             "message": {
                 "idol01": "images/idol-07.jpg",
@@ -44,7 +43,6 @@
     },
     "cover": {
         "image": "cover_normal",
-        "imageAlpha": "cover_alpha",
         "bgColor": "#ECF0F3"
     },
     "message": [

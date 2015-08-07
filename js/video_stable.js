@@ -34,8 +34,6 @@
             get: _get
         }
     })();
-    MFC.Video.timeline = new TimelineLite();
-    TweenLite.defaultEase = Quad.easeOut;
     MFC.Video.init = function($video, $configUrl, opts) {
         MFC.Video.player = $video;
 
@@ -97,7 +95,6 @@
          */
 
         //1- load config
-            //create loading progress
             var loadingProgress = $('#mfc-loading-progress');
             var loadingProgressText = loadingProgress.find('> span').eq(0);
             var loadingProgressHeight;
@@ -108,10 +105,8 @@
                     lineHeight: loadingProgressHeight + 'px'
                 });
             }, 250);
-            $(window).on( 'resize', _setLoadingProgressFont );
-            //end. create loading progress
 
-            //get config
+            $(window).on( 'resize', _setLoadingProgressFont );
             $.getJSON($configUrl)
                 .done(function(response) {
                     $.extend( true, MFC.Video.config, response );
@@ -123,40 +118,10 @@
 
         //2- preparing assets: images and sounds
             MFC.Video.sub( 'MFC.Video.config:ready', function() {
-                //press spacebar to play|pause
-                $(document).on('keyup', function(e) {
-                    if ( e.keyCode == 32 ) {
-                        playPauseReplayBtn.trigger('click');
-                    }
-                });
                 playPauseReplayBtn.on('click touch', function() {
                     _log('Loading...');
 
                     playPauseReplayBtn.addClass('playing');
-                    //Start play
-                    if ( playPauseReplayBtn.attr('data-play') == 0 ) {
-                        playPauseReplayBtn
-                            .attr('data-play', 1)
-                            .text('Pause');
-                    }
-                    else {
-                        //Playing -> Pause
-                        if ( playPauseReplayBtn.attr('data-pause') == 0 ) {
-                            playPauseReplayBtn
-                                .attr('data-pause', 1)
-                                .text('Resume');
-                            MFC.Video.timeline.pause();
-                            MFC.Video.soundManager.currentPlaying.paused = true;
-                        }
-                        //Pause -> Resume
-                        else {
-                            playPauseReplayBtn
-                                .attr('data-pause', 0)
-                                .text('Pause');
-                            MFC.Video.timeline.resume();
-                            MFC.Video.soundManager.currentPlaying.paused = false;
-                        }
-                    }
 
                     if ( $body.attr('data-state').indexOf('replay') > 0 ) {
                         MFC.Video.pub( 'MFC.Video:init' );
@@ -205,6 +170,7 @@
                     _log( '<span style="color:#f00">Failed: "' + arguments[0] + '</span>' );
                 } );
                 // load images
+                var imagesQueue = new createjs.LoadQueue(true);
                 $.each(MFC.Video.config.images.files, function(key, images) {
                     $.each(images, function(_subkey, _image) {
                         var _img = new Image();
@@ -325,7 +291,7 @@
             <div class="block anim-block-03 color-style-03" id="scene-01__anim-block-03"></div>
         */}).toString().match(reCommentContents)[1];
         var stage = $('#scene-01').html( _template );
-        var sound = MFC.Video.soundManager.currentPlaying = MFC.Video.soundManager.createInstance('scene01_sound01');
+        var sound = MFC.Video.soundManager.createInstance('scene01_sound01');
 
         //blocks
         var imgPlaceHolder01 = $('#scene-01__img-placeholder-01');
@@ -366,37 +332,53 @@
             $.when( d1, d2, d3, d4 ).done(function() {
                 MFC.Video.pub( 'MFC.Video.scene01:startPart2' );
             });
-
-            var t1 = 3;
-            var timeline = MFC.Video.timeline;
-            timeline.add( [
-                TweenLite.to( animBlock02, t1, {
-                    width: '3%',
-                    onComplete: function() {
+            var t1 = 3000;
+            animBlock02.velocity(
+                { //2 blocks move left
+                    width: '3%'
+                },
+                {
+                    duration: t1,
+                    complete: function() {
                         d1.resolve();
                     }
-                } ),
-                TweenLite.to( scaleBlock01, t1, {
+                }
+            );
+            scaleBlock01.velocity(
+                { // hidden block move left
                     width: '100%',
-                    right: 0,
-                    onComplete: function() {
+                    right: 0
+                },
+                {
+                    duration: t1,
+                    complete: function() {
                         d2.resolve();
                     }
-                } ),
-                TweenLite.to( animBlock01, t1, {
-                    height: '48%',
-                    onComplete: function() {
+                }
+            );
+            animBlock01.velocity(
+                { // block anim top-right move down
+                    height: '48%'
+                },
+                {
+                    duration: t1,
+                    complete: function() {
                         d3.resolve();
                     }
-                } ),
-                TweenLite.to( imgPlaceHolder02, t1/3, {
-                    top: 0,
+                }
+            );
+            imgPlaceHolder02.velocity(
+                { //image placeholder 2 slide down
+                    top: 0
+                },
+                {
                     delay: t1/2,
-                    onComplete: function() {
+                    duration: t1/3,
+                    complete: function() {
                         d4.resolve();
                     }
-                } )
-            ] );
+                }
+            );
         } );
 
         /*
@@ -414,42 +396,59 @@
             $.when( d1, d2, d3, d4 ).done(function() {
                 MFC.Video.pub( 'MFC.Video.scene01:startPart3' );
             });
-
             //set state
             scaleBlock01.css({
                 right: 'auto',
                 left: 0
             });
-            var t1 = 0.8;
-            var timeline = MFC.Video.timeline;
-            timeline.add( [
-                TweenLite.to( animBlock02, t1, {
-                    width: '20%',
-                    onComplete: function() {
+            //animate
+            var t1 = 800;
+            animBlock02.velocity(
+                { // 2 blocks move right a little bit
+                    width: '20%'
+                },
+                {
+                    duration: t1,
+                    complete: function() {
                         d1.resolve();
                     }
-                } ),
-                TweenLite.to( scaleBlock01Wrapper, t1, {
-                    width: '22%',
-                    onComplete: function() {
+                }
+            );
+            scaleBlock01Wrapper.velocity(
+                { // blocks move right a little bit
+                    width: '22%'
+                },
+                {
+                    duration: t1,
+                    complete: function() {
                         d2.resolve();
                     }
-                } ),
-                TweenLite.to( imgPlaceHolder01, t1, {
-                    left: '-100%',
-                    onComplete: function() {
+                }
+            );
+            imgPlaceHolder01.velocity(
+                {
+                    left: '-100%'
+                },
+                {
+                    duration: t1,
+                    complete: function() {
                         imgPlaceHolder01.remove();
                         d3.resolve();
                     }
-                } ),
-                TweenLite.to( animBlock01, t1/2, {
-                    right: '-100%',
-                    onComplete: function() {
+                }
+            );
+            animBlock01.velocity(
+                {
+                    right: '-100%'
+                },
+                {
+                    duration: t1/2,
+                    complete: function() {
                         animBlock01.remove();
                         d4.resolve();
                     }
-                } )
-            ] );
+                }
+            );
         } );
 
         /*
@@ -475,121 +474,155 @@
                 stage.empty();
                 MFC.Video.pub( 'MFC.Video.scene01:completed' );
             });
-
-            var t1 = 0.8;
-            var timeline = MFC.Video.timeline;
-            timeline.add( [
-                // d1: 2 blocks move left and hide to bottom
-                TweenLite.to( animBlock02, t1, {
+            //animate
+            var t1 = 800;
+            animBlock02.velocity(
+                { // 2 blocks move left and hide to bottom
                     width: '5%',
-                    bottom: '-100%',
-                    onComplete: function() {
+                    bottom: '-100%'
+                },
+                {
+                    duration: t1,
+                    complete: function() {
                         animBlock02.remove();
                         d1.resolve();
                     }
-                } ),
-                // d2: hidden block grown-up
-                TweenLite.to( scaleBlock01Wrapper, t1, {
+                }
+            );
+            scaleBlock01Wrapper.velocity(
+                { // hidden block grown-up
                     width: '40%',
                     height: '83%'
-                } ),
-                //d3
-                TweenLite.to( imgPlaceHolder02, t1/3, {
-                    left: '100%',
-                    delay: t1*3/4,
-                    onComplete: function() {
-                        imgPlaceHolder02.remove();
-                        d3.resolve();
-                    }
-                } ),
-                //d4
-                TweenLite.to( imgPlaceHolder03, t1/3, {
-                    right: '-100%',
-                    delay: t1*3/4,
-                    onComplete: function() {
-                        imgPlaceHolder03.remove();
-                        d4.resolve();
-                    }
-                } ),
-                //d5
-                TweenLite.to( staticBlock01, t1/2, {
-                    height: 0,
-                    delay: t1/4,
-                    onComplete: function() {
-                        staticBlock01.remove();
-                        d5.resolve();
-                    }
-                } )
-            ] );
-            timeline.add( [
-                //d2: hidden block grown-up, scale 100% width
-                TweenLite.to( scaleBlock01Wrapper, t1/2, {
-                    width: '100%',
-                    onStart: function() {
+                },
+                {
+                    duration: t1,
+                    easing: 'linear',
+                    complete: function() {
                         scaleBlock01Wrapper.css({
                             right: 'auto',
                             left: scaleBlock01Wrapper.position().left
                         });
-                    }
-                } ),
-                //d2: hidden block change position alignment and grow up
-                TweenLite.to( scaleBlock01Wrapper, t1/2, {
-                    // hidden block scale full-width, align top
-                    left: 0,
-                    top: 0,
-                    delay: t1/3,
-                    onStart: function() {
-                        scaleBlock01Wrapper.css({
-                            bottom: 'auto',
-                            top: scaleBlock01Wrapper.position().top
-                        });
-                    },
-                    onComplete: function() {
-                        //init kaleidoscope
-                        var kaleidoscope = $('#scene-01__kaleidoscope');
-                        var kaleidoscopeApi = kaleidoscope.mfcKaleidos({
-                            delay: 100,
-                            duration: 500
-                        });
-                        //set theme color/img
-                        kaleidoscopeApi.updateImg(
-                            kaleidoscope,
-                            MFC.Video.imageManager.get( MFC.Video.config.cover.image ),
-                            MFC.Video.config.cover.bgColor
+                        scaleBlock01Wrapper.velocity(
+                            { // hidden block grown-up
+                                width: '100%'
+                            },
+                            {
+                                duration: t1,
+                                queue: false
+                            }
                         );
-                        d2.resolve();
                     }
-                } )
-            ] );
+                }
+            );
+            setTimeout(function() {
+                scaleBlock01Wrapper.css({
+                    bottom: 'auto',
+                    top: scaleBlock01Wrapper.position().top
+                });
+                scaleBlock01Wrapper.velocity(
+                    { // hidden block scale full-width, align top
+                        left: 0,
+                        top: 0
+                    },
+                    {
+                        duration: t1/2,
+                        queue: false,
+                        complete: function() {
+                            var kaleidoscope = $('#scene-01__kaleidoscope');
+                            var kaleidoscopeApi = kaleidoscope.mfcKaleidos({
+                                delay: 100,
+                                duration: 500
+                            });
+                            //set theme color/img
+                            kaleidoscopeApi.updateImg(
+                                kaleidoscope,
+                                MFC.Video.imageManager.get( MFC.Video.config.cover.image ),
+                                MFC.Video.config.cover.bgColor
+                            );
+                            d2.resolve();
+                        }
+                    }
+                )
+            }, t1*4/3);
+            imgPlaceHolder02.velocity(
+                {
+                    left: '100%'
+                },
+                {
+                    delay: t1*3/4,
+                    duration: t1/3,
+                    complete: function() {
+                        imgPlaceHolder02.remove();
+                        d3.resolve();
+                    }
+                }
+            );
+            imgPlaceHolder03.velocity(
+                {
+                    right: '-100%'
+                },
+                {
+                    delay: t1*3/4,
+                    duration: t1/3,
+                    complete: function() {
+                        imgPlaceHolder03.remove();
+                        d4.resolve();
+                    }
+                }
+            );
+            staticBlock01.velocity(
+                {
+                    height: 0
+                },
+                {
+                    delay: t1/4,
+                    duration: t1/2,
+                    complete: function() {
+                        staticBlock01.remove();
+                        d5.resolve();
+                    }
+                }
+            );
             $.when( d2 ).done(function(v2) {
-                timeline.add( [
-                    TweenLite.to( animBlock03, t1, {
-                        width: '100%',
-                        delay: 0.5,
-                        onComplete: function() {
+                animBlock03.velocity(
+                    {
+                        width: '100%'
+                    },
+                    {
+                        delay: 500,
+                        duration: t1,
+                        complete: function() {
                             d6.resolve();
                         }
-                    } )
-                ] );
+                    }
+                );
             });
-            $.when( d2, d6 ).done(function() { //goes off hidden
-                var _delay = 1;
-                timeline.add( [
-                    TweenLite.to( scaleBlock01Wrapper, t1/3, {
-                        left: '100%',
+            $.when( d2, d6 ).done(function() {
+                var _delay = 1000;
+                scaleBlock01Wrapper.velocity(
+                    {
+                        left: '100%'
+                    },
+                    {
                         delay: _delay,
-                        onComplete: function() {
+                        duration: t1/3,
+                        complete: function() {
                             d7.resolve();
                         }
-                    } ),
-                    TweenLite.to( animBlock03, t1/3, {
-                        left: '-100%',
+                    }
+                );
+                animBlock03.velocity(
+                    {
+                        left: '-100%'
+                    },
+                    {
                         delay: _delay,
-                        onComplete: function() {
+                        duration: t1/3,
+                        complete: function() {
                             d8.resolve();
                         }
-                    } )
-                ] );
+                    }
+                );
             });
         } );
 
@@ -631,51 +664,6 @@
         var kaleidoscopeSentenceHeight = kaleidoscopeSentence.height();
         var arrTxt = MFC.Video.config.message;
 
-        var i = 0;
-        var _ajustKaleidoscopeFont = Helpers.throttle(function() {
-            //word in kaleidoscope
-            var _kHeight = kaleidoscope.height();
-            var _height = _kHeight*parseInt(arrTxt[i].fontSize)/100;
-            kaleidoscopeText.css({
-                fontSize: _height + 'px',
-                lineHeight: _kHeight + 'px',
-            });
-
-            //sentence
-            kaleidoscopeSentenceHeight = kaleidoscopeSentence.height();
-            kaleidoscopeSentence.css({
-                fontSize: kaleidoscopeSentenceHeight + 'px',
-                lineHeight: kaleidoscopeSentenceHeight + 'px',
-            });
-        }, 250);
-        $(window).on( 'resize', _ajustKaleidoscopeFont );
-        var kaleidoscopeApi;
-        var _updateMessage = function(message) {
-            //get/play sound
-            if ( sound !== undefined ) {
-                sound.stop();
-            }
-            sound = MFC.Video.soundManager.currentPlaying = MFC.Video.soundManager.createInstance( message.themeSound );
-            sound.play();
-
-            //set theme color/img
-            kaleidoscopeApi.updateImg(
-                kaleidoscope,
-                MFC.Video.imageManager.get( message.themeBgKaleidoscope ),
-                message.themeBgKaleidoscopeColor
-            );
-            //load new text to kaleidoscope
-            kaleidoscopeText.text( message.text );
-            _ajustKaleidoscopeFont();
-
-            //set theme color
-            animBlock01.add(animBlock02).css({
-                backgroundColor: message.themeBgColor
-            });
-            imgPlaceHolder01.css({
-                backgroundImage: 'url(' + MFC.Video.imageManager.get( message.themeBgImg ) + ')'
-            });
-        }
         MFC.Video.sub( 'MFC.Video.scene02:start', function() {
             //sentence at bottom
             kaleidoscopeSentence
@@ -685,88 +673,133 @@
                     lineHeight: kaleidoscopeSentenceHeight + 'px'
                 });
 
+            //init kaleidoscope & text inside
+            MFC.Video.pub( 'MFC.Video.scene02:initKaleidoscopeLoop' );
+
             var d1 = $.Deferred(); //block contains kaleidoscope
             var d2 = $.Deferred(); //block contains img on the right
             var d3 = $.Deferred(); //block at the bottom
-            $.when( d1, d2, d3 ).done(function(v1, v2, v3) {
-                //no thing
+            $.when( d1, d2, d3 ).done(function(v1, v2, v3 ) {
+                //TODO...
             });
-
-            var t1 = 0.5;
-            var timeline = MFC.Video.timeline;
-            //update 1st message theme
-            timeline.add(
-                (function() {
-                    i++;
-                    //init kaleidoscope
-                    kaleidoscopeApi = kaleidoscope.mfcKaleidos({
-                        delay: 200,
-                        duration: 400
-                    });
-                    _updateMessage( arrTxt[0] );
-                })
-            );
-            timeline.add( [
-                //block contains kaleidoscope move right full-width
-                TweenLite.to( animBlock01, t1, {
-                    left: 0,
-                    onComplete: function() {
+            var t1 = 500;
+            animBlock01.velocity(
+                { //block contains kaleidoscope move right full-width
+                    left: 0
+                },
+                {
+                    duration: t1,
+                    complete: function() {
                         d1.resolve();
                     }
-                } ),
-                //block at the bottom move left full-width
-                TweenLite.to( animBlock02, t1, {
-                    width: '100%',
-                    onComplete: function() {
-                        d3.resolve();
-                    }
-                } )
-            ] );
-            //block contains img move left
-            timeline.add(
-                TweenLite.to( imgPlaceHolder01Wrapper, t1/2, {
-                    right: 0,
-                    delay: 0.2,
-                    ease: Sine.easeIn,
-                    onComplete: function() {
-                        d2.resolve();
-                    }
-                } )
+                }
             );
-            MFC.Video.pub( 'MFC.Video.scene02:initMessageLoop' );
-        } );
-
-        MFC.Video.sub( 'MFC.Video.scene02:initMessageLoop', function() {
-            var t2 = 3;
-            var d1 = $.Deferred();
-            $.when( d1 ).done(function(v1) {
-                sound.stop();
-                stage.empty();
-                MFC.Video.pub( 'MFC.Video.scene02:completed' );
-            });
-
-            var loopMessageTween = [];
-            $.each(arrTxt, function(index, message) {
-                if ( index == 0 ) { return true; } //continue
-                loopMessageTween.push(
-                    (function() {
-                        if ( i < arrTxt.length - 1 ) { i++; }
-                        kaleidoscopeSentence.append( arrTxt[index-1].text );
-                        _updateMessage(message);
-                    })
+            $.when( d1 ).done(function() {
+                imgPlaceHolder01Wrapper.velocity(
+                    { //block contains img move left
+                        right: 0
+                    },
+                    {
+                        delay: 200,
+                        duration: t1/2,
+                        easing: 'easeIn',
+                        complete: function() {
+                            d2.resolve();
+                        }
+                    }
                 );
             });
-            var timeline = MFC.Video.timeline;
-            //loop message
-            timeline.add( loopMessageTween, '+=' + t2, 'sequence', t2 );
-            //last word
-            timeline.add(
-                (function() {
-                    kaleidoscopeSentence.append( arrTxt[arrTxt.length-1].text );
-                    d1.resolve();
-                }),
-                '+=' + t2
+            animBlock02.velocity(
+                { //block at the bottom move left full-width
+                    width: '100%'
+                },
+                {
+                    duration: t1,
+                    complete: function() {
+                        d3.resolve();
+                    }
+                }
             );
+        } );
+
+        MFC.Video.sub( 'MFC.Video.scene02:initKaleidoscopeLoop', function() {
+            var i = 0;
+            var t = 1;
+            var _ajustKaleidoscopeFont = Helpers.throttle(function() {
+                //word in kaleidoscope
+                var _kHeight = kaleidoscope.height();
+                var _height = _kHeight*parseInt(arrTxt[i].fontSize)/100;
+                kaleidoscopeText.css({
+                    fontSize: _height + 'px',
+                    lineHeight: _kHeight + 'px',
+                });
+
+                //sentence
+                kaleidoscopeSentenceHeight = kaleidoscopeSentence.height();
+                kaleidoscopeSentence.css({
+                    fontSize: kaleidoscopeSentenceHeight + 'px',
+                    lineHeight: kaleidoscopeSentenceHeight + 'px',
+                });
+            }, 250);
+            $(window).on( 'resize', _ajustKaleidoscopeFont );
+            var kaleidoscopeApi;
+            var kaleidoscopeTextIntv = function() {
+                setTimeout(function() {
+                    if ( t == 1 ) { //1st time, init kaleidoscope
+                        kaleidoscopeApi = kaleidoscope.mfcKaleidos({
+                            delay: 200,
+                            duration: 400
+                        });
+                        t = 2000;
+                    }
+
+                    //get/play sound
+                    if ( sound !== undefined ) {
+                        sound.stop();
+                    }
+                    sound = MFC.Video.soundManager.createInstance( arrTxt[i].themeSound );
+                    sound.play();
+
+                    //set theme color/img
+                    kaleidoscopeApi.updateImg(
+                        kaleidoscope,
+                        MFC.Video.imageManager.get( arrTxt[i].themeBgKaleidoscope ),
+                        arrTxt[i].themeBgKaleidoscopeColor
+                    );
+                    //load new text to kaleidoscope
+                    kaleidoscopeText.text( arrTxt[i].text );
+                    _ajustKaleidoscopeFont();
+
+                    //set theme color
+                    animBlock01.add(animBlock02).css({
+                        backgroundColor: arrTxt[i].themeBgColor
+                    });
+                    imgPlaceHolder01.css({
+                        backgroundImage: 'url(' + MFC.Video.imageManager.get( arrTxt[i].themeBgImg ) + ')'
+                    });
+
+                    //update text to sentence at bottom
+                    if ( i > 0 ) {
+                        kaleidoscopeSentence.append( arrTxt[i-1].text );
+                    }
+
+                    if ( i == arrTxt.length - 1 ) { //last word
+                        setTimeout(function() {
+                            kaleidoscopeSentence.append( arrTxt[i].text );
+                        }, t);
+                        setTimeout(function() {
+                            sound.stop();
+                            stage.empty();
+                            MFC.Video.pub( 'MFC.Video.scene02:completed' );
+                        }, t + 500);
+                    }
+                    else { //do the loop
+                        setTimeout(kaleidoscopeTextIntv, t);
+                        i++;
+                    }
+                }, t);
+            }
+            kaleidoscopeTextIntv();
         } );
 
         //do something before start scene 02
@@ -814,36 +847,8 @@
             </div>
         */}).toString().match(reCommentContents)[1];
         var stage = $('#scene-03').html(_templatePart01);
-        var sound = MFC.Video.soundManager.currentPlaying = MFC.Video.soundManager.createInstance( 'scene03_sound01' );
+        var sound = MFC.Video.soundManager.createInstance( 'scene03_sound01' );
         var sentence = MFC.Video.config.sentence;
-
-        //do something before start scene 03
-        //...
-        var t = 2;
-        var timeline = MFC.Video.timeline;
-        var a;
-        timeline.add(
-            (function() {
-                MFC.Video.pub( 'MFC.Video.scene03:startPart1' );
-            })
-        );
-        // display keyword of the sentence
-        var isKeywordHidden = true;
-        timeline.add(
-            (function() {
-                isKeywordHidden = false;
-                $('.scene-03__keyword').css({ visibility: 'visible' });
-            }),
-            '+=' + 0.75
-        );
-        timeline.add( [
-            (function() {
-                MFC.Video.pub( 'MFC.Video.scene03:startPart2' );
-            }),
-            (function() {
-                MFC.Video.pub( 'MFC.Video.scene03:startPart3' );
-            })
-        ], '+=' + t, 'sequence', t);
 
         /*
          * scene 03 - part 1
@@ -854,6 +859,7 @@
             sound.play();
 
             var $rows = $('.sentence-row');
+            var isKeywordHidden = true;
             var _preparingContent = Helpers.throttle( function() { //need responsively update
                 $rows.empty();
                 var stageWidth = stage.width();
@@ -956,9 +962,21 @@
                         rowBlocks.css({ width: '100%' });
                     }
                 });
+
+                //display keyword of the sentence
+                if ( isKeywordHidden ) {
+                    setTimeout(function() {
+                        isKeywordHidden = false;
+                        $('.scene-03__keyword').css({ visibility: 'visible' });
+                    }, 750);
+                }
             }, 250 );
             $(window).on( 'resize', _preparingContent );
             _preparingContent();
+
+            setTimeout(function() {
+                MFC.Video.pub( 'MFC.Video.scene03:startPart2' );
+            }, 2000);
         } );
 
         /*
@@ -968,7 +986,7 @@
          */
         MFC.Video.sub( 'MFC.Video.scene03:startPart2', function() {
             sound.stop();
-            sound = MFC.Video.soundManager.currentPlaying = MFC.Video.soundManager.createInstance( 'scene03_sound02' );
+            sound = MFC.Video.soundManager.createInstance( 'scene03_sound01' );
             sound.play();
 
             stage.html(_templatePart02);
@@ -984,6 +1002,10 @@
             }, 250);
             $(window).on( 'resize', _preparingContent );
             _preparingContent();
+
+            setTimeout(function() {
+                MFC.Video.pub( 'MFC.Video.scene03:startPart3' );
+            }, 2000);
         });
 
         /*
@@ -992,7 +1014,7 @@
          */
         MFC.Video.sub( 'MFC.Video.scene03:startPart3', function() {
             sound.stop();
-            sound = MFC.Video.soundManager.currentPlaying = MFC.Video.soundManager.createInstance( 'scene03_sound03' );
+            sound = MFC.Video.soundManager.createInstance( 'scene03_sound01' );
             sound.play();
 
             stage.html(_templatePart03);
@@ -1023,5 +1045,9 @@
             $(window).on( 'resize', _preparingContent );
             _preparingContent();
         });
+
+        //do something before start scene 03
+        //...
+        MFC.Video.pub( 'MFC.Video.scene03:startPart1' );
     };
 })(jQuery);

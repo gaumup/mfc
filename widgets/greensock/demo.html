@@ -1,0 +1,77 @@
+<!doctype html public "✰">
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title dir="ltr">GSAP</title>
+
+    <meta name="viewport" content="width=device-width">
+
+    <style type="text/css">
+        .box1 {
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            top: 100px;
+            left: 0;
+            background: #f00;
+        }
+        .box2 {
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            top: 200px;
+            right: 0;
+            background: #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <button class="" id="play">Play</button>
+    <button class="" id="pause" data-pause="0">Pause</button>
+
+    <div class="box1"></div>
+    <div class="box2"></div>
+
+    <script type="text/javascript" src="../../js/jquery2.min.js"></script>
+    <script src="js/plugins/CSSPlugin.min.js"></script>
+    <script src="js/easing/EasePack.min.js"></script>
+    <script type="text/javascript" src="js/TweenLite.min.js"></script>
+    <script type="text/javascript" src="js/TimelineLite.min.js"></script>
+    <script type="text/javascript">
+        (function($) {
+            $(document).ready(function() {
+                var box1 = $('.box1');
+                var box2 = $('.box2');
+
+                var tl = new TimelineLite();
+                tl.add( TweenLite.to( box1, 4, { left: '50%' } ) );
+                tl.add( TweenLite.to( box2, 5, { right: '50%' } ) );
+                tl.add( TweenLite.to( box1, 8, { top: '60%' } ) );
+                tl.stop();
+
+                //controls
+                var play = $('#play');
+                var pause = $('#pause');
+                play.on('click', function(e) {
+                    tl.play();
+                    return false;
+                });
+                pause.on('click', function(e) {
+                    if ( $(this).attr('data-pause') == 0 ) {
+                        $(this).attr('data-pause', 1).text('Resume');
+                        tl.pause();
+                    }
+                    else {
+                        $(this).attr('data-pause', 0).text('Pause');
+                        tl.resume();
+                    }
+                    return false;
+                });
+            });
+        })(jQuery);
+    </script>
+</body>
+</html>
