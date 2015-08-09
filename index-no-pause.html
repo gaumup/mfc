@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>MFC</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="css/video.css" media="all" />
+        <link rel="stylesheet" type="text/css" href="css/theme.css" media="all" />
+        <link rel="stylesheet" type="text/css" href="widgets/kaleidoscope/css/mfc.kaleidoscope.css" media="all" />
+    </head>
+
+    <!--
+        **state:
+            - stop: when video not playing and at position 0
+            - playing: while playing. Click start -> state = playing
+            - pause: pause at a position while playing. Click pause -> state = 'pause'
+            - replay: return to 0 and play. When user click stop -> state = 'replay'
+    -->
+    <body data-state="stop">
+        <button class="mfc-control-btn mfc-play-btn" id="mfc-play-pause-replay" data-play="0" data-pause="0" data-reply="0">Play</button>
+        <button class="mfc-control-btn mfc-stop-btn" id="mfc-stop">Stop</button>
+
+        <div class="mfc-video__wrapper">
+            <!-- 1160x580 => ratio 2:1, mfc-video__loading -->
+            <div class="mfc-video__content mfc-video__content--theme-01 mfc-video__loading" id="mfc-video">
+                <p id="mfc-loading-progress" class="mfc-loading-progress hidden"><span>0</span>%</p>
+                <!-- content generated dynamically -->
+
+                <!-- scene 01 -->
+                <div id="scene-01" class="stage scene-01"></div>
+                <!-- end. scene 01 -->
+
+                <!-- scene 02 -->
+                <div id="scene-02" class="stage scene-02"></div>
+                <!-- end. scene 02 -->
+
+                <!-- scene 03 -->
+                <div id="scene-03" class="stage scene-03"></div>
+                <!-- end. scene 03 -->
+            </div>
+        </div>
+
+        <script type="text/javascript" src="js/jquery2.min.js"></script>
+        <script type="text/javascript" src="js/utils.js"></script>
+        <script type="text/javascript" src="js/velocity.min.js"></script>
+        <script type="text/javascript" src="widgets/kaleidoscope/js/mfc.kaleidoscope.js"></script>
+        <!-- greensock -->
+        <script type="text/javascript" src="widgets/greensock/js/plugins/CSSPlugin.min.js"></script>
+        <script type="text/javascript" src="widgets/greensock/js/easing/EasePack.min.js"></script>
+        <script type="text/javascript" src="widgets/greensock/js/TweenLite.min.js"></script>
+        <script type="text/javascript" src="widgets/greensock/js/TimelineLite.min.js"></script>
+        <!-- end. greensock -->
+        <script type="text/javascript" src="js/preloadjs-0.6.1.min.js"></script>
+        <script type="text/javascript" src="js/soundjs-0.6.1.min.js"></script>
+        <script type="text/javascript" src="js/video_stable.js"></script>
+    </body>
+</html>
