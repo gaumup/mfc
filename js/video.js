@@ -3,7 +3,7 @@
 (function($) {
     $(document).ready(function() {
         MFC.Video.init( $('#mfc-video'), 'config.json', {
-            debug: true
+            debug: false
         } );
     });
 
@@ -19,6 +19,7 @@
     var MFC = {};
     MFC.Video = {};
     MFC.Video.config = {
+        canPause: false //pause is not well-tested so, please do not turn on
     };
     MFC.Video.controls = {};
     MFC.Video.soundManager = createjs.Sound;
@@ -34,15 +35,47 @@
             get: _get
         }
     })();
-    MFC.Video.timeline = new TimelineLite();
     TweenLite.defaultEase = Quad.easeOut;
     MFC.Video.init = function($video, $configUrl, opts) {
         MFC.Video.player = $video;
 
         //common vars
-            var playPauseReplayBtn = MFC.Video.controls.playPauseReplayBtn = $('#mfc-play-pause-replay');
+            var playPauseReplayBtn = MFC.Video.controls.playPauseReplayBtn = $('#mfc-play-pause-replay').removeClass('hidden');
             var stopBtn = MFC.Video.controls.stopBtn = $('#mfc-stop');
+            var volumeBtn = MFC.Video.controls.volumeBtn = $('#mfc-volume').removeClass('hidden');
             var $body = $('body');
+            //extend playPauseReplayBtn methods
+            $.extend( true, playPauseReplayBtn, {
+                setStatus: function(status) {
+                    switch ( status ) {
+                        case 'playing':
+                        case 'resume':
+                            playPauseReplayBtn
+                                // .text('Pause')
+                                .attr('data-play', 1)
+                                .attr('data-pause', 0)
+                                .addClass('playing')
+                            break;
+                        case 'pause':
+                            playPauseReplayBtn
+                                // .text('Resume')
+                                .attr('data-pause', 1)
+                            break;
+                        case 'stop':
+                        case 'replay':
+                            playPauseReplayBtn
+                                // .text('Play')
+                                .attr('data-play', 0)
+                                .attr('data-pause', 0)
+                                .attr('data-replay', 1)
+                                .removeClass('playing')
+                        case 'replay':
+                            playPauseReplayBtn
+                                // .text('Replay')
+                            break;
+                    }
+                }
+            });
 
         //logs
             var _log = (function() {
@@ -85,10 +118,15 @@
         //apply pub/sub to 'MFC.Video'
             Pattern.Mediator.installTo(MFC.Video);
             MFC.Video.sub( 'MFC.Video:init', function() {
+                MFC.Video.timeline = new TimelineLite();
                 $body.attr('data-state', 'playing');
                 MFC.Video.playScene01();
             });
-            MFC.Video.sub( 'MFC.Video.stop', MFC.Video.stop );
+            MFC.Video.sub( 'MFC.Video:end', function() {
+                MFC.Video.stop();
+                playPauseReplayBtn.setStatus('replay');
+            } );
+            MFC.Video.sub( 'MFC.Video:stop', MFC.Video.stop );
 
         /*
          * 1- load 'config' -> publish 'MFC.Video.config:ready'
@@ -104,7 +142,7 @@
             var _setLoadingProgressFont = Helpers.throttle(function() {
                 loadingProgressHeight = loadingProgress.height();
                 loadingProgress.css({
-                    fontSize: loadingProgressHeight*.11 + 'px',
+                    fontSize: loadingProgressHeight*.08 + 'px',
                     lineHeight: loadingProgressHeight + 'px'
                 });
             }, 250);
@@ -129,49 +167,58 @@
                         playPauseReplayBtn.trigger('click');
                     }
                 });
-                playPauseReplayBtn.on('click touch', function() {
-                    _log('Loading...');
+                playPauseReplayBtn.on('click touch', function(e) {
+                    $video.removeClass('mfc-video__waiting');
 
-                    playPauseReplayBtn.addClass('playing');
-                    //Start play
+                    //Start play: update <body> status
                     if ( playPauseReplayBtn.attr('data-play') == 0 ) {
-                        playPauseReplayBtn
-                            .attr('data-play', 1)
-                            .text('Pause');
+                        if ( $body.attr('data-state').indexOf('replay') > 0 ) {
+                            _log('Replay video...');
+                            MFC.Video.pub( 'MFC.Video:init' );
+                        }
+                        else {
+                            _log('Start loading video assets...');
+                            $body.attr('data-state', 'loading');
+                            MFC.Video.pub( 'MFC.Video:startLoading' );
+                        }
+                        //set buttons status
+                        playPauseReplayBtn.setStatus('playing');
+                        stopBtn.removeClass('hidden');
                     }
                     else {
-                        //Playing -> Pause
-                        if ( playPauseReplayBtn.attr('data-pause') == 0 ) {
-                            playPauseReplayBtn
-                                .attr('data-pause', 1)
-                                .text('Resume');
-                            MFC.Video.timeline.pause();
-                            MFC.Video.soundManager.currentPlaying.paused = true;
-                        }
-                        //Pause -> Resume
-                        else {
-                            playPauseReplayBtn
-                                .attr('data-pause', 0)
-                                .text('Pause');
-                            MFC.Video.timeline.resume();
-                            MFC.Video.soundManager.currentPlaying.paused = false;
+                        if ( MFC.Video.config.canPause ) {
+                            //Playing -> Pause
+                            if ( playPauseReplayBtn.attr('data-pause') == 0 ) {
+                                playPauseReplayBtn.setStatus('pause');
+                                MFC.Video.timeline.pause();
+                                MFC.Video.soundManager.currentPlaying.paused = true;
+                            }
+                            //Pause -> Resume
+                            else {
+                                playPauseReplayBtn.setStatus('resume');
+                                MFC.Video.timeline.resume();
+                                MFC.Video.soundManager.currentPlaying.paused = false;
+                            }
                         }
                     }
 
-                    if ( $body.attr('data-state').indexOf('replay') > 0 ) {
-                        MFC.Video.pub( 'MFC.Video:init' );
-                    }
-                    else {
-                        $body.attr('data-state', 'loading');
-                        MFC.Video.pub( 'MFC.Video.startLoading' );
-                    }
+                    return false;
                 });
-                stopBtn.on('click touch', function() {
+                stopBtn.on('click touch', function(e) {
                     _log('Stop');
-                    MFC.Video.pub( 'MFC.Video.stop' );
+                    MFC.Video.pub( 'MFC.Video:stop' );
+
+                    return false;
+                });
+                volumeBtn.on('click touch', function(e) {
+                    var $this = $(this);
+                    $this.toggleClass('muted');
+                    MFC.Video.soundManager.currentPlaying.muted = MFC.Video.soundManager.muted = $this.hasClass('muted') ? true : false;
+
+                    return false;
                 });
             } );
-            MFC.Video.sub( 'MFC.Video.startLoading', function() {
+            MFC.Video.sub( 'MFC.Video:startLoading', function() {
                 loadingProgress.removeClass('hidden');
                 _setLoadingProgressFont();
 
@@ -247,19 +294,15 @@
 
         //3- start playing video
             MFC.Video.sub( 'MFC.Video:ready', function() {
-                loadingProgress.velocity(
+                loadingProgress.animate(
                     {
                         opacity: 0
-                    },
-                    {
-                        duration: 800,
-                        complete: function() {
+                    }, 800, function() {
                             loadingProgress.remove();
                             $video.removeClass('mfc-video__loading');
                             MFC.Video.pub( 'MFC.Video:init' );
-                        }
                     }
-                )
+                );
             } );
     };
 
@@ -272,7 +315,7 @@
             MFC.Video.unsub( 'MFC.Video.scene01:completed' );
             //part 2
             MFC.Video.unsub( 'MFC.Video.scene02:start' );
-            MFC.Video.unsub( 'MFC.Video.scene02:initKaleidoscopeLoop' );
+            MFC.Video.unsub( 'MFC.Video.scene02:initMessageLoop' );
             MFC.Video.unsub( 'MFC.Video.scene02:completed' );
             //part 3
             MFC.Video.unsub( 'MFC.Video.scene03:startPart1' );
@@ -280,19 +323,21 @@
             MFC.Video.unsub( 'MFC.Video.scene03:startPart3' );
 
         //2- stop all animation
-            $('.velocity-animating').velocity( 'stop', true );
+            MFC.Video.timeline.kill();
 
         //3- clear all generated HTML
-            // MFC.Video.player.find('.stage').empty();
+            MFC.Video.player.find('.stage').empty();
 
         //4- stop all sounds, note: stop but not remove sound registers
             MFC.Video.soundManager.stop();
 
         //5- update <body> state
             $('body').attr('data-state', 'stop replay');
+            MFC.Video.player.addClass('mfc-video__waiting');
 
         //6- update buttons state & display
-            MFC.Video.controls.playPauseReplayBtn.removeClass('playing');
+            MFC.Video.controls.playPauseReplayBtn.setStatus('stop');
+            MFC.Video.controls.stopBtn.addClass('hidden');
     }
     MFC.Video.playScene01 = function() {
         MFC.Video.sub( 'MFC.Video.scene01:completed', MFC.Video.playScene02 );
@@ -347,6 +392,7 @@
          */
         MFC.Video.sub( 'MFC.Video.scene01:startPart1', function() {
             //play sound
+            sound.muted = MFC.Video.soundManager.muted;
             sound.play();
 
             //set cover image to img placeholder block
@@ -656,6 +702,7 @@
                 sound.stop();
             }
             sound = MFC.Video.soundManager.currentPlaying = MFC.Video.soundManager.createInstance( message.themeSound );
+            sound.muted = MFC.Video.soundManager.muted;
             sound.play();
 
             //set theme color/img
@@ -844,6 +891,20 @@
                 MFC.Video.pub( 'MFC.Video.scene03:startPart3' );
             })
         ], '+=' + t, 'sequence', t);
+        //the end...
+        timeline.add(
+            (function() {
+                if ( sound.position == sound.duration ) {
+                    MFC.Video.pub( 'MFC.Video:end' );
+                }
+                else {
+                    sound.addEventListener('complete', function() {
+                        MFC.Video.pub( 'MFC.Video:end' );
+                    });
+                }
+            }),
+            '+=' + t
+        );
 
         /*
          * scene 03 - part 1
@@ -851,6 +912,7 @@
          * - delay for 3s before go to part 2
          */
         MFC.Video.sub( 'MFC.Video.scene03:startPart1', function() {
+            sound.muted = MFC.Video.soundManager.muted;
             sound.play();
 
             var $rows = $('.sentence-row');
@@ -953,7 +1015,7 @@
 
                     //exceptional for last row, 1 word block only
                     if ( rowBlocks.length == 1 && rowIndex == 2 ) {
-                        rowBlocks.css({ width: '100%' });
+                        rowBlocks.outerWidth( stageWidth, true );
                     }
                 });
             }, 250 );
@@ -969,6 +1031,7 @@
         MFC.Video.sub( 'MFC.Video.scene03:startPart2', function() {
             sound.stop();
             sound = MFC.Video.soundManager.currentPlaying = MFC.Video.soundManager.createInstance( 'scene03_sound02' );
+            sound.muted = MFC.Video.soundManager.muted;
             sound.play();
 
             stage.html(_templatePart02);
@@ -993,6 +1056,7 @@
         MFC.Video.sub( 'MFC.Video.scene03:startPart3', function() {
             sound.stop();
             sound = MFC.Video.soundManager.currentPlaying = MFC.Video.soundManager.createInstance( 'scene03_sound03' );
+            sound.muted = MFC.Video.soundManager.muted;
             sound.play();
 
             stage.html(_templatePart03);

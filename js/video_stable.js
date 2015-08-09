@@ -959,7 +959,7 @@
 
                     //exceptional for last row, 1 word block only
                     if ( rowBlocks.length == 1 && rowIndex == 2 ) {
-                        rowBlocks.css({ width: '100%' });
+                        rowBlocks.outerWidth( stageWidth, true );
                     }
                 });
 

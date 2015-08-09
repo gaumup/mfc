@@ -1,0 +1,177 @@
+.mfc__kaleidoscope-wrapper {
+    width: 100%;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+}
+.mfc__kaleidoscope {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+.mfc__kaleidoscope-tile {
+    width: 50%;
+    height: 50%;
+    position: absolute;
+    overflow: hidden;
+}
+    .t0 {
+        top: 0;
+        left: 0;
+    }
+    .t2 {
+        top: 0;
+        left: 0;
+        transform-origin: right bottom;
+        -webkit-transform-origin: right bottom;
+        transform: rotate(90deg);
+        -webkit-transform: rotate(90deg);
+    }
+    .t1 {
+        top: 0;
+        right: 0;
+    }
+    .t3 {
+        top: 0;
+        right: 0;
+        transform-origin: left bottom;
+        -webkit-transform-origin: left bottom;
+        transform: rotate(90deg);
+        -webkit-transform: rotate(90deg);
+    }
+    .t4 {
+        bottom: 0;
+        right: 0;
+    }
+    .t6 {
+        bottom: 0;
+        right: 0;
+        transform-origin: left top;
+        -webkit-transform-origin: left top;
+        transform: rotate(90deg);
+        -webkit-transform: rotate(90deg);
+    }
+    .t5 {
+        bottom: 0;
+        left: 0;
+    }
+    .t7 {
+        bottom: 0;
+        left: 0;
+        transform-origin: right top;
+        -webkit-transform-origin: right top;
+        transform: rotate(90deg);
+        -webkit-transform: rotate(90deg);
+    }
+
+.mfc__kaleidoscope-tile .tile-helper {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+    .mfc__kaleidoscope-tile .mfc__kaleidoscope-image {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+    .mfc__kaleidoscope-tile.t0 .tile-helper,
+    .mfc__kaleidoscope-tile.t2 .tile-helper,
+    .mfc__kaleidoscope-tile.t5 .tile-helper,
+    .mfc__kaleidoscope-tile.t7 .tile-helper {
+        right: 0;
+    }
+    .mfc__kaleidoscope-tile.t1 .tile-helper,
+    .mfc__kaleidoscope-tile.t3 .tile-helper,
+    .mfc__kaleidoscope-tile.t4 .tile-helper,
+    .mfc__kaleidoscope-tile.t6 .tile-helper {
+        left: 0;
+    }
+    .mfc__kaleidoscope-tile.t0 .tile-helper,
+    .mfc__kaleidoscope-tile.t2 .tile-helper {
+        transform-origin: right bottom;
+        -webkit-transform-origin: right bottom;
+        transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+    }
+        .mfc__kaleidoscope-tile.t0 .mfc__kaleidoscope-image,
+        .mfc__kaleidoscope-tile.t2 .mfc__kaleidoscope-image {
+            transform-origin: right bottom;
+            -webkit-transform-origin: right bottom;
+            transform: rotate(45deg) scale(-1, 1) translate(100%, 100%);
+            -webkit-transform: rotate(45deg) scale(-1, 1) translate(100%, 100%);
+        }
+    .mfc__kaleidoscope-tile.t1 .tile-helper,
+    .mfc__kaleidoscope-tile.t3 .tile-helper {
+        transform-origin: left bottom;
+        -webkit-transform-origin: left bottom;
+        transform: rotate(-45deg);
+        -webkit-transform: rotate(-45deg);
+    }
+        .mfc__kaleidoscope-tile.t1 .mfc__kaleidoscope-image,
+        .mfc__kaleidoscope-tile.t3 .mfc__kaleidoscope-image {
+            transform-origin: left bottom;
+            -webkit-transform-origin: left bottom;
+            transform: rotate(-45deg) translate(0, 100%);
+            -webkit-transform: rotate(-45deg) translate(0, 100%);
+        }
+    .mfc__kaleidoscope-tile.t4 .tile-helper,
+    .mfc__kaleidoscope-tile.t6 .tile-helper {
+        transform-origin: left top;
+        -webkit-transform-origin: left top;
+        transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+    }
+        .mfc__kaleidoscope-tile.t4 .mfc__kaleidoscope-image,
+        .mfc__kaleidoscope-tile.t6 .mfc__kaleidoscope-image {
+            transform-origin: left top;
+            -webkit-transform-origin: left top;
+            transform: rotate(45deg) scale(1, -1);
+            -webkit-transform: rotate(45deg) scale(1, -1);
+        }
+    .mfc__kaleidoscope-tile.t5 .tile-helper,
+    .mfc__kaleidoscope-tile.t7 .tile-helper {
+        transform-origin: right top;
+        -webkit-transform-origin: right top;
+        transform: rotate(-45deg);
+        -webkit-transform: rotate(-45deg);
+    }
+        .mfc__kaleidoscope-tile.t5 .mfc__kaleidoscope-image,
+        .mfc__kaleidoscope-tile.t7 .mfc__kaleidoscope-image {
+            transform-origin: right top;
+            -webkit-transform-origin: right top;
+            transform: rotate(-45deg) scale(-1, -1) translate(100%, 0);
+            -webkit-transform: rotate(-45deg) scale(-1, -1) translate(100%, 0);
+        }
+
+.mfc__kaleidoscope-tile .ct {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+}
+.circle-tile {
+    width: 400%;
+    height: 400%;
+    position: absolute;
+    top: -200%;
+    left: -200%;
+    z-index: 998;
+
+    background-size: 25%;
+    background-repeat: repeat;
+    background-position: right bottom;
+
+    transform-origin: center center;
+    -webkit-transform-origin: center center;
+
+    transform: translate(-3%, 8%) scale(-1, 1) rotate(-30deg);
+    -webkit-transform: translate(-3%, 8%) scale(-1, 1) rotate(-30deg);
+}

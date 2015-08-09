@@ -1,4 +1,4 @@
-@font-face {
+/*@font-face {
     font-family: 'Noto Sans Regular';
     src: url('../fonts/notosans-regular-webfont.eot');
     src: url('../fonts/notosans-regular-webfont.eot?#iefix') format('embedded-opentype'),
@@ -8,7 +8,7 @@
          url('../fonts/notosans-regular-webfont.svg#noto_sansregular') format('svg');
     font-weight: normal;
     font-style: normal;
-}
+}*/
 
 html,
 body {
@@ -35,7 +35,7 @@ strong {
     cursor: default;
 }
 .hidden {
-    display: none;
+    display: none !important;
 }
 .logs {
     width: 100%;
@@ -49,33 +49,132 @@ strong {
     overflow: auto;
     color: #666;
 }
-.mfc-control-btn {
-    position: absolute;
-    right: 0;
-    top: 0;
-    z-index: 1000000;
-    width: 10%;
-}
-    .mfc-play-btn {
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        margin: auto;
-        width: 25%;
-        height: 25%;
-    }
-    .mfc-play-btn.playing {
-        top: 0;
-        bottom: auto;
-        right: 10%;
-        left: auto;
+
+/* video controls button */
+    .mfc-control-btn {
+        display: block;
+        position: absolute;
+        z-index: 1000000;
         width: 10%;
-        height: auto;
+        text-align: center;
+        cursor: pointer;
     }
-    .mfc-stop-btn {
-        right: 0;
+    .mfc-control-btn,
+    .mfc-control-btn:hover {
+        text-decoration: none;
     }
+        .mfc-svg-btn {
+            display: block;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            background: rgba(0, 0, 0, .6);
+            cursor: pointer;
+        }
+            .mfc-svg-btn .ytp-svg-fill {
+                fill: #fff;
+            }
+            .mfc-svg-btn .ytp-svg-shadow {
+                fill: none;
+            }
+
+        /* volume button */
+            .mfc-volume-btn {
+                width: 4%;
+                height: 8%;
+                right: 2%;
+                bottom: 2%;
+            }
+                .mfc-volume-btn.muted .mfc-svg-btn--volume-on,
+                .mfc-volume-btn .mfc-svg-btn--volume-off {
+                    display: none;
+                }
+                .mfc-volume-btn .mfc-svg-btn--volume-on,
+                .mfc-volume-btn.muted .mfc-svg-btn--volume-off {
+                    display: block;
+                }
+        /* end. volume button */
+
+        /* stop button */
+            .mfc-stop-btn {
+                width: 4%;
+                height: 8%;
+                right: 7%;
+                bottom: 2%;
+                background: rgba(0,0,0,0.6);
+                text-indent: -1000em;
+            }
+                .mfc-stop-btn:after {
+                    width: 40%;
+                    height: 40%;
+                    content: " ";
+                    display: block;
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    margin: auto;
+                    background-color: #fff;
+                }
+        /* end. stop button */
+
+        /* play|pause button */
+            .mfc-play-btn {
+                width: 100%;
+                height: 100%;
+                left: 0;
+                top: 0;
+            }
+            .mfc-play-btn .mfc-svg-btn {
+                visibility: hidden;
+                width: 10%;
+                height: 20%;
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                margin: auto;
+                cursor: pointer;
+
+                border-radius: 100%;
+                -moz-border-radius: 100%;
+                -webkit-border-radius: 100%;
+
+                transform: scale(1);
+                -webkit-transform: scale(1);
+
+                opacity: 1;
+                -moz-opacity: 1;
+                filter: alpha(opacity=1);
+
+                transition: transform .75s, opacity .75s;
+                -webkit-transition: -webkit-transform .75s, opacity .75s;
+            }
+                .mfc-play-btn .mfc-svg-btn svg {
+                    width: 100%;
+                    height: 100%;
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                }
+            .mfc-play-btn[data-play="0"] .mfc-svg-btn--play {
+                visibility: visible;
+            }
+            .mfc-play-btn.playing[data-pause="0"] .mfc-svg-btn--play,
+            .mfc-play-btn.playing[data-pause="1"] .mfc-svg-btn--pause {
+                visibility: visible;
+
+                transform: scale(2);
+                -webkit-transform: scale(2);
+
+                opacity: 0;
+                -moz-opacity: 0;
+                filter: alpha(opacity=0);
+            }
+        /* end. play|pause button */
+/* end. video controls button */
+
 .mfc-video__wrapper {
     position: absolute;
     width: 100%;
@@ -96,6 +195,10 @@ strong {
         bottom: 0;
         overflow: hidden;
     }
+    .mfc-video__content.mfc-video__waiting {
+        background: url(../images/video-cover.png) no-repeat center center;
+        background-size: cover;
+    }
     .mfc-video__content.mfc-video__loading {
         z-index: 1;
     }
@@ -114,7 +217,7 @@ strong {
             background-size: contain;
 
             text-align: center;
-            color: #fff;
+            color: #999;
             font-weight: bold;
             font-style: italic;
         }
@@ -150,6 +253,9 @@ strong {
 
         -webkit-transform: rotate(-30deg);
         transform: rotate(-30deg);
+
+        /* this fixes the overflow:hidden in Chrome */
+        -webkit-mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC);
     }
 
     /* scene 01 */
@@ -378,7 +484,6 @@ strong {
                 height: 25%;
             }
                 .scene-03 .word-block {
-                    font-family: 'Noto Sans Regular';
                     float: left;
                     color: #fff;
                     text-transform: uppercase;
@@ -434,7 +539,6 @@ strong {
 
         /* part 3 */
             .scene-03 .mfc-banner-01 {
-                font-family: 'Noto Sans Regular';
                 position: absolute;
                 top: 25%;
                 left: 0;
@@ -448,7 +552,6 @@ strong {
                 font-weight: bold;
             }
             .scene-03 .mfc-big-day {
-                font-family: 'Noto Sans Regular';
                 text-align: center;
                 color: #dfdfdf;
                 position: absolute;
@@ -475,7 +578,6 @@ strong {
                     background-size: contain;
                 }
                 .scene-03 .mfc-copyright {
-                    font-family: 'Noto Sans Regular';
                     position: absolute;
                     bottom: 10%;
                     left: 0;

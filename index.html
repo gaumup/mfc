@@ -18,13 +18,31 @@
             - replay: return to 0 and play. When user click stop -> state = 'replay'
     -->
     <body data-state="stop">
-        <button class="mfc-control-btn mfc-play-btn" id="mfc-play-pause-replay" data-play="0" data-pause="0" data-reply="0">Play</button>
-        <button class="mfc-control-btn mfc-stop-btn" id="mfc-stop">Stop</button>
-
         <div class="mfc-video__wrapper">
             <!-- 1160x580 => ratio 2:1, mfc-video__loading -->
-            <div class="mfc-video__content mfc-video__content--theme-01 mfc-video__loading" id="mfc-video">
+            <div class="mfc-video__content mfc-video__content--theme-01 mfc-video__loading mfc-video__waiting" id="mfc-video">
                 <p id="mfc-loading-progress" class="mfc-loading-progress hidden"><span>0</span>%</p>
+
+                <a href="#" class="mfc-control-btn mfc-play-btn hidden" id="mfc-play-pause-replay" data-play="0" data-pause="0" data-reply="0">
+                    <span class="mfc-svg-btn mfc-svg-btn--play">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" height="100%" version="1.1" viewBox="0 0 40 40" width="100%"><defs><path d="m 12.22,28.88 0,-17.77 16.66,8.91 -16.66,8.86 z" id="ytp-svg-30"></path></defs><use class="ytp-svg-shadow" xlink:href="#ytp-svg-30"></use><use class="ytp-svg-fill" xlink:href="#ytp-svg-30"></use></svg>
+                    </span>
+                    <span class="mfc-svg-btn mfc-svg-btn--pause">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" height="100%" version="1.1" viewBox="0 0 40 40" width="100%"><defs><path d="m 12.22,11.11 0,17.77 6.66,0 0,-17.77 -6.66,0 z m 10,0 0,17.77 6.66,0 0,-17.77 -6.66,0 z" id="ytp-svg-29"></path></defs><use class="ytp-svg-shadow" xlink:href="#ytp-svg-29"></use><use class="ytp-svg-fill" xlink:href="#ytp-svg-29"></use></svg>
+                    </span>
+                </a>
+
+                <a class="mfc-control-btn mfc-stop-btn hidden" id="mfc-stop">Stop</a>
+                <a class="mfc-control-btn mfc-volume-btn hidden" id="mfc-volume">
+                    <span class="mfc-svg-btn mfc-svg-btn--volume-on">
+                        <svg width="100%" height="100%" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path class="ytp-svg-shadow" d="M12.39,15.54 L10,15.54 L10,20.44 L12.4,20.44 L17,25.50 L17,10.48 L12.39,15.54 Z" opacity="1"></path><path class="ytp-svg-fill" d="M12.39,15.54 L10,15.54 L10,20.44 L12.4,20.44 L17,25.50 L17,10.48 L12.39,15.54 Z" opacity="1"></path><path class="ytp-svg-shadow" d="M22,17.99 C22,16.4 20.74,15.05 19,14.54 L19,21.44 C20.74,20.93 22,19.59 22,17.99 Z" opacity="1"></path><path class="ytp-svg-fill" d="M22,17.99 C22,16.4 20.74,15.05 19,14.54 L19,21.44 C20.74,20.93 22,19.59 22,17.99 Z" opacity="1"></path><path class="ytp-svg-shadow" d="M19,24.31 L19,26 C22.99,25.24 26,21.94 26,18 C26,14.05 22.99,10.75 19,10 L19,11.68 C22.01,12.41 24.24,14.84 24.24,18 C24.24,21.15 22.01,23.58 19,24.31 Z" opacity="1"></path><path class="ytp-svg-fill" d="M19,24.31 L19,26 C22.99,25.24 26,21.94 26,18 C26,14.05 22.99,10.75 19,10 L19,11.68 C22.01,12.41 24.24,14.84 24.24,18 C24.24,21.15 22.01,23.58 19,24.31 Z" opacity="1"></path></svg>
+                    </span>
+
+                    <span class="mfc-svg-btn mfc-svg-btn--volume-off">
+                        <svg width="100%" height="100%" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path class="ytp-svg-shadow" d="M12.39,15.54 L10,15.54 L10,20.44 L12.4,20.44 L17,25.50 L17,10.48 L12.39,15.54 Z" opacity="1"></path><path class="ytp-svg-fill" d="M12.39,15.54 L10,15.54 L10,20.44 L12.4,20.44 L17,25.50 L17,10.48 L12.39,15.54 Z" opacity="1"></path><path class="ytp-svg-shadow" d="M19.63,15.92 L20.68,14.93 L22.81,16.94 L24.94,14.93 L26,15.92 L23.86,17.93 L26,19.93 L24.94,20.92 L22.81,18.92 L20.68,20.92 L19.63,19.93 L21.76,17.93 L19.63,15.92 Z" opacity="1"></path><path class="ytp-svg-fill" d="M19.63,15.92 L20.68,14.93 L22.81,16.94 L24.94,14.93 L26,15.92 L23.86,17.93 L26,19.93 L24.94,20.92 L22.81,18.92 L20.68,20.92 L19.63,19.93 L21.76,17.93 L19.63,15.92 Z" opacity="1"></path></svg>
+                    </span>
+                </a>
+
                 <!-- content generated dynamically -->
 
                 <!-- scene 01 -->
@@ -43,7 +61,6 @@
 
         <script type="text/javascript" src="js/jquery2.min.js"></script>
         <script type="text/javascript" src="js/utils.js"></script>
-        <script type="text/javascript" src="js/velocity.min.js"></script>
         <script type="text/javascript" src="widgets/kaleidoscope/js/mfc.kaleidoscope.js"></script>
         <!-- greensock -->
         <script type="text/javascript" src="widgets/greensock/js/plugins/CSSPlugin.min.js"></script>
