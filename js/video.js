@@ -305,8 +305,9 @@
                 );
             } );
     };
-
     MFC.Video.stop = function() {
+        if ( MFC.Video.timeline === undefined ) { return false; }
+        try {
         //1- clear all subscribes
             //part 1
             MFC.Video.unsub( 'MFC.Video.scene01:startPart1' );
@@ -324,6 +325,7 @@
 
         //2- stop all animation
             MFC.Video.timeline.kill();
+            MFC.Video.timeline = undefined;
 
         //3- clear all generated HTML
             MFC.Video.player.find('.stage').empty();
@@ -338,6 +340,7 @@
         //6- update buttons state & display
             MFC.Video.controls.playPauseReplayBtn.setStatus('stop');
             MFC.Video.controls.stopBtn.addClass('hidden');
+        } catch(ex) {}
     }
     MFC.Video.playScene01 = function() {
         MFC.Video.sub( 'MFC.Video.scene01:completed', MFC.Video.playScene02 );
@@ -1088,4 +1091,7 @@
             _preparingContent();
         });
     };
+
+    //export to global
+    window[ns + 'Video_stop'] = MFC.Video.stop; //MFC_Video_stop
 })(jQuery);

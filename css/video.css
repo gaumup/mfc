@@ -126,6 +126,9 @@ strong {
                 left: 0;
                 top: 0;
             }
+            .mfc-play-btn.playing {
+                cursor: default;
+            }
             .mfc-play-btn .mfc-svg-btn {
                 visibility: hidden;
                 width: 10%;
@@ -171,6 +174,8 @@ strong {
                 opacity: 0;
                 -moz-opacity: 0;
                 filter: alpha(opacity=0);
+
+                cursor: default;
             }
         /* end. play|pause button */
 /* end. video controls button */
