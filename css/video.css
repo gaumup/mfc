@@ -204,6 +204,21 @@ strong {
         background: url(../images/video-cover.png) no-repeat center center;
         background-size: cover;
     }
+    .mfc-video__content.mfc-video__error {
+        background: none;
+    }
+        .mfc-video__content.mfc-video__error .mfc-control-btn {
+            display: none !important;
+        }
+        .mfc-video__content.mfc-video__error .mfc-video-error-text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            color: #fff;
+            text-align: center;
+        }
     .mfc-video__content.mfc-video__loading {
         z-index: 1;
     }

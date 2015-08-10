@@ -1,8 +1,12 @@
 'use strict';
 
 (function($) {
+    var queryString = window.location.search;
+    queryString = queryString.substring( queryString.indexOf('?')+1 );
+    var configUrl = queryString.split('=')[1];
+
     $(document).ready(function() {
-        MFC.Video.init( $('#mfc-video'), 'config.json', {
+        MFC.Video.init( $('#mfc-video'), configUrl, {
             debug: false
         } );
     });
@@ -37,7 +41,7 @@
     })();
     TweenLite.defaultEase = Quad.easeOut;
     MFC.Video.init = function($video, $configUrl, opts) {
-        MFC.Video.player = $video;
+        MFC.Video.player = $video.removeClass('hidden');
 
         //common vars
             var playPauseReplayBtn = MFC.Video.controls.playPauseReplayBtn = $('#mfc-play-pause-replay').removeClass('hidden');
@@ -156,6 +160,7 @@
                     MFC.Video.pub( 'MFC.Video.config:ready' );
                 })
                 .fail(function() {
+                    MFC.Video.pub( 'MFC.Video.config:error' );
                 })
                 .always(function() {});
 
@@ -303,6 +308,17 @@
                             MFC.Video.pub( 'MFC.Video:init' );
                     }
                 );
+            } );
+
+        //handling error
+            MFC.Video.sub( 'MFC.Video.config:error', function() {
+                $video.addClass('mfc-video__error');
+                $('<p class="mfc-video-error-text">Sorry, this video is no longer exists!</p>')
+                    .appendTo($video)
+                    .css({
+                        fontSize: $video.height()*.03 + 'px',
+                        lineHeight: $video.height() + 'px'
+                    })
             } );
     };
     MFC.Video.stop = function() {
