@@ -1,6 +1,6 @@
 <?php
     try {
-        $wwwPath = 'http://projects.local/od.mfc/screenshot/html';
+        $wwwPath = 'http://projects.local/od.mfc/video-generated/screenshot/html';
 
         //params: ?config=url
         $configUrl = isset($_GET['config'])
@@ -22,9 +22,10 @@
 
         //build command for phantomjs
         $cmd .= ' ' .
+            '--url=' . implode(',', $urls) . ' ' .
             '--img-path=' . implode(',', $imgPath) . ' ' .
             '--img-name=' . implode(',', $imgName) . ' ' .
-            '--url=' . implode(',', $urls) . ' ';
+            '--mode=prod';
 
         //execute and process response data
         $rawResults = shell_exec($cmd);
