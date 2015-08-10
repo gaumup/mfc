@@ -15,6 +15,12 @@
     var ns = 'MFC_';
     var Pattern = window[ns + 'Pattern'];
     var Helpers = window[ns + 'Helpers'];
+    var Themes = {
+        love: 'mfc-video__content--theme-01',
+        fun: 'mfc-video__content--theme-02',
+        idol: 'mfc-video__content--theme-03',
+        success: 'mfc-video__content--theme-04'
+    }
     // start matching after: comment start block => ! or @preserve => optional whitespace => newline
     // stop matching before: last newline => optional whitespace => comment end block
     var reCommentContents = /\/\*!?(?:\@preserve)?[ \t]*(?:\r\n|\n)([\s\S]*?)(?:\r\n|\n)[ \t]*\*\//;
@@ -166,6 +172,8 @@
 
         //2- preparing assets: images and sounds
             MFC.Video.sub( 'MFC.Video.config:ready', function() {
+                $video.addClass( Themes[ MFC.Video.config.theme ] );
+
                 //press spacebar to play|pause
                 $(document).on('keyup', function(e) {
                     if ( e.keyCode == 32 ) {

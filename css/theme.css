@@ -1,4 +1,4 @@
-/* .mfc-video__content--theme-01 */
+/* .mfc-video__content--theme-01: Love; */
     .mfc-video__content--theme-01 .color-style-default {
         background-color: #666;
     }
@@ -8,9 +8,60 @@
     .mfc-video__content--theme-01 .color-style-02 {
         background-color: #E0DCDD;
     }
-    .mfc-video__content--theme-01 .color-style-03 {
-        background-color: #4C8589;
+    .mfc-video__content--theme-01 .color-style-03 { /* main theme color */
+        background-color: #8F443E;
     }
     .mfc-video__content--theme-01 .color-style-04 {
+        background-color: #000;
+    }
+
+/* .mfc-video__content--theme-02: Fun; */
+    .mfc-video__content--theme-02 .color-style-default {
+        background-color: #666;
+    }
+    .mfc-video__content--theme-02 .color-style-01 {
+        background-color: #D80420;
+    }
+    .mfc-video__content--theme-02 .color-style-02 {
+        background-color: #E0DCDD;
+    }
+    .mfc-video__content--theme-02 .color-style-03 { /* main theme color */
+        background-color: #657536;
+    }
+    .mfc-video__content--theme-02 .color-style-04 {
+        background-color: #000;
+    }
+
+/* .mfc-video__content--theme-03: Idol; */
+    .mfc-video__content--theme-01 .color-style-default {
+        background-color: #666;
+    }
+    .mfc-video__content--theme-03 .color-style-01 {
+        background-color: #D80420;
+    }
+    .mfc-video__content--theme-03 .color-style-02 {
+        background-color: #E0DCDD;
+    }
+    .mfc-video__content--theme-03 .color-style-03 { /* main theme color */
+        background-color: #4C8589;
+    }
+    .mfc-video__content--theme-03 .color-style-04 {
+        background-color: #000;
+    }
+
+/* .mfc-video__content--theme-04: Success; */
+    .mfc-video__content--theme-04 .color-style-default {
+        background-color: #666;
+    }
+    .mfc-video__content--theme-04 .color-style-01 {
+        background-color: #D80420;
+    }
+    .mfc-video__content--theme-04 .color-style-02 {
+        background-color: #E0DCDD;
+    }
+    .mfc-video__content--theme-04 .color-style-03 { /* main theme color */
+        background-color: #716430;
+    }
+    .mfc-video__content--theme-04 .color-style-04 {
         background-color: #000;
     }

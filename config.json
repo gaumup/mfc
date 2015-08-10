@@ -1,5 +1,6 @@
 {
     "name": "MFC",
+    "theme": "success",
     "assetsPath": {
         "sound": "sound",
         "images": "images"
