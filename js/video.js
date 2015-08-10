@@ -29,7 +29,8 @@
     var MFC = {};
     MFC.Video = {};
     MFC.Video.config = {
-        canPause: false //pause is not well-tested so, please do not turn on
+        allowFullscreen: false,
+        canPause: true //pause is not well-tested so, please do not turn on
     };
     MFC.Video.controls = {};
     MFC.Video.soundManager = createjs.Sound;
@@ -104,8 +105,8 @@
         //set video dimension with ratio 2:1
             var _setVideoHeightLazy = Helpers.throttle( function(e) {
                 //video size
-                var windowHeight = $(window).height();
-                var videoHeight = $video.width()/2;
+                var windowHeight = Math.round( $(window).height() );
+                var videoHeight = Math.round( $video.width()/2 );
                 if ( videoHeight > windowHeight ) {
                     $video.css({
                         width: windowHeight*2,
@@ -182,6 +183,11 @@
                 });
                 playPauseReplayBtn.on('click touch', function(e) {
                     $video.removeClass('mfc-video__waiting');
+
+                    //request fullscreen
+                    if ( MFC.Video.config.allowFullscreen && !Helpers.isFullscreen() ) {
+                        Helpers.setFullscreen( $video.get(0) );
+                    }
 
                     //Start play: update <body> status
                     if ( playPauseReplayBtn.attr('data-play') == 0 ) {
@@ -265,6 +271,9 @@
                 } );
                 MFC.Video.sub( 'MFC.Video.image:fail', function() {
                     _log( '<span style="color:#f00">Failed: "' + arguments[0] + '</span>' );
+
+                    //ignore image failed, pub 'load'
+                    MFC.Video.pub( 'MFC.Video.image:load' );
                 } );
                 // load images
                 $.each(MFC.Video.config.images.files, function(key, images) {
@@ -295,6 +304,9 @@
                 } );
                 MFC.Video.sub( 'MFC.Video.sound:fail', function() {
                     _log( '<span style="color:#f00">Failed: "' + arguments[0] + '": ' + arguments[1] + '</span>' );
+
+                    //ignore sound failed, pub 'load'
+                    MFC.Video.pub( 'MFC.Video.sound:load' );
                 } );
                 //SoundJS
                 createjs.Sound.addEventListener('fileload', function(e) {
@@ -408,7 +420,8 @@
         var imgPlaceHolder02 = $('#scene-01__img-placeholder-02');
         var imgPlaceHolder03 = $('#scene-01__img-placeholder-03');
         var animBlock01 = $('#scene-01__anim-block-01');
-        var animBlock02 = $('#scene-01__anim-block-02');
+        var animBlock02Wrapper = $('#scene-01__anim-block-02');
+        var animBlock02 = $('#scene-01__anim-block-02 > .block__inner');
         var scaleBlock01Wrapper = $('#scene-01__scale-block-01');
         var scaleBlock01 = $('#scene-01__scale-block-01 > .block__inner');
         var staticBlock01 = $('#scene-01__static-block-01');
@@ -448,14 +461,13 @@
             var timeline = MFC.Video.timeline;
             timeline.add( [
                 TweenLite.to( animBlock02, t1, {
-                    width: '3%',
+                    right: '95%',
                     onComplete: function() {
                         d1.resolve();
                     }
                 } ),
                 TweenLite.to( scaleBlock01, t1, {
-                    width: '100%',
-                    right: 0,
+                    left: '10%',
                     onComplete: function() {
                         d2.resolve();
                     }
@@ -492,22 +504,17 @@
                 MFC.Video.pub( 'MFC.Video.scene01:startPart3' );
             });
 
-            //set state
-            scaleBlock01.css({
-                right: 'auto',
-                left: 0
-            });
             var t1 = 0.8;
             var timeline = MFC.Video.timeline;
             timeline.add( [
                 TweenLite.to( animBlock02, t1, {
-                    width: '20%',
+                    right: '55%',
                     onComplete: function() {
                         d1.resolve();
                     }
                 } ),
-                TweenLite.to( scaleBlock01Wrapper, t1, {
-                    width: '22%',
+                TweenLite.to( scaleBlock01, t1, {
+                    left: '50%',
                     onComplete: function() {
                         d2.resolve();
                     }
@@ -556,24 +563,62 @@
             var t1 = 0.8;
             var timeline = MFC.Video.timeline;
             timeline.add( [
-                // d1: 2 blocks move left and hide to bottom
-                TweenLite.to( animBlock02, t1, {
-                    width: '5%',
+                //d1: 2 blocks move left and hide to bottom
+                TweenLite.to( animBlock02Wrapper, t1, {
+                    left: '-10%',
                     bottom: '-100%',
                     onComplete: function() {
                         animBlock02.remove();
                         d1.resolve();
                     }
                 } ),
-                // d2: hidden block grown-up
-                TweenLite.to( scaleBlock01Wrapper, t1, {
-                    width: '40%',
-                    height: '83%'
+                //d2: hidden block grown-up
+                TweenLite.to( scaleBlock01Wrapper, t1/2, {
+                    width: '66%',
+                    height: '83%',
+                    ease: Linear.easeNone,
+                    onComplete: function() {
+                        scaleBlock01Wrapper.css({
+                            right: 'auto',
+                            bottom: 'auto',
+                            left: (66 - 50*66/100 - 21) + '%',
+                            top: (100 - 83) + '%',
+                            width: 50*66/100 + '%' //50% of 65%
+                        });
+                        scaleBlock01.css({
+                            left: 0
+                        });
+                    }
+                } ),
+                //d2: hidden block grown-up, scale 100% width
+                TweenLite.to( scaleBlock01Wrapper, t1*2/3, {
+                    width: '100%',
+                    left: 0,
+                    top: 0,
+                    ease: Linear.easeNone,
+                    delay: t1/2, //little trick
+                    onComplete: function() {
+                        //init kaleidoscope
+                        var kaleidoscope = $('#scene-01__kaleidoscope');
+                        kaleidoscope
+                            .hide()
+                            .mfcKaleidos({
+                                delay: 100,
+                                duration: 500
+                            })
+                            .mfcKaleidos.update(
+                                MFC.Video.imageManager.get( MFC.Video.config.cover.image ),
+                                MFC.Video.config.cover.bgColor
+                            )
+                            .fadeIn();
+
+                        d2.resolve();
+                    }
                 } ),
                 //d3
                 TweenLite.to( imgPlaceHolder02, t1/3, {
                     left: '100%',
-                    delay: t1*3/4,
+                    delay: t1/3,
                     onComplete: function() {
                         imgPlaceHolder02.remove();
                         d3.resolve();
@@ -582,59 +627,19 @@
                 //d4
                 TweenLite.to( imgPlaceHolder03, t1/3, {
                     right: '-100%',
-                    delay: t1*3/4,
+                    delay: t1/3,
                     onComplete: function() {
                         imgPlaceHolder03.remove();
                         d4.resolve();
                     }
                 } ),
                 //d5
-                TweenLite.to( staticBlock01, t1/2, {
+                TweenLite.to( staticBlock01, t1/3, {
                     height: 0,
                     delay: t1/4,
                     onComplete: function() {
                         staticBlock01.remove();
                         d5.resolve();
-                    }
-                } )
-            ] );
-            timeline.add( [
-                //d2: hidden block grown-up, scale 100% width
-                TweenLite.to( scaleBlock01Wrapper, t1/2, {
-                    width: '100%',
-                    onStart: function() {
-                        scaleBlock01Wrapper.css({
-                            right: 'auto',
-                            left: scaleBlock01Wrapper.position().left
-                        });
-                    }
-                } ),
-                //d2: hidden block change position alignment and grow up
-                TweenLite.to( scaleBlock01Wrapper, t1/2, {
-                    // hidden block scale full-width, align top
-                    left: 0,
-                    top: 0,
-                    delay: t1/3,
-                    onStart: function() {
-                        scaleBlock01Wrapper.css({
-                            bottom: 'auto',
-                            top: scaleBlock01Wrapper.position().top
-                        });
-                    },
-                    onComplete: function() {
-                        //init kaleidoscope
-                        var kaleidoscope = $('#scene-01__kaleidoscope');
-                        var kaleidoscopeApi = kaleidoscope.mfcKaleidos({
-                            delay: 100,
-                            duration: 500
-                        });
-                        //set theme color/img
-                        kaleidoscopeApi.updateImg(
-                            kaleidoscope,
-                            MFC.Video.imageManager.get( MFC.Video.config.cover.image ),
-                            MFC.Video.config.cover.bgColor
-                        );
-                        d2.resolve();
                     }
                 } )
             ] );
@@ -650,7 +655,7 @@
                 ] );
             });
             $.when( d2, d6 ).done(function() { //goes off hidden
-                var _delay = 1;
+                var _delay = 1.5;
                 timeline.add( [
                     TweenLite.to( scaleBlock01Wrapper, t1/3, {
                         left: '100%',
@@ -726,7 +731,6 @@
             });
         }, 250);
         $(window).on( 'resize', _ajustKaleidoscopeFont );
-        var kaleidoscopeApi;
         var _updateMessage = function(message) {
             //get/play sound
             if ( sound !== undefined ) {
@@ -737,8 +741,7 @@
             sound.play();
 
             //set theme color/img
-            kaleidoscopeApi.updateImg(
-                kaleidoscope,
+            kaleidoscope.mfcKaleidos.update(
                 MFC.Video.imageManager.get( message.themeBgKaleidoscope ),
                 message.themeBgKaleidoscopeColor
             );
@@ -777,7 +780,7 @@
                 (function() {
                     i++;
                     //init kaleidoscope
-                    kaleidoscopeApi = kaleidoscope.mfcKaleidos({
+                    kaleidoscope.mfcKaleidos({
                         delay: 200,
                         duration: 400
                     });

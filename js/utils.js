@@ -138,6 +138,32 @@
                 return result;
             }
         },
+        prefixMethod: function(obj, method) {
+            var pfx = ['webkit', 'moz', 'ms', 'o', ''];
+            var p = 0, m, t;
+            while (p < pfx.length && !obj[m]) {
+                m = method;
+                if (pfx[p] == '') {
+                    m = m.substr(0,1).toLowerCase() + m.substr(1);
+                }
+                m = pfx[p] + m;
+                t = typeof obj[m];
+                if (t != 'undefined') {
+                    pfx = [pfx[p]];
+                    return (t == 'function' ? obj[m]() : obj[m]);
+                }
+                p++;
+            }
+        },
+        isFullscreen: function() {
+            return Helpers.prefixMethod(document, 'FullScreen') || Helpers.prefixMethod(document, 'IsFullScreen');
+        },
+        setFullscreen: function(el) {
+            Helpers.prefixMethod(el, 'RequestFullScreen');
+        },
+        closeFullscreen: function() {
+            return Helpers.prefixMethod(document, 'CancelFullScreen');
+        }
     }
     //export global
     g[ns + 'Helpers'] = Helpers;

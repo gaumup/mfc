@@ -1,6 +1,6 @@
 {
     "name": "MFC",
-    "theme": "success",
+    "theme": "love",
     "assetsPath": {
         "sound": "sound",
         "images": "images"
@@ -28,13 +28,14 @@
         }
     },
     "images": {
-        "total": 8,
+        "total": 9,
         "files": {
             "logo": {
                 "normal": "logo.png"
             },
             "cover": {
-                "normal": "cover.png"
+                "normal": "kaka.jpg",
+                "front": "video-cover.png"
             },
             "message": {
                 "idol01": "idol-07.jpg",

@@ -208,17 +208,20 @@
         }
         timer();
 
-        return MFC_Kaleidos;
-    }
-    MFC_Kaleidos.updateImg = function($obj, url, themeColor) {
-        var kaleidoscope = $obj;
-        var c = kaleidoscope.find('.circle-tile');
-        c.css({
-            backgroundImage: 'url(' + url + ')'
-        });
-        kaleidoscope.css({
-             backgroundColor: themeColor
-        });
+        return $obj.extend( true, {
+            mfcKaleidos: {
+                update: function(url, themeColor) {
+                    kaleidoscope.find('.circle-tile').css({
+                        backgroundImage: 'url(' + url + ')'
+                    });
+                    kaleidoscope.css({
+                         backgroundColor: themeColor
+                    });
+
+                    return kaleidoscope;
+                }
+            }
+        } );
     }
 
     //export as jQuery function
