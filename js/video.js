@@ -226,8 +226,9 @@
                 volumeBtn.on('click touch', function(e) {
                     var $this = $(this);
                     $this.toggleClass('muted');
-                    MFC.Video.soundManager.currentPlaying.muted = MFC.Video.soundManager.muted = $this.hasClass('muted') ? true : false;
-
+                    if ( MFC.Video.soundManager.currentPlaying !== undefined ) {
+                        MFC.Video.soundManager.currentPlaying.muted = MFC.Video.soundManager.muted = $this.hasClass('muted') ? true : false;
+                    }
                     return false;
                 });
             } );
