@@ -233,6 +233,7 @@
                 }
 
                 //preparing assets: images + sounds
+                var assetsPath = MFC.Video.config.assetsPath;
                 var isAllImagesLoaded = false;
                 var isAllSoundLoaded = false;
                 var totalAssets = MFC.Video.config.images.total + MFC.Video.config.sound.total;
@@ -259,6 +260,7 @@
                 // load images
                 $.each(MFC.Video.config.images.files, function(key, images) {
                     $.each(images, function(_subkey, _image) {
+                        var _imgPath = assetsPath.images + '/' + _image;
                         var _img = new Image();
                         _img.onload = function() {
                             MFC.Video.pub( 'MFC.Video.image:load', _image );
@@ -266,8 +268,8 @@
                         _img.onerror = function() {
                             MFC.Video.pub( 'MFC.Video.image:fail', _image );
                         }
-                        _img.src = _image;
-                        MFC.Video.imageManager.set( key + '_' + _subkey, _image );
+                        _img.src = _imgPath;
+                        MFC.Video.imageManager.set( key + '_' + _subkey, _imgPath );
                     });
                 });
 
@@ -291,8 +293,9 @@
                 });
                 $.each(MFC.Video.config.sound.files, function(key, sounds) {
                     $.each(sounds, function(_subkey, _sound) {
-                        _log('Loading: "' + (key + '_' + _subkey) + '": ' + _sound);
-                        createjs.Sound.registerSound( _sound, (key + '_' + _subkey) );
+                        var _soundPath = assetsPath.sound + '/' + _sound;
+                        _log('Loading: "' + (key + '_' + _subkey) + '": ' + _soundPath);
+                        createjs.Sound.registerSound( _soundPath, (key + '_' + _subkey) );
                     });
                 });
             } );

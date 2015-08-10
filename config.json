@@ -1,24 +1,28 @@
 {
     "name": "MFC",
+    "assetsPath": {
+        "sound": "sound",
+        "images": "images"
+    },
     "sound": {
         "total": 10,
         "files": {
             "scene01": {
-                "sound01": "sound/Sym2 I1.mp3"
+                "sound01": "Sym2 I1.mp3"
             },
             "scene02": {},
             "scene03": {
-                "sound01": "sound/Sym6 I8.mp3",
-                "sound02": "sound/Sym2 I3.mp3",
-                "sound03": "sound/Sym1 I1.mp3"
+                "sound01": "Sym6 I8.mp3",
+                "sound02": "Sym2 I3.mp3",
+                "sound03": "Sym1 I1.mp3"
             },
             "message": {
-                "sound01": "sound/Sym1 I1.mp3",
-                "sound02": "sound/Sym2 I2.mp3",
-                "sound03": "sound/Sym2 I3.mp3",
-                "sound04": "sound/Sym6 I8.mp3",
-                "sound05": "sound/Sym8 I1.mp3",
-                "sound06": "sound/Sym8 I3.mp3"
+                "sound01": "Sym1 I1.mp3",
+                "sound02": "Sym2 I2.mp3",
+                "sound03": "Sym2 I3.mp3",
+                "sound04": "Sym6 I8.mp3",
+                "sound05": "Sym8 I1.mp3",
+                "sound06": "Sym8 I3.mp3"
             }
         }
     },
@@ -26,18 +30,18 @@
         "total": 8,
         "files": {
             "logo": {
-                "normal": "images/logo.png"
+                "normal": "logo.png"
             },
             "cover": {
-                "normal": "images/cover.png"
+                "normal": "cover.png"
             },
             "message": {
-                "idol01": "images/idol-07.jpg",
-                "idol02": "images/idol-08.jpg",
-                "idol03": "images/idol-05.jpg",
-                "idol04": "images/idol-14.jpg",
-                "idol05": "images/idol-16.jpg",
-                "idol06": "images/idol-09.jpg"
+                "idol01": "idol-07.jpg",
+                "idol02": "idol-08.jpg",
+                "idol03": "idol-05.jpg",
+                "idol04": "idol-14.jpg",
+                "idol05": "idol-16.jpg",
+                "idol06": "idol-09.jpg"
             }
         }
     },
