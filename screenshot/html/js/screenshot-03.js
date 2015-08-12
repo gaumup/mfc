@@ -7,6 +7,8 @@
                 var $video = $('#mfc-video').addClass( response.theme );
                 var stage = $('#scene-03');
                 var sentence = response.sentence;
+                //remove , ! . and space more than 1
+                sentence = sentence.replace( new RegExp('[,.!]', 'g'), '' ).replace( new RegExp('\\s+', 'g'), ' ' );
                 var $rows = $('.sentence-row');
                 (function() {
                     var stageWidth = stage.width();
@@ -66,11 +68,23 @@
                         var rowBlocks = $rows.eq(rowIndex).find('.block');
                         var rowBlockWords = $rows.eq(rowIndex).find('.block').filter(':not(.block-space)');
                         var rowBlockSpaces = $rows.eq(rowIndex).find('.block-space');
+                        var rowBlockWordsSortAsc = [];
+                        var rowBlockWordsWidthSortAsc = [];
                         rowBlockWords.each(function() {
                             var $this = $(this);
                             var outerW = Math.floor( $(this).outerWidth(true) );
                             $this.outerWidth( outerW, true );
                             w += outerW;
+                            if ( rowBlockWordsSortAsc.length == 0
+                                || outerW > rowBlockWordsWidthSortAsc[rowBlockWordsSortAsc.length-1]
+                            ) {
+                                rowBlockWordsSortAsc.push($this);
+                                rowBlockWordsWidthSortAsc.push(outerW);
+                            }
+                            else {
+                                rowBlockWordsSortAsc.unshift($this);
+                                rowBlockWordsWidthSortAsc.unshift(outerW);
+                            }
                         });
                         //set space width
                         var spaceWidth = Math.floor( ( stageWidth - w)/rowBlockSpaces.length );
@@ -80,11 +94,24 @@
                                 reduceBlockWordWidth += Math.ceil( (w - stageWidth)/rowBlockWords.length );
                             }
                             var _w = 0;
-                            rowBlockWords.each(function() {
+                            $.each(rowBlockWordsSortAsc, function(index, item) {
                                 var $this = $(this);
-                                var outerW = Math.floor($this.outerWidth(true) - reduceBlockWordWidth);
-                                $this.outerWidth( outerW, true );
-                                _w += outerW;
+                                var originW = Math.floor( $(this).outerWidth(true) );
+                                var outerW = Math.floor( originW - reduceBlockWordWidth );
+                                if ( outerW < 0 ) {
+                                    //set block word min = 10%
+                                    $this.width(stageWidth*.1);
+                                    var _newWidth = $this.outerWidth(true);
+                                    _w += _newWidth;
+
+                                    //recalculate reduce block word space
+                                    reduceBlockWordWidth = Math.ceil( (rowBlockSpaces.length*stageWidth*0.1)/(rowBlockWords.length - (index + 1)) );
+                                    reduceBlockWordWidth += Math.ceil( ( (w - originW) - (stageWidth - _newWidth) )/(rowBlockWords.length - (index + 1)) );
+                                }
+                                else {
+                                    $this.outerWidth( outerW, true );
+                                    _w += outerW;
+                                }
                                 var innerW = $this.width();
                                 var p = $this.find('span').eq(0);
                                 var _fs = initialFontSize;

@@ -1,6 +1,5 @@
 .mfc__kaleidoscope-wrapper {
     width: 100%;
-    height: 100%;
     margin: auto;
     position: absolute;
     top: 0;
@@ -159,20 +158,92 @@
     top: -100%;
 }
 .circle-tile {
-    width: 300%;
-    height: 300%;
+    width: 100%;
+    height: 100%;
     position: absolute;
-    top: -150%;
-    left: -150%;
+    top: 0;
+    left: 0;
     z-index: 998;
 
-    background-size: 17%;
+    background-size: 52%;
     background-repeat: repeat;
     background-position: right bottom;
 
     transform-origin: center center;
     -webkit-transform-origin: center center;
 
-    transform: translate(-3%, 7%) scale(-1, 1) rotate(2deg);
-    -webkit-transform: translate(-3%, 7%) scale(-1, 1) rotate(2deg);
+    transform: translate(0, 20%) scale(-1, 1) rotate(3deg);
+    -webkit-transform: translate(0, 20%) scale(-1, 1) rotate(3deg);
+}
+.circle-tile.animating {
+    transition-property: transform;
+    transition-duration: 1s;
+    transition-timing-function: linear;
+    transition-delay: 0s;
+}
+.circle-tile.p1 {
+    transform: translate(6%, 26%) scale(-1, 1) rotate(16deg);
+    -webkit-transform: translate(6%, 26%) scale(-1, 1) rotate(16deg);
+}
+.circle-tile.p2 {
+    transform: translate(2%, 36%) scale(-1, 1) rotate(35deg);
+    -webkit-transform: translate(2%, 36%) scale(-1, 1) rotate(35deg);
+}
+.circle-tile.p3 {
+    transform: translate(-3%, 37%) scale(-1, 1) rotate(47deg);
+    -webkit-transform: translate(-3%, 37%) scale(-1, 1) rotate(47deg);
+}
+.circle-tile.p4 {
+    transition: transform .25s linear;
+    -webkit-transition: -webkit-transform .25s linear;
+
+    transform: translate(-3%, 37%) scale(-1, 1) rotate(47deg);
+    -webkit-transform: translate(-3%, 37%) scale(-1, 1) rotate(47deg);
+}
+.circle-tile.p5 {
+    transition: transform .5s linear;
+    -webkit-transition: -webkit-transform .5s linear;
+
+    transform: translate(10%, -19%) scale(-1, 1) rotate(-20deg);
+    -webkit-transform: translate(10%, -19%) scale(-1, 1) rotate(-20deg);
+}
+.circle-tile.p6 {
+    transition: transform .2s linear;
+    -webkit-transition: -webkit-transform .2s linear;
+
+    transform: translate(36%, 6%) scale(-1, 1) rotate(-45deg);
+    -webkit-transform: translate(36%, 6%) scale(-1, 1) rotate(-45deg);
+}
+.circle-tile.p7 {
+    transition: transform .5s linear;
+    -webkit-transition: -webkit-transform .5s linear;
+
+    transform: translate(22%, -34%) scale(-1, 1) rotate(-75deg);
+    -webkit-transform: translate(22%, -34%) scale(-1, 1) rotate(-75deg);
+}
+.circle-tile.p8 {
+    transition: transform .2s linear;
+    -webkit-transition: -webkit-transform .2s linear;
+
+    transform: translate(28%, -25%) scale(-1, 1) rotate(-90deg);
+    -webkit-transform: translate(28%, -25%) scale(-1, 1) rotate(-90deg);
+}
+.circle-tile.p9 {
+    transition: transform .5s linear;
+    -webkit-transition: -webkit-transform .5s linear;
+
+    transform: translate(15%, -40%) scale(-1, 1) rotate(-90deg);
+    -webkit-transform: translate(15%, -40%) scale(-1, 1) rotate(-90deg);
+}
+.circle-tile.p10 {
+    transition: transform 0s linear;
+    -webkit-transition: -webkit-transform 0s linear;
+
+    transform: translate(80%, 13%) scale(-1, 1) rotate(-90deg);
+}
+.circle-tile.p11 {
+    transform: translate(65%, -26%) scale(-1, 1) rotate(-65deg);
+}
+.circle-tile.p12 {
+    transform: translate(55%, 3%) scale(-1, 1) rotate(-37deg);
 }

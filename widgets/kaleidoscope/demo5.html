@@ -1,0 +1,225 @@
+<!doctype html public "✰">
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title dir="ltr">Kaleidos: CSS3 Kaleidoscope Effects</title>
+
+    <meta name="viewport" content="width=device-width">
+
+    <link rel="stylesheet" type="text/css" href="css/mfc.kaleidoscope2.css" media="all" />
+    <style type="text/css">
+        .state-btn {
+            display: block;
+            float: right;
+            color: #666;
+            padding: 5px 0;
+            margin-left: 10px;
+            text-decoration: none;
+            font-size: 12px;
+            font-family: Arial;
+            background: #efefef;
+            width: 30px;
+            text-align: center;
+        }
+        .state-btn.active {
+            background-color: #f00;
+            color: #fff;
+        }
+        .line {
+            position: absolute;
+            z-index: 999;
+            background: #f00;
+        }
+            .line-x {
+                width: 100%;
+                height: 1px;
+                top: 50%;
+                left: 0;
+            }
+            .line-y {
+                width: 1px;
+                height: 100%;
+                left: 50%;
+                top: 0;
+            }
+            .line-x-45,
+            .line-y-45 {
+                width: 150%;
+                height: 1px;
+                top: 50%;
+                left: -25%;
+                background: #fff;
+            }
+            .line-x-45 {
+                transform-origin: center center;
+                -webkit-transform-origin: center center;
+                transform: rotate(-45deg);
+                -webkit-transform: rotate(-45deg);
+            }
+            .line-y-45 {
+                transform-origin: center center;
+                -webkit-transform-origin: center center;
+                transform: rotate(45deg);
+                -webkit-transform: rotate(45deg);
+            }
+            .circle {
+                width: 100%;
+                height: 100%;
+                border: 1px solid #f00;
+                border-radius: 100%;
+                -webkit-border-radius: 100%;
+                position: absolute;
+                top: 0;
+                left: 0;
+                z-index: 999;
+            }
+
+        .wrapper {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            width: 50%;
+        }
+        .kaleidoscope {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 100%;
+            -moz-border-radius: 100%;
+            -webkit-border-radius: 100%;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- <div class="circle"></div>
+        <div class="line line-x"></div>
+        <div class="line line-y"></div>
+        <div class="line line-x-45"></div>
+        <div class="line line-y-45"></div> -->
+
+        <div id="kaleidoscope" class="kaleidoscope">
+            <div class="mfc__kaleidoscope-wrapper">
+                <div class="mfc__kaleidoscope">
+                    <div class="mfc__kaleidoscope-tile t0">
+                        <div class="tile-helper">
+                            <div class="mfc__kaleidoscope-image">
+                                <div class="ct">
+                                    <div class="circle-tile"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mfc__kaleidoscope-tile t1">
+                        <div class="tile-helper">
+                            <div class="mfc__kaleidoscope-image">
+                                <div class="ct">
+                                    <div class="circle-tile"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mfc__kaleidoscope-tile t2">
+                        <div class="tile-helper">
+                            <div class="mfc__kaleidoscope-image">
+                                <div class="ct">
+                                    <div class="circle-tile"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mfc__kaleidoscope-tile t3">
+                        <div class="tile-helper">
+                            <div class="mfc__kaleidoscope-image">
+                                <div class="ct">
+                                    <div class="circle-tile"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mfc__kaleidoscope-tile t4">
+                        <div class="tile-helper">
+                            <div class="mfc__kaleidoscope-image">
+                                <div class="ct">
+                                    <div class="circle-tile"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mfc__kaleidoscope-tile t5">
+                        <div class="tile-helper">
+                            <div class="mfc__kaleidoscope-image">
+                                <div class="ct">
+                                    <div class="circle-tile"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mfc__kaleidoscope-tile t6">
+                        <div class="tile-helper">
+                            <div class="mfc__kaleidoscope-image">
+                                <div class="ct">
+                                    <div class="circle-tile"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mfc__kaleidoscope-tile t7">
+                        <div class="tile-helper">
+                            <div class="mfc__kaleidoscope-image">
+                                <div class="ct">
+                                    <div class="circle-tile"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="../../js/jquery2.min.js"></script>
+    <script type="text/javascript" src="js/mfc.kaleidoscope3.js"></script>
+    <script type="text/javascript">
+        (function($) {
+            var queryString = window.location.search;
+            queryString = queryString.substring( queryString.indexOf('?')+1 );
+
+            $(document).ready(function() {
+                for ( var i=0; i < 13; i++ ) {
+                    $('<a href="?' + i + '" class="state-btn ' + (i==queryString ? 'active' : '') + '">' + i + '</a>').prependTo('body');
+                }
+                $('.wrapper').css({
+                    height: $('.wrapper').width()
+                });
+
+                var kaleidoscope = $('#kaleidoscope').mfcKaleidos({
+                    delay: 500,
+                    duration: 2000
+                });
+                kaleidoscope.mfcKaleidos.update(
+                    '../../images/idol-07.jpg'
+                );
+
+                kaleidoscope.find('.circle-tile').addClass( 'p' + queryString );
+            });
+        })(jQuery);
+    </script>
+</body>
+</html>

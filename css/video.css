@@ -206,7 +206,7 @@ strong {
         background-size: cover;
     }
     .mfc-video__content.mfc-video__error {
-        background: none;
+        background: none !important;
     }
         .mfc-video__content.mfc-video__error .mfc-control-btn {
             display: none !important;
@@ -348,7 +348,7 @@ strong {
         .scene-01 .scale-block-01 {
             width: 45%;
             height: 64%;
-            right: 55%;
+            right: 55% ;
             bottom: 0;
             overflow: hidden;
         }

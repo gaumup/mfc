@@ -1,6 +1,7 @@
 {
     "name": "MFC",
     "theme": "love",
+    "frontCover": "screenshot/php/screenshots/1439270209305_389427.32382565737.jpg",
     "assetsPath": {
         "sound": "sound",
         "images": "images"
@@ -28,14 +29,13 @@
         }
     },
     "images": {
-        "total": 9,
+        "total": 8,
         "files": {
             "logo": {
                 "normal": "logo.png"
             },
             "cover": {
-                "normal": "kaka.jpg",
-                "front": "video-cover.png"
+                "normal": "kaka.jpg"
             },
             "message": {
                 "idol01": "idol-07.jpg",
@@ -115,6 +115,6 @@
     ],
     "sentence": {
         "phase": "In a word, love is {keyword}",
-        "keyword": "love"
+        "keyword": "internationalization"
     }
 }

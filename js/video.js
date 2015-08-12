@@ -30,7 +30,7 @@
     MFC.Video = {};
     MFC.Video.config = {
         allowFullscreen: false,
-        canPause: true //pause is not well-tested so, please do not turn on
+        canPause: false //90% tested work stability on Chrome, FF, Safari, IE9+
     };
     MFC.Video.controls = {};
     MFC.Video.soundManager = createjs.Sound;
@@ -104,6 +104,7 @@
 
         //set video dimension with ratio 2:1
             var _setVideoHeightLazy = Helpers.throttle( function(e) {
+                $video.css({width: '100%'});
                 //video size
                 var windowHeight = Math.round( $(window).height() );
                 var videoHeight = Math.round( $video.width()/2 );
@@ -129,9 +130,12 @@
         //apply pub/sub to 'MFC.Video'
             Pattern.Mediator.installTo(MFC.Video);
             MFC.Video.sub( 'MFC.Video:init', function() {
+                $video.css({
+                    backgroundImage: 'none'
+                });
                 MFC.Video.timeline = new TimelineLite();
                 $body.attr('data-state', 'playing');
-                MFC.Video.playScene01();
+                MFC.Video.playScene03();
             });
             MFC.Video.sub( 'MFC.Video:end', function() {
                 MFC.Video.stop();
@@ -173,7 +177,9 @@
 
         //2- preparing assets: images and sounds
             MFC.Video.sub( 'MFC.Video.config:ready', function() {
-                $video.addClass( Themes[ MFC.Video.config.theme ] );
+                $video.addClass( Themes[ MFC.Video.config.theme ] ).css({
+                    backgroundImage: 'url(' + MFC.Video.config.frontCover + ')'
+                });
 
                 //press spacebar to play|pause
                 $(document).on('keyup', function(e) {
@@ -210,12 +216,22 @@
                             if ( playPauseReplayBtn.attr('data-pause') == 0 ) {
                                 playPauseReplayBtn.setStatus('pause');
                                 MFC.Video.timeline.pause();
+                                //pause the kaleidoscope
+                                var kaleidoscope = $('.kaleidoscope');
+                                if ( kaleidoscope.length > 0 ) {
+                                    kaleidoscope.data('mfcKaleidos').pause();
+                                }
                                 MFC.Video.soundManager.currentPlaying.paused = true;
                             }
                             //Pause -> Resume
                             else {
                                 playPauseReplayBtn.setStatus('resume');
                                 MFC.Video.timeline.resume();
+                                //resume the kaleidoscope
+                                var kaleidoscope = $('.kaleidoscope');
+                                if ( kaleidoscope.length > 0 ) {
+                                    kaleidoscope.data('mfcKaleidos').resume();
+                                }
                                 MFC.Video.soundManager.currentPlaying.paused = false;
                             }
                         }
@@ -232,13 +248,18 @@
                 volumeBtn.on('click touch', function(e) {
                     var $this = $(this);
                     $this.toggleClass('muted');
+                    MFC.Video.soundManager.muted = $this.hasClass('muted') ? true : false;
                     if ( MFC.Video.soundManager.currentPlaying !== undefined ) {
-                        MFC.Video.soundManager.currentPlaying.muted = MFC.Video.soundManager.muted = $this.hasClass('muted') ? true : false;
+                        MFC.Video.soundManager.currentPlaying.muted = MFC.Video.soundManager.muted;
                     }
                     return false;
                 });
             } );
             MFC.Video.sub( 'MFC.Video:startLoading', function() {
+                $video.css({
+                    backgroundImage: 'none'
+                });
+
                 loadingProgress.removeClass('hidden');
                 _setLoadingProgressFont();
 
@@ -312,6 +333,9 @@
                 createjs.Sound.addEventListener('fileload', function(e) {
                     MFC.Video.pub( 'MFC.Video.sound:load', e.id, e.src );
                 });
+                createjs.Sound.addEventListener('fileerror', function(e) {
+                    MFC.Video.pub( 'MFC.Video.sound:fail', e.id, e.src );
+                });
                 $.each(MFC.Video.config.sound.files, function(key, sounds) {
                     $.each(sounds, function(_subkey, _sound) {
                         var _soundPath = assetsPath.sound + '/' + _sound;
@@ -327,9 +351,9 @@
                     {
                         opacity: 0
                     }, 800, function() {
-                            loadingProgress.remove();
-                            $video.removeClass('mfc-video__loading');
-                            MFC.Video.pub( 'MFC.Video:init' );
+                        loadingProgress.remove();
+                        $video.removeClass('mfc-video__loading');
+                        MFC.Video.pub( 'MFC.Video:init' );
                     }
                 );
             } );
@@ -380,6 +404,11 @@
         //6- update buttons state & display
             MFC.Video.controls.playPauseReplayBtn.setStatus('stop');
             MFC.Video.controls.stopBtn.addClass('hidden');
+
+        //7- update cover
+            MFC.Video.player.addClass( Themes[ MFC.Video.config.theme ] ).css({
+                backgroundImage: 'url(' + MFC.Video.config.frontCover + ')'
+            });
         } catch(ex) {}
     }
     MFC.Video.playScene01 = function() {
@@ -606,9 +635,8 @@
                                 delay: 100,
                                 duration: 500
                             })
-                            .mfcKaleidos.update(
-                                MFC.Video.imageManager.get( MFC.Video.config.cover.image ),
-                                MFC.Video.config.cover.bgColor
+                            .data('mfcKaleidos').play(
+                                MFC.Video.imageManager.get( MFC.Video.config.cover.image )
                             )
                             .fadeIn();
 
@@ -741,9 +769,8 @@
             sound.play();
 
             //set theme color/img
-            kaleidoscope.mfcKaleidos.update(
-                MFC.Video.imageManager.get( message.themeBgKaleidoscope ),
-                message.themeBgKaleidoscopeColor
+            kaleidoscope.mfcKaleidos.play(
+                MFC.Video.imageManager.get( message.themeBgKaleidoscope )
             );
             //load new text to kaleidoscope
             kaleidoscopeText.text( message.text );
@@ -782,8 +809,9 @@
                     //init kaleidoscope
                     kaleidoscope.mfcKaleidos({
                         delay: 200,
-                        duration: 400
+                        duration: 500
                     });
+                    kaleidoscope.mfcKaleidos = kaleidoscope.data('mfcKaleidos');
                     _updateMessage( arrTxt[0] );
                 })
             );
@@ -833,7 +861,8 @@
                     (function() {
                         if ( i < arrTxt.length - 1 ) { i++; }
                         kaleidoscopeSentence.append( arrTxt[index-1].text );
-                        _updateMessage(message);
+                        kaleidoscope.mfcKaleidos.clear();
+                        _updateMessage( message );
                     })
                 );
             });
@@ -897,6 +926,8 @@
         var stage = $('#scene-03').html(_templatePart01);
         var sound = MFC.Video.soundManager.currentPlaying = MFC.Video.soundManager.createInstance( 'scene03_sound01' );
         var sentence = MFC.Video.config.sentence;
+        //remove , ! . and space more than 1
+        sentence.phase = sentence.phase.replace( new RegExp('[,.!]', 'g'), '' ).replace( new RegExp('\\s+', 'g'), ' ' );
 
         //do something before start scene 03
         //...
@@ -924,7 +955,7 @@
             (function() {
                 MFC.Video.pub( 'MFC.Video.scene03:startPart3' );
             })
-        ], '+=' + t, 'sequence', t);
+        ], '+=' + (t*2), 'sequence', t);
         //the end...
         timeline.add(
             (function() {
@@ -1015,11 +1046,23 @@
                     var rowBlocks = $rows.eq(rowIndex).find('.block');
                     var rowBlockWords = $rows.eq(rowIndex).find('.block').filter(':not(.block-space)');
                     var rowBlockSpaces = $rows.eq(rowIndex).find('.block-space');
+                    var rowBlockWordsSortAsc = [];
+                    var rowBlockWordsWidthSortAsc = [];
                     rowBlockWords.each(function() {
                         var $this = $(this);
                         var outerW = Math.floor( $(this).outerWidth(true) );
                         $this.outerWidth( outerW, true );
                         w += outerW;
+                        if ( rowBlockWordsSortAsc.length == 0
+                            || outerW > rowBlockWordsWidthSortAsc[rowBlockWordsSortAsc.length-1]
+                        ) {
+                            rowBlockWordsSortAsc.push($this);
+                            rowBlockWordsWidthSortAsc.push(outerW);
+                        }
+                        else {
+                            rowBlockWordsSortAsc.unshift($this);
+                            rowBlockWordsWidthSortAsc.unshift(outerW);
+                        }
                     });
                     //set space width
                     var spaceWidth = Math.floor( ( stageWidth - w)/rowBlockSpaces.length );
@@ -1029,11 +1072,24 @@
                             reduceBlockWordWidth += Math.ceil( (w - stageWidth)/rowBlockWords.length );
                         }
                         var _w = 0;
-                        rowBlockWords.each(function() {
+                        $.each(rowBlockWordsSortAsc, function(index, item) {
                             var $this = $(this);
-                            var outerW = Math.floor($this.outerWidth(true) - reduceBlockWordWidth);
-                            $this.outerWidth( outerW, true );
-                            _w += outerW;
+                            var originW = Math.floor( $(this).outerWidth(true) );
+                            var outerW = Math.floor( originW - reduceBlockWordWidth );
+                            if ( outerW < 0 ) {
+                                //set block word min = 10%
+                                $this.width(stageWidth*.1);
+                                var _newWidth = $this.outerWidth(true);
+                                _w += _newWidth;
+
+                                //recalculate reduce block word space
+                                reduceBlockWordWidth = Math.ceil( (rowBlockSpaces.length*stageWidth*0.1)/(rowBlockWords.length - (index + 1)) );
+                                reduceBlockWordWidth += Math.ceil( ( (w - originW) - (stageWidth - _newWidth) )/(rowBlockWords.length - (index + 1)) );
+                            }
+                            else {
+                                $this.outerWidth( outerW, true );
+                                _w += outerW;
+                            }
                             var innerW = $this.width();
                             var p = $this.find('span').eq(0);
                             var _fs = initialFontSize;

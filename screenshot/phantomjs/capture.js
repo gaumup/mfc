@@ -10,7 +10,7 @@
                 verbose: true, //set 'true' for debug only
                 logLevel: 'debug', //debug | info | warning | error
                 viewportSize: { width: 1920, height: 960 },
-                timeout: 15000, //Max timeout in milliseconds
+                timeout: 18000, //Max timeout in milliseconds
                 waitTimeout: 5000, //Default wait timeout, for wait* family functions.
                 retryTimeout: 1000, //retry after 1s
             },
@@ -18,7 +18,7 @@
                 verbose: true, //set 'true' for debug only
                 logLevel: 'error', //debug | info | warning | error
                 viewportSize: { width: 1920, height: 960 },
-                timeout: 15000, //Max timeout in milliseconds
+                timeout: 18000, //Max timeout in milliseconds
                 waitTimeout: 5000, //Default wait timeout, for wait* family functions.
                 retryTimeout: 1000, //retry after 1s
             },
@@ -26,7 +26,7 @@
                 verbose: false, //set 'true' for debug only
                 logLevel: 'error', //debug | info | warning | error
                 viewportSize: { width: 1920, height: 960 },
-                timeout: 15000, //Max timeout in milliseconds
+                timeout: 18000, //Max timeout in milliseconds
                 waitTimeout: 5000, //Default wait timeout, for wait* family functions.
                 retryTimeout: 1000, //retry after 1s
             }

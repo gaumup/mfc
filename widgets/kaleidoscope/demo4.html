@@ -9,6 +9,24 @@
     <meta name="viewport" content="width=device-width">
 
     <style type="text/css">
+        .state-btn {
+            display: block;
+            float: right;
+            color: #666;
+            padding: 5px 0;
+            margin-left: 10px;
+            text-decoration: none;
+            font-size: 12px;
+            font-family: Arial;
+            background: #efefef;
+            width: 30px;
+            text-align: center;
+        }
+        .state-btn.active {
+            background-color: #f00;
+            color: #fff;
+        }
+
         .mfc__kaleidoscope-wrapper {
             width: 40%;
             margin: auto;
@@ -20,8 +38,8 @@
             overflow: hidden;
             border-radius: 100%;
             -webkit-border-radius: 100%;
-            transform: rotate(-30deg);
-            -webkit-transform: rotate(-30deg);
+            /*transform: rotate(-30deg);
+            -webkit-transform: rotate(-30deg);*/
         }
         .mfc__kaleidoscope {
             position: absolute;
@@ -408,7 +426,14 @@
     <script type="text/javascript" src="../../js/jquery2.min.js"></script>
     <script type="text/javascript">
         (function($) {
+            var queryString = window.location.search;
+            queryString = queryString.substring( queryString.indexOf('?')+1 );
+
             $(document).ready(function() {
+                for ( var i=0; i < 13; i++ ) {
+                    $('<a href="?' + i + '" class="state-btn ' + (i==queryString ? 'active' : '') + '">' + i + '</a>').prependTo('body');
+                }
+
                 $('.mfc__kaleidoscope-wrapper').css({
                     height: $('.mfc__kaleidoscope-wrapper').width()
                 });
@@ -441,7 +466,7 @@
                     '#4F2660', //19
                     '#008FFF'  //20
                 ];
-                var timer = function() {
+                var timer = function(run) {
                     if ( i > loop ) { return; }
                     c.css({
                         backgroundImage: i < 10
@@ -451,60 +476,65 @@
                     kaleidoscope.css({
                          backgroundColor: theme[i-1]
                     });
-                    setTimeout(function() {
-                        c.addClass('animating');
-                        c.addClass('p1');
-                    }, delay);
-                    setTimeout(function() { //p1 duration = 1s
-                        c.removeClass('p1');
-                        c.addClass('p2');
-                    }, s+delay);
-                    setTimeout(function() { //p2 duration = 1s
-                        c.removeClass('p2');
-                        c.addClass('p3');
-                    }, s*2+delay);
-                    setTimeout(function() { //p3 duration = 1s
-                        c.removeClass('p3');
-                        c.addClass('p4');
-                    }, s*3+delay);
-                    setTimeout(function() { //p4 duration = 0.25s = s/4
-                        c.removeClass('p4');
-                        c.addClass('p5');
-                    }, s*3+s/4+delay);
-                    setTimeout(function() { //p5 duration = 0.5s = s/2
-                        c.removeClass('p5');
-                        c.addClass('p6');
-                    }, s*3+s/4+s/2+delay);
-                    setTimeout(function() { //p6 duration = 0.2s = s/5
-                        c.removeClass('p6');
-                        c.addClass('p7');
-                    }, s*3+s/4+s/2+s/5+delay);
-                    setTimeout(function() { //p7 duration = 0.5s = s/2 + delay 0.2s = s/5
-                        c.removeClass('p7');
-                        c.addClass('p8');
-                    }, s*3+s/4+s/2+s/5+s/2+s/5+delay);
-                    setTimeout(function() { //p8 duration = 0.2s = s/5
-                        c.removeClass('p8');
-                        c.addClass('p9');
-                    }, s*3+s/4+s/2+s/5+s/2+s/5+s/5+delay);
-                    setTimeout(function() { //p9 duration = 0.5s = s/2
-                        c.removeClass('p9');
-                        c.addClass('p10');
-                    }, s*3+s/4+s/2+s/5+s/2+s/5+s/5+s/2+delay);
-                    setTimeout(function() { //p10 duration = 0s + delay 0.1s = s/10
-                        c.removeClass('p10');
-                        c.addClass('p11');
-                    }, s*3+s/4+s/2+s/5+s/2+s/5+s/5+s/2+s/10+delay);
-                    setTimeout(function() { //p11 duration = 1s = s
-                        c.removeClass('p11');
-                        c.addClass('p12');
-                    }, s*3+s/4+s/2+s/5+s/2+s/5+s/5+s/2+s/10+s+delay);
-                    setTimeout(function() { //p12 duration = 1s = s
-                        c.removeClass('p12').removeClass('animating');
-                        timer();
-                    }, s+s+s+s/4+s/2+s/5+s/2+s/5+s/5+s/2+s/10+s+s+delay);
+                    if ( run ) {
+                        setTimeout(function() {
+                            c.addClass('animating');
+                            c.addClass('p1');
+                        }, delay);
+                        setTimeout(function() { //p1 duration = 1s
+                            c.removeClass('p1');
+                            c.addClass('p2');
+                        }, s+delay);
+                        setTimeout(function() { //p2 duration = 1s
+                            c.removeClass('p2');
+                            c.addClass('p3');
+                        }, s*2+delay);
+                        setTimeout(function() { //p3 duration = 1s
+                            c.removeClass('p3');
+                            c.addClass('p4');
+                        }, s*3+delay);
+                        setTimeout(function() { //p4 duration = 0.25s = s/4
+                            c.removeClass('p4');
+                            c.addClass('p5');
+                        }, s*3+s/4+delay);
+                        setTimeout(function() { //p5 duration = 0.5s = s/2
+                            c.removeClass('p5');
+                            c.addClass('p6');
+                        }, s*3+s/4+s/2+delay);
+                        setTimeout(function() { //p6 duration = 0.2s = s/5
+                            c.removeClass('p6');
+                            c.addClass('p7');
+                        }, s*3+s/4+s/2+s/5+delay);
+                        setTimeout(function() { //p7 duration = 0.5s = s/2 + delay 0.2s = s/5
+                            c.removeClass('p7');
+                            c.addClass('p8');
+                        }, s*3+s/4+s/2+s/5+s/2+s/5+delay);
+                        setTimeout(function() { //p8 duration = 0.2s = s/5
+                            c.removeClass('p8');
+                            c.addClass('p9');
+                        }, s*3+s/4+s/2+s/5+s/2+s/5+s/5+delay);
+                        setTimeout(function() { //p9 duration = 0.5s = s/2
+                            c.removeClass('p9');
+                            c.addClass('p10');
+                        }, s*3+s/4+s/2+s/5+s/2+s/5+s/5+s/2+delay);
+                        setTimeout(function() { //p10 duration = 0s + delay 0.1s = s/10
+                            c.removeClass('p10');
+                            c.addClass('p11');
+                        }, s*3+s/4+s/2+s/5+s/2+s/5+s/5+s/2+s/10+delay);
+                        setTimeout(function() { //p11 duration = 1s = s
+                            c.removeClass('p11');
+                            c.addClass('p12');
+                        }, s*3+s/4+s/2+s/5+s/2+s/5+s/5+s/2+s/10+s+delay);
+                        setTimeout(function() { //p12 duration = 1s = s
+                            c.removeClass('p12').removeClass('animating');
+                            timer();
+                        }, s+s+s+s/4+s/2+s/5+s/2+s/5+s/5+s/2+s/10+s+s+delay);
+                    }
+                    else {
+                        c.addClass('p' + queryString);
+                    }
                 }
-                timer();
+                timer(false);
             });
         })(jQuery);
     </script>

@@ -1,30 +1,5 @@
 'use strict';
 
-/*
-    themesColor: [
-        '#204D88', //1
-        '#2F285B', //2
-        '#383B70', //3
-        '#5C2E5D', //4
-        '#404587', //5
-        '#412A56', //6
-        '#6B3571', //7
-        '#454E9B', //8
-        '#1D5A9D', //9
-        '#432E71', //10
-        '#FF79FE', //11
-        '#650080', //12
-        '#B901DF', //13
-        '#1EB4CF', //14
-        '#013186', //15
-        '#0093B4', //16
-        '#006188', //17
-        '#9900F9', //18
-        '#4F2660', //19
-        '#008FFF'  //20
-    ]
- */
-
 (function($) {
     // start matching after: comment start block => ! or @preserve => optional whitespace => newline
     // stop matching before: last newline => optional whitespace => comment end block
@@ -118,110 +93,205 @@
     MFC_Kaleidos.init = function($obj, params) {
         var opts = $.extend( true, {
             delay: 500,
-            speed: 1000
+            duration: 1000
         }, params );
 
-        var kaleidoscope = $obj.html( _template );
-        var c = kaleidoscope.find('.circle-tile') ;
-        var s = opts.duration;
-        var _setDuration = function(el, duration) {
-            return el.css({
-                'transition-duration': duration/1000 + 's',
-                '-webkit-transition-duration': duration/1000 + 's'
-            });
-        }
-        var _setEasing = function(el, timingFunc) {
-            return el.css({
-                'transition-timing-function': timingFunc,
-                '-webkit-transition-timing-function': timingFunc
-            });
-        }
-        //loop
-        var timer = function() {
-            //run animation
-            setTimeout(function() {
-                c.addClass('animating');
-                c.addClass('p1');
-                _setDuration(c, s);
-            }, opts.delay);
-            setTimeout(function() { //p1 duration = 1s
-                c.removeClass('p1');
-                c.addClass('p2');
-                _setDuration(c, s);
-                _setEasing(c, 'cubic-bezier(1, 1.25, 0.75, 2)');
-            }, s+opts.delay);
-            setTimeout(function() { //p2 duration = 1s
-                c.removeClass('p2');
-                c.addClass('p3');
-                _setDuration(c, s);
-                _setEasing(c, 'linear');
-            }, s+s+opts.delay);
-            setTimeout(function() { //p3 duration = 1s
-                c.removeClass('p3');
-                c.addClass('p4');
-                _setDuration(c, s/4);
-            }, s+s+s+opts.delay);
-            setTimeout(function() { //p4 duration = 0.25s = s/4
-                c.removeClass('p4');
-                c.addClass('p5');
-                _setDuration(c, s/2);
-            }, s+s+s+s/4+opts.delay);
-            setTimeout(function() { //p5 duration = 0.5s = s/2
-                c.removeClass('p5');
-                c.addClass('p6');
-                _setDuration(c, s/5);
-            }, s+s+s+s/4+s/2+opts.delay);
-            setTimeout(function() { //p6 duration = 0.2s = s/5
-                c.removeClass('p6');
-                c.addClass('p7');
-                _setDuration(c, s/2);
-            }, s+s+s+s/4+s/2+s/5+opts.delay);
-            setTimeout(function() { //p7 duration = 0.5s = s/2 + delay 0.2s = s/5
-                c.removeClass('p7');
-                c.addClass('p8');
-                _setDuration(c, s/5);
-            }, s+s+s+s/4+s/2+s/5+s/2+s/5+opts.delay);
-            setTimeout(function() { //p8 duration = 0.2s = s/5
-                c.removeClass('p8');
-                c.addClass('p9');
-                _setDuration(c, s/2);
-            }, s+s+s+s/4+s/2+s/5+s/2+s/5+s/5+opts.delay);
-            setTimeout(function() { //p9 duration = 0.5s = s/2
-                c.removeClass('p9');
-                c.addClass('p10');
-                _setDuration(c, 0);
-            }, s+s+s+s/4+s/2+s/5+s/2+s/5+s/5+s/2+opts.delay);
-            setTimeout(function() { //p10 duration = 0s + delay 0.1s = s/10
-                c.removeClass('p10');
-                c.addClass('p11');
-                _setDuration(c, s);
-            }, s+s+s+s/4+s/2+s/5+s/2+s/5+s/5+s/2+s/10+opts.delay);
-            setTimeout(function() { //p11 duration = 1s = s
-                c.removeClass('p11');
-                c.addClass('p12');
-                _setDuration(c, s);
-            }, s+s+s+s/4+s/2+s/5+s/2+s/5+s/5+s/2+s/10+s+opts.delay);
-            setTimeout(function() { //p12 duration = 1s = s
-                c.removeClass('p12').removeClass('animating');
-                timer();
-            }, s+s+s+s/4+s/2+s/5+s/2+s/5+s/5+s/2+s/10+s+s+opts.delay);
-        }
-        timer();
+        var kaleidoscope = $obj;
+        var timeline;
+        var _createTimeline = function(c) {
+            var t = opts.duration/1000;
+            TweenLite.defaultEase = Linear.easeNone;
+            timeline = new TimelineLite();
 
-        return $obj.extend( true, {
+            timeline.add( //p1 = t
+                TweenLite.to(c, t, {
+                    css: {
+                        xPercent: '+=1%',
+                        yPercent: '+=6.5%',
+                        rotation: '-=13deg'
+                    }
+                })
+            );
+            timeline.add( //p2 = t
+                TweenLite.to(c, t, {
+                    css: {
+                        xPercent: '-=4.5%',
+                        yPercent: '+=12.5%',
+                        rotation: '-=21deg'
+                    }
+                })
+            );
+            timeline.add( //p3 = t/2
+                TweenLite.to(c, t/2, {
+                    css: {
+                        xPercent: '-=2%',
+                        yPercent: '+=4%',
+                        rotation: '-=11deg'
+                    }
+                })
+            );
+            timeline.add( //p4 = 0.2
+                TweenLite.to(c, 0.2, {
+                    // immediateRender: false,
+                    css: {
+                        xPercent: '+=7%',
+                        yPercent: '-=19%',
+                        rotation: '+=53deg'
+                    }
+                })
+            );
+            timeline.add( //p5 = t, delay t/4
+                TweenLite.to(c, t/2, {
+                    delay: t/4,
+                    css: {
+                        xPercent: '+=16.5%',
+                        yPercent: '-=7.5%',
+                        rotation: '+=42deg'
+                    }
+                })
+            );
+            timeline.add( //p6 = 0.2
+                TweenLite.to(c, 0.2, {
+                    // immediateRender: false,
+                    css: {
+                        xPercent: '+=8%',
+                        yPercent: '+=2.5%',
+                        rotation: '+=24deg'
+                    }
+                })
+            );
+            timeline.add( //p7 = t
+                TweenLite.to(c, t, {
+                    delay: t/4,
+                    css: {
+                        xPercent: '+=3%',
+                        yPercent: '+=2.2%',
+                        rotation: '+=15deg'
+                    }
+                })
+            );
+            timeline.add( //p8 = t -> bridge
+                TweenLite.to(c, t, {
+                    css: {
+                        xPercent: '-=10%',
+                        yPercent: '-=9%',
+                        rotation: '-=20deg'
+                    },
+                    ease: Linear.easeNone
+                })
+            );
+            timeline.add( //p9 = t/2 -> bridge
+                TweenLite.to(c, t/2, {
+                    css: {
+                        xPercent: '-=6%',
+                        yPercent: '-=1.5%',
+                        rotation: '-=17deg'
+                    },
+                    ease: Linear.easeNone
+                })
+            );
+            timeline.add( //p10 = t/2
+                TweenLite.to(c, t/2, {
+                    css: {
+                        xPercent: '-=7.5%',
+                        yPercent: '+=2%',
+                        rotation: '-=30deg'
+                    }
+                })
+            );
+            timeline.add( //p11 = t
+                TweenLite.to(c, t, {
+                    css: {
+                        xPercent: '-=3%',
+                        yPercent: '+=9%',
+                        rotation: '-=26deg'
+                    }
+                })
+            );
+            timeline.add( //p12 = t/2
+                TweenLite.to(c, t/2, {
+                    css: {
+                        xPercent: '-=9%',
+                        yPercent: '+=19%',
+                        rotation: '-=38deg'
+                    }
+                })
+            );
+            timeline.add( //p13 = 0.2
+                TweenLite.to(c, 0.2, {
+                    // immediateRender: false,
+                    css: {
+                        xPercent: '+=10%',
+                        yPercent: '-=18%',
+                        rotation: '+=53deg'
+                    }
+                })
+            );
+            timeline.add( //p14 = t, delay t/4
+                TweenLite.to(c, t/2, {
+                    delay: t/4,
+                    css: {
+                        xPercent: '+=15%',
+                        yPercent: '-=4.5%',
+                        rotation: '+=38deg'
+                    }
+                })
+            );
+            timeline.add( //p15 = 0.2
+                TweenLite.to(c, 0.2, {
+                    // immediateRender: false,
+                    css: {
+                        xPercent: '+=8%',
+                        yPercent: '+=2.5%',
+                        rotation: '+=24deg'
+                    }
+                })
+            );
+            timeline.add( //p7 = t
+                TweenLite.to(c, t, {
+                    delay: t/4,
+                    css: {
+                        xPercent: '+=3%',
+                        yPercent: '+=1%',
+                        rotation: '+=15deg'
+                    }
+                })
+            );
+            timeline.play();
+        }
+
+        return $obj.data({
             mfcKaleidos: {
-                update: function(url, themeColor) {
-                    kaleidoscope.find('.circle-tile').css({
+                clear: function() {
+                    timeline.clear();
+                    kaleidoscope.empty();
+
+                    return kaleidoscope;
+                },
+                play: function(url) {
+                    //add template
+                    kaleidoscope.html( _template );
+                    //set img
+                    var c = kaleidoscope.find('.circle-tile')
+                    _createTimeline(c);
+                    c.add(kaleidoscope).css({
                         backgroundImage: 'url(' + url + ')'
                     });
-                    kaleidoscope.css({
-                         backgroundColor: themeColor
-                    });
+
+                    return kaleidoscope;
+                },
+                pause: function() {
+                    timeline.pause();
+
+                    return kaleidoscope;
+                },
+                resume: function() {
+                    timeline.resume();
 
                     return kaleidoscope;
                 }
             }
-        } );
+        });
     }
 
     //export as jQuery function
