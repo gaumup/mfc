@@ -100,7 +100,7 @@
         var timeline;
         var _createTimeline = function(c) {
             var t = opts.duration/1000;
-            TweenLite.defaultEase = Linear.easeNone;
+            TweenLite.defaultEase = Linear.easeOut;
             timeline = new TimelineLite();
 
             timeline.add( //p1 = t
@@ -130,9 +130,10 @@
                     }
                 })
             );
-            timeline.add( //p4 = 0.2
-                TweenLite.to(c, 0.2, {
+            timeline.add( //p4 = t/3
+                TweenLite.to(c, t/3, {
                     // immediateRender: false,
+                    ease: Linear.easeNone,
                     css: {
                         xPercent: '+=7%',
                         yPercent: '-=19%',
@@ -140,9 +141,8 @@
                     }
                 })
             );
-            timeline.add( //p5 = t, delay t/4
+            timeline.add( //p5 = t
                 TweenLite.to(c, t/2, {
-                    delay: t/4,
                     css: {
                         xPercent: '+=16.5%',
                         yPercent: '-=7.5%',
@@ -150,9 +150,10 @@
                     }
                 })
             );
-            timeline.add( //p6 = 0.2
-                TweenLite.to(c, 0.2, {
+            timeline.add( //p6 = t/3
+                TweenLite.to(c, t/3, {
                     // immediateRender: false,
+                    ease: Linear.easeNone,
                     css: {
                         xPercent: '+=8%',
                         yPercent: '+=2.5%',
@@ -162,7 +163,6 @@
             );
             timeline.add( //p7 = t
                 TweenLite.to(c, t, {
-                    delay: t/4,
                     css: {
                         xPercent: '+=3%',
                         yPercent: '+=2.2%',
@@ -217,9 +217,10 @@
                     }
                 })
             );
-            timeline.add( //p13 = 0.2
-                TweenLite.to(c, 0.2, {
+            timeline.add( //p13 = t/3
+                TweenLite.to(c, t/3, {
                     // immediateRender: false,
+                    ease: Linear.easeNone,
                     css: {
                         xPercent: '+=10%',
                         yPercent: '-=18%',
@@ -227,9 +228,8 @@
                     }
                 })
             );
-            timeline.add( //p14 = t, delay t/4
+            timeline.add( //p14 = t
                 TweenLite.to(c, t/2, {
-                    delay: t/4,
                     css: {
                         xPercent: '+=15%',
                         yPercent: '-=4.5%',
@@ -237,9 +237,10 @@
                     }
                 })
             );
-            timeline.add( //p15 = 0.2
-                TweenLite.to(c, 0.2, {
+            timeline.add( //p15 = t/3
+                TweenLite.to(c, t/3, {
                     // immediateRender: false,
+                    ease: Linear.easeNone,
                     css: {
                         xPercent: '+=8%',
                         yPercent: '+=2.5%',
@@ -249,7 +250,6 @@
             );
             timeline.add( //p7 = t
                 TweenLite.to(c, t, {
-                    delay: t/4,
                     css: {
                         xPercent: '+=3%',
                         yPercent: '+=1%',

@@ -30,7 +30,7 @@
     MFC.Video = {};
     MFC.Video.config = {
         allowFullscreen: false,
-        canPause: false //90% tested work stability on Chrome, FF, Safari, IE9+
+        canPause: true //90% tested work stability on Chrome, FF, Safari, IE9+
     };
     MFC.Video.controls = {};
     MFC.Video.soundManager = createjs.Sound;
@@ -135,7 +135,7 @@
                 });
                 MFC.Video.timeline = new TimelineLite();
                 $body.attr('data-state', 'playing');
-                MFC.Video.playScene03();
+                MFC.Video.playScene01();
             });
             MFC.Video.sub( 'MFC.Video:end', function() {
                 MFC.Video.stop();
@@ -215,24 +215,32 @@
                             //Playing -> Pause
                             if ( playPauseReplayBtn.attr('data-pause') == 0 ) {
                                 playPauseReplayBtn.setStatus('pause');
-                                MFC.Video.timeline.pause();
-                                //pause the kaleidoscope
-                                var kaleidoscope = $('.kaleidoscope');
-                                if ( kaleidoscope.length > 0 ) {
-                                    kaleidoscope.data('mfcKaleidos').pause();
+                                if ( MFC.Video.timeline !== undefined ) {
+                                    MFC.Video.timeline.pause();
                                 }
-                                MFC.Video.soundManager.currentPlaying.paused = true;
+                                //pause the kaleidoscope
+                                var kaleidoscope = $('.kaleidoscope').data('mfcKaleidos');
+                                if ( kaleidoscope !== undefined  ) {
+                                    kaleidoscope.pause();
+                                }
+                                if ( MFC.Video.soundManager.currentPlaying !== undefined ) {
+                                    MFC.Video.soundManager.currentPlaying.paused = true;
+                                }
                             }
                             //Pause -> Resume
                             else {
                                 playPauseReplayBtn.setStatus('resume');
-                                MFC.Video.timeline.resume();
-                                //resume the kaleidoscope
-                                var kaleidoscope = $('.kaleidoscope');
-                                if ( kaleidoscope.length > 0 ) {
-                                    kaleidoscope.data('mfcKaleidos').resume();
+                                if ( MFC.Video.timeline !== undefined ) {
+                                    MFC.Video.timeline.resume();
                                 }
-                                MFC.Video.soundManager.currentPlaying.paused = false;
+                                //resume the kaleidoscope
+                                var kaleidoscope = $('.kaleidoscope').data('mfcKaleidos');
+                                if ( kaleidoscope !== undefined  ) {
+                                    kaleidoscope.resume();
+                                }
+                                if ( MFC.Video.soundManager.currentPlaying !== undefined ) {
+                                    MFC.Video.soundManager.currentPlaying.paused = false;
+                                }
                             }
                         }
                     }
@@ -490,25 +498,25 @@
             var timeline = MFC.Video.timeline;
             timeline.add( [
                 TweenLite.to( animBlock02, t1, {
-                    right: '95%',
+                    xPercent: -95,
                     onComplete: function() {
                         d1.resolve();
                     }
                 } ),
                 TweenLite.to( scaleBlock01, t1, {
-                    left: '10%',
+                    xPercent: -95,
                     onComplete: function() {
                         d2.resolve();
                     }
                 } ),
                 TweenLite.to( animBlock01, t1, {
-                    height: '48%',
+                    yPercent: 100,
                     onComplete: function() {
                         d3.resolve();
                     }
                 } ),
                 TweenLite.to( imgPlaceHolder02, t1/3, {
-                    top: 0,
+                    yPercent: 105,
                     delay: t1/2,
                     onComplete: function() {
                         d4.resolve();
@@ -537,26 +545,26 @@
             var timeline = MFC.Video.timeline;
             timeline.add( [
                 TweenLite.to( animBlock02, t1, {
-                    right: '55%',
+                    xPercent: -55,
                     onComplete: function() {
                         d1.resolve();
                     }
                 } ),
                 TweenLite.to( scaleBlock01, t1, {
-                    left: '50%',
+                    xPercent: -55,
                     onComplete: function() {
                         d2.resolve();
                     }
                 } ),
                 TweenLite.to( imgPlaceHolder01, t1, {
-                    left: '-100%',
+                    xPercent: -100,
                     onComplete: function() {
                         imgPlaceHolder01.remove();
                         d3.resolve();
                     }
                 } ),
                 TweenLite.to( animBlock01, t1/2, {
-                    right: '-100%',
+                    xPercent: 100,
                     onComplete: function() {
                         animBlock01.remove();
                         d4.resolve();
@@ -593,9 +601,10 @@
             var timeline = MFC.Video.timeline;
             timeline.add( [
                 //d1: 2 blocks move left and hide to bottom
-                TweenLite.to( animBlock02Wrapper, t1, {
-                    left: '-10%',
-                    bottom: '-100%',
+                TweenLite.to( animBlock02, t1/2, {
+                    xPercent: -80,
+                    yPercent: 300,
+                    ease: Linear.easeNone,
                     onComplete: function() {
                         animBlock02.remove();
                         d1.resolve();
@@ -603,36 +612,31 @@
                 } ),
                 //d2: hidden block grown-up
                 TweenLite.to( scaleBlock01Wrapper, t1/2, {
-                    width: '66%',
                     height: '83%',
-                    ease: Linear.easeNone,
-                    onComplete: function() {
-                        scaleBlock01Wrapper.css({
-                            right: 'auto',
-                            bottom: 'auto',
-                            left: (66 - 50*66/100 - 21) + '%',
-                            top: (100 - 83) + '%',
-                            width: 50*66/100 + '%' //50% of 65%
-                        });
-                        scaleBlock01.css({
-                            left: 0
-                        });
-                    }
+                    ease: Linear.easeNone
+                } ),
+                TweenLite.to( scaleBlock01, t1/2, {
+                    xPercent: -80,
+                    ease: Linear.easeNone
                 } ),
                 //d2: hidden block grown-up, scale 100% width
-                TweenLite.to( scaleBlock01Wrapper, t1*2/3, {
+                TweenLite.to( scaleBlock01Wrapper, t1/2, {
                     width: '100%',
-                    left: 0,
-                    top: 0,
+                    yPercent: -17,
+                    delay: t1/2,
+                    ease: Linear.easeNone
+                } ),
+                TweenLite.to( scaleBlock01, t1/2, {
+                    xPercent: -47.3, //TODO: optimizing
+                    delay: t1/2,
                     ease: Linear.easeNone,
-                    delay: t1/2, //little trick
                     onComplete: function() {
                         //init kaleidoscope
                         var kaleidoscope = $('#scene-01__kaleidoscope');
                         kaleidoscope
                             .hide()
                             .mfcKaleidos({
-                                delay: 100,
+                                delay: 50,
                                 duration: 500
                             })
                             .data('mfcKaleidos').play(
@@ -645,8 +649,9 @@
                 } ),
                 //d3
                 TweenLite.to( imgPlaceHolder02, t1/3, {
-                    left: '100%',
+                    xPercent: 150,
                     delay: t1/3,
+                    ease: Linear.easeNone,
                     onComplete: function() {
                         imgPlaceHolder02.remove();
                         d3.resolve();
@@ -654,8 +659,9 @@
                 } ),
                 //d4
                 TweenLite.to( imgPlaceHolder03, t1/3, {
-                    right: '-100%',
+                    xPercent: 350,
                     delay: t1/3,
+                    ease: Linear.easeNone,
                     onComplete: function() {
                         imgPlaceHolder03.remove();
                         d4.resolve();
@@ -663,7 +669,7 @@
                 } ),
                 //d5
                 TweenLite.to( staticBlock01, t1/3, {
-                    height: 0,
+                    yPercent: 100,
                     delay: t1/4,
                     onComplete: function() {
                         staticBlock01.remove();
@@ -674,7 +680,7 @@
             $.when( d2 ).done(function(v2) {
                 timeline.add( [
                     TweenLite.to( animBlock03, t1, {
-                        width: '100%',
+                        xPercent: -100,
                         delay: 0.5,
                         onComplete: function() {
                             d6.resolve();
@@ -686,14 +692,14 @@
                 var _delay = 1.5;
                 timeline.add( [
                     TweenLite.to( scaleBlock01Wrapper, t1/3, {
-                        left: '100%',
+                        xPercent: 100,
                         delay: _delay,
                         onComplete: function() {
                             d7.resolve();
                         }
                     } ),
                     TweenLite.to( animBlock03, t1/3, {
-                        left: '-100%',
+                        xPercent: -200,
                         delay: _delay,
                         onComplete: function() {
                             d8.resolve();
@@ -808,7 +814,7 @@
                     i++;
                     //init kaleidoscope
                     kaleidoscope.mfcKaleidos({
-                        delay: 200,
+                        delay: 50,
                         duration: 500
                     });
                     kaleidoscope.mfcKaleidos = kaleidoscope.data('mfcKaleidos');
@@ -818,14 +824,14 @@
             timeline.add( [
                 //block contains kaleidoscope move right full-width
                 TweenLite.to( animBlock01, t1, {
-                    left: 0,
+                    xPercent: 100,
                     onComplete: function() {
                         d1.resolve();
                     }
                 } ),
                 //block at the bottom move left full-width
                 TweenLite.to( animBlock02, t1, {
-                    width: '100%',
+                    xPercent: -100,
                     onComplete: function() {
                         d3.resolve();
                     }
@@ -834,7 +840,7 @@
             //block contains img move left
             timeline.add(
                 TweenLite.to( imgPlaceHolder01Wrapper, t1/2, {
-                    right: 0,
+                    xPercent: -100,
                     delay: 0.2,
                     ease: Sine.easeIn,
                     onComplete: function() {
@@ -955,7 +961,7 @@
             (function() {
                 MFC.Video.pub( 'MFC.Video.scene03:startPart3' );
             })
-        ], '+=' + (t*2), 'sequence', t);
+        ], '+=' + (t*1.5), 'sequence', t);
         //the end...
         timeline.add(
             (function() {

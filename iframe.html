@@ -10,12 +10,33 @@
                 margin: 0;
                 padding: 0;
             }
+            .container {
+                width: 100%;
+                margin: 0;
+            }
+            .wrapper {
+                width: 100%;
+                height: 100%;
+                margin: 0 auto;
+            }
+            .inner {
+                position: relative;
+                width: 903px;
+                height: 465px;
+                margin: 0 auto;
+            }
+            .video {
+                width: 100%;
+                height: 100%;
+                display: block;
+                margin: 0 ;
+            }
             iframe {
                 display: block;
-                margin: 0 auto;
+                margin: 0;
                 padding: 0;
-                width: 900px;
-                height: 450px;
+                width: 100%;
+                height: 100%;
                 border: none;
             }
             .button-wrapper {
@@ -25,9 +46,17 @@
     </head>
 
     <body>
-        <iframe id="video-01" name="video-01" src="http://projects.local/od.mfc/video-generated/"></iframe>
-        <div class="button-wrapper">
-            <button id="stop" data-frame="video-01">Stop</button>
+        <div class="container">
+            <div class="wrapper">
+                <div class="inner">
+                    <div class="video">
+                        <iframe id="video-01" name="video-01" src="index.html?config=config.json"></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="button-wrapper">
+                <button id="stop" data-frame="video-01">Stop</button>
+            </div>
         </div>
 
         <script type="text/javascript" src="js/jquery2.min.js"></script>
