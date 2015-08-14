@@ -54,7 +54,31 @@ strong {
 }
 
 /* progress bar */
-
+    .mfc-control {}
+        .mfc-progress {
+            width: 80%;
+            height: 3%;
+            border: 1px solid #fff;
+            position: absolute;
+            left: 3%;
+            bottom: 4%;
+            z-index: 10000;
+        }
+            .mfc-progress__bar {
+                width: calc( 100% - 2px );
+                height: calc( 100% - 2px );
+                position: absolute;
+                top: 1px;
+                left: 1px;
+            }
+                .mfc-progress__indicator {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 0;
+                    height: 100%;
+                    background-color: rgb(255,255,255);
+                }
 /* end. progress bar */
 
 /* video controls button */
