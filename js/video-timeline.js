@@ -30,7 +30,7 @@
     MFC.Video = {};
     MFC.Video.config = {
         allowFullscreen: false,
-        canPause: false, //90% tested work stability on Chrome, FF, Safari, IE9+
+        canPause: true, //90% tested work stability on Chrome, FF, Safari, IE9+
         showProgress: false //not-well tested and design, should not go on production
     };
     MFC.Video.controls = {};

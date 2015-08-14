@@ -43,11 +43,15 @@
                         $.each(words, function(wordIndex, word) {
                             //create word block
                             var _block = $(_blockTpl)
-                                .html('<span>' + word + '</span>')
+                                .html('<span>' + (function() {
+                                    return word == '{keyword}'
+                                        ? '<em class="scene-03__keyword ' + (isKeywordHidden ? '' : 'visible') + '">' + sentence.keyword + '</em>'
+                                        : word;
+                                })() + '</span>')
                                 .addClass('color-style-03')
                                 .css({
                                     height: rowHeight,
-                                    fontSize: initialFontSize,
+                                    fontSize: rowHeight,
                                     lineHeight: rowHeight + 'px'
                                 });
                             $rows.eq(rowIndex).append( _block );
@@ -72,9 +76,9 @@
                         var rowBlockWordsWidthSortAsc = [];
                         rowBlockWords.each(function() {
                             var $this = $(this);
-                            var outerW = Math.floor( $(this).outerWidth(true) );
-                            $this.outerWidth( outerW, true );
-                            w += outerW;
+                            var outerW = $(this).outerWidth(true);
+                            $this.outerWidth( Math.floor(outerW), true );
+                            w += Math.ceil(outerW);
                             if ( rowBlockWordsSortAsc.length == 0
                                 || outerW > rowBlockWordsWidthSortAsc[rowBlockWordsSortAsc.length-1]
                             ) {
@@ -86,6 +90,7 @@
                                 rowBlockWordsWidthSortAsc.unshift(outerW);
                             }
                         });
+
                         //set space width
                         var spaceWidth = Math.floor( ( stageWidth - w)/rowBlockSpaces.length );
                         if ( spaceWidth < stageWidth*0.1 ) { //set space = 10%
@@ -96,12 +101,12 @@
                             var _w = 0;
                             $.each(rowBlockWordsSortAsc, function(index, item) {
                                 var $this = $(this);
-                                var originW = Math.floor( $(this).outerWidth(true) );
-                                var outerW = Math.floor( originW - reduceBlockWordWidth );
+                                var originW = $(this).outerWidth(true);
+                                var outerW = originW - reduceBlockWordWidth;
                                 if ( outerW < 0 ) {
                                     //set block word min = 10%
                                     $this.width(stageWidth*.1);
-                                    var _newWidth = $this.outerWidth(true);
+                                    var _newWidth = Math.ceil( $this.outerWidth(true) );
                                     _w += _newWidth;
 
                                     //recalculate reduce block word space
@@ -109,8 +114,8 @@
                                     reduceBlockWordWidth += Math.ceil( ( (w - originW) - (stageWidth - _newWidth) )/(rowBlockWords.length - (index + 1)) );
                                 }
                                 else {
-                                    $this.outerWidth( outerW, true );
-                                    _w += outerW;
+                                    $this.outerWidth( Math.floor(outerW), true );
+                                    _w += Math.ceil(outerW);
                                 }
                                 var innerW = $this.width();
                                 var p = $this.find('span').eq(0);

@@ -5,7 +5,7 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
 
-        <link rel="stylesheet" type="text/css" href="css/video-timeline.css" media="all" />
+        <link rel="stylesheet" type="text/css" href="css/video.css" media="all" />
         <link rel="stylesheet" type="text/css" href="css/theme.css" media="all" />
         <link rel="stylesheet" type="text/css" href="widgets/kaleidoscope/css/mfc.kaleidoscope.css" media="all" />
     </head>
@@ -32,37 +32,29 @@
                     </span>
                 </a>
 
-                <div class="mfc-control">
-                    <div class="mfc-progress hidden" id="mfc-video-progress-wrapper">
-                        <div class="mfc-progress__bar">
-                            <div class="mfc-progress__indicator" id="mfc-video-progress"></div>
-                        </div>
-                    </div>
+                <a class="mfc-control-btn mfc-stop-btn hidden" id="mfc-stop">Stop</a>
+                <a class="mfc-control-btn mfc-volume-btn hidden" id="mfc-volume">
+                    <span class="mfc-svg-btn mfc-svg-btn--volume-on">
+                        <svg width="100%" height="100%" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path class="ytp-svg-shadow" d="M12.39,15.54 L10,15.54 L10,20.44 L12.4,20.44 L17,25.50 L17,10.48 L12.39,15.54 Z" opacity="1"></path><path class="ytp-svg-fill" d="M12.39,15.54 L10,15.54 L10,20.44 L12.4,20.44 L17,25.50 L17,10.48 L12.39,15.54 Z" opacity="1"></path><path class="ytp-svg-shadow" d="M22,17.99 C22,16.4 20.74,15.05 19,14.54 L19,21.44 C20.74,20.93 22,19.59 22,17.99 Z" opacity="1"></path><path class="ytp-svg-fill" d="M22,17.99 C22,16.4 20.74,15.05 19,14.54 L19,21.44 C20.74,20.93 22,19.59 22,17.99 Z" opacity="1"></path><path class="ytp-svg-shadow" d="M19,24.31 L19,26 C22.99,25.24 26,21.94 26,18 C26,14.05 22.99,10.75 19,10 L19,11.68 C22.01,12.41 24.24,14.84 24.24,18 C24.24,21.15 22.01,23.58 19,24.31 Z" opacity="1"></path><path class="ytp-svg-fill" d="M19,24.31 L19,26 C22.99,25.24 26,21.94 26,18 C26,14.05 22.99,10.75 19,10 L19,11.68 C22.01,12.41 24.24,14.84 24.24,18 C24.24,21.15 22.01,23.58 19,24.31 Z" opacity="1"></path></svg>
+                    </span>
 
-                    <a class="mfc-control-btn mfc-stop-btn hidden" id="mfc-stop">Stop</a>
-                    <a class="mfc-control-btn mfc-volume-btn hidden" id="mfc-volume">
-                        <span class="mfc-svg-btn mfc-svg-btn--volume-on">
-                            <svg width="100%" height="100%" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path class="ytp-svg-shadow" d="M12.39,15.54 L10,15.54 L10,20.44 L12.4,20.44 L17,25.50 L17,10.48 L12.39,15.54 Z" opacity="1"></path><path class="ytp-svg-fill" d="M12.39,15.54 L10,15.54 L10,20.44 L12.4,20.44 L17,25.50 L17,10.48 L12.39,15.54 Z" opacity="1"></path><path class="ytp-svg-shadow" d="M22,17.99 C22,16.4 20.74,15.05 19,14.54 L19,21.44 C20.74,20.93 22,19.59 22,17.99 Z" opacity="1"></path><path class="ytp-svg-fill" d="M22,17.99 C22,16.4 20.74,15.05 19,14.54 L19,21.44 C20.74,20.93 22,19.59 22,17.99 Z" opacity="1"></path><path class="ytp-svg-shadow" d="M19,24.31 L19,26 C22.99,25.24 26,21.94 26,18 C26,14.05 22.99,10.75 19,10 L19,11.68 C22.01,12.41 24.24,14.84 24.24,18 C24.24,21.15 22.01,23.58 19,24.31 Z" opacity="1"></path><path class="ytp-svg-fill" d="M19,24.31 L19,26 C22.99,25.24 26,21.94 26,18 C26,14.05 22.99,10.75 19,10 L19,11.68 C22.01,12.41 24.24,14.84 24.24,18 C24.24,21.15 22.01,23.58 19,24.31 Z" opacity="1"></path></svg>
-                        </span>
-
-                        <span class="mfc-svg-btn mfc-svg-btn--volume-off">
-                            <svg width="100%" height="100%" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path class="ytp-svg-shadow" d="M12.39,15.54 L10,15.54 L10,20.44 L12.4,20.44 L17,25.50 L17,10.48 L12.39,15.54 Z" opacity="1"></path><path class="ytp-svg-fill" d="M12.39,15.54 L10,15.54 L10,20.44 L12.4,20.44 L17,25.50 L17,10.48 L12.39,15.54 Z" opacity="1"></path><path class="ytp-svg-shadow" d="M19.63,15.92 L20.68,14.93 L22.81,16.94 L24.94,14.93 L26,15.92 L23.86,17.93 L26,19.93 L24.94,20.92 L22.81,18.92 L20.68,20.92 L19.63,19.93 L21.76,17.93 L19.63,15.92 Z" opacity="1"></path><path class="ytp-svg-fill" d="M19.63,15.92 L20.68,14.93 L22.81,16.94 L24.94,14.93 L26,15.92 L23.86,17.93 L26,19.93 L24.94,20.92 L22.81,18.92 L20.68,20.92 L19.63,19.93 L21.76,17.93 L19.63,15.92 Z" opacity="1"></path></svg>
-                        </span>
-                    </a>
-                </div>
+                    <span class="mfc-svg-btn mfc-svg-btn--volume-off">
+                        <svg width="100%" height="100%" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path class="ytp-svg-shadow" d="M12.39,15.54 L10,15.54 L10,20.44 L12.4,20.44 L17,25.50 L17,10.48 L12.39,15.54 Z" opacity="1"></path><path class="ytp-svg-fill" d="M12.39,15.54 L10,15.54 L10,20.44 L12.4,20.44 L17,25.50 L17,10.48 L12.39,15.54 Z" opacity="1"></path><path class="ytp-svg-shadow" d="M19.63,15.92 L20.68,14.93 L22.81,16.94 L24.94,14.93 L26,15.92 L23.86,17.93 L26,19.93 L24.94,20.92 L22.81,18.92 L20.68,20.92 L19.63,19.93 L21.76,17.93 L19.63,15.92 Z" opacity="1"></path><path class="ytp-svg-fill" d="M19.63,15.92 L20.68,14.93 L22.81,16.94 L24.94,14.93 L26,15.92 L23.86,17.93 L26,19.93 L24.94,20.92 L22.81,18.92 L20.68,20.92 L19.63,19.93 L21.76,17.93 L19.63,15.92 Z" opacity="1"></path></svg>
+                    </span>
+                </a>
 
                 <!-- content generated dynamically -->
 
                 <!-- scene 01 -->
-                <div id="scene-01" class="stage scene-01 invisible"></div>
+                <div id="scene-01" class="stage scene-01"></div>
                 <!-- end. scene 01 -->
 
                 <!-- scene 02 -->
-                <div id="scene-02" class="stage scene-02 invisible"></div>
+                <div id="scene-02" class="stage scene-02"></div>
                 <!-- end. scene 02 -->
 
                 <!-- scene 03 -->
-                <div id="scene-03" class="stage scene-03 invisible"></div>
+                <div id="scene-03" class="stage scene-03"></div>
                 <!-- end. scene 03 -->
             </div>
         </div>
@@ -78,6 +70,6 @@
         <!-- end. greensock -->
         <script type="text/javascript" src="js/preloadjs-0.6.1.min.js"></script>
         <script type="text/javascript" src="js/soundjs-0.6.1.min.js"></script>
-        <script type="text/javascript" src="js/video-timeline.js"></script>
+        <script type="text/javascript" src="js/video.js"></script>
     </body>
 </html>

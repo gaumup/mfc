@@ -37,9 +37,6 @@ strong {
 .hidden {
     display: none !important;
 }
-.invisible {
-    visibility: hidden !important;
-}
 .logs {
     width: 100%;
     font-size: 12px;
@@ -52,10 +49,6 @@ strong {
     overflow: auto;
     color: #666;
 }
-
-/* progress bar */
-
-/* end. progress bar */
 
 /* video controls button */
     .mfc-control-btn {
@@ -251,7 +244,6 @@ strong {
         }
     .stage {
         position: absolute;
-        z-index: 1;
         top: 0;
         left: 0;
         width: 100%;
@@ -259,6 +251,9 @@ strong {
     }
         .block {
             position: absolute;
+        }
+        .mfc-video__loading .block {
+            display: none;
         }
 
     .kaleidoscope {
@@ -519,14 +514,6 @@ strong {
                 }
 
         /* part 2 */
-            .scene-03 .scene-03__part-block {
-                position: absolute;
-                z-index: 1;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-            }
             .scene-03 .word-block-wrapper {
                 position: absolute;
                 top: 0;
