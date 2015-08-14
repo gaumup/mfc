@@ -31,7 +31,7 @@
     MFC.Video.config = {
         allowFullscreen: false,
         canPause: true, //90% tested work stability on Chrome, FF, Safari, IE9+
-        showProgress: false //not-well tested and design, should not go on production
+        showProgress: true //not-well tested and design, should not go on production
     };
     MFC.Video.controls = {};
     MFC.Video.soundManager = createjs.Sound;

@@ -148,6 +148,7 @@ strong {
             color: #fff;
             font-family: 'Noto Sans Regular';
             text-align: center;
+            text-transform: uppercase;
         }
         .scene-01 .anim-block-03 {
             width: 0;
