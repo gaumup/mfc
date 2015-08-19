@@ -131,16 +131,6 @@
             }
         }
         var capture = function() {
-            //catch error
-            casper.onLoadError = function(casper, url, status) {
-                // console.log(status);
-            }
-            casper.onLoadError = function(message, backtrace) {
-                // console.log(message);
-            }
-            casper.onWaitTimeout = function(timeout) {
-                // console.log(timeout);
-            }
             //open page
             casper.start(pageUrls[i], function() {
                 var status = this.status();

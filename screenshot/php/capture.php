@@ -1,6 +1,6 @@
 <?php
     try {
-        $wwwPath = 'http://projects.local/od.mfc/video-generated/screenshot/html';
+        $wwwPath = 'http://projects.local/od.mfc/video/screenshot/html';
 
         //params: ?config=url
         $configUrl = isset($_GET['config'])
@@ -13,7 +13,7 @@
         $imgPath = array(
             __DIR__ . '/screenshots'
         );
-        $imgName = array();
+        $imgName = array( 'screenshot-01', 'screenshot-02', 'screenshot-03' );
         $urls = array(
             urlencode( $wwwPath . '/screenshot-01.html?config=' . $configUrl),
             urlencode( $wwwPath . '/screenshot-02.html?config=' . $configUrl),
