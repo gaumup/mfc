@@ -98,10 +98,13 @@
 
         var kaleidoscope = $obj;
         var timeline;
+        var isGPU = false;
         var _createTimeline = function(c) {
             var t = opts.duration/1000;
             TweenLite.defaultEase = Linear.easeOut;
-            timeline = new TimelineLite();
+            timeline = new TimelineLite({
+                paused: true
+            });
 
             timeline.add( //p1 = t
                 TweenLite.to(c, t, {
@@ -109,7 +112,8 @@
                         xPercent: '+=1%',
                         yPercent: '+=6.5%',
                         rotation: '-=13deg'
-                    }
+                    },
+                    force3D: isGPU
                 })
             );
             timeline.add( //p2 = t
@@ -118,7 +122,8 @@
                         xPercent: '-=4.5%',
                         yPercent: '+=12.5%',
                         rotation: '-=21deg'
-                    }
+                    },
+                    force3D: isGPU
                 })
             );
             timeline.add( //p3 = t/2
@@ -127,7 +132,8 @@
                         xPercent: '-=2%',
                         yPercent: '+=4%',
                         rotation: '-=11deg'
-                    }
+                    },
+                    force3D: isGPU
                 })
             );
             timeline.add( //p4 = t/3
@@ -138,7 +144,8 @@
                         xPercent: '+=7%',
                         yPercent: '-=19%',
                         rotation: '+=53deg'
-                    }
+                    },
+                    force3D: isGPU
                 })
             );
             timeline.add( //p5 = t
@@ -147,7 +154,8 @@
                         xPercent: '+=16.5%',
                         yPercent: '-=7.5%',
                         rotation: '+=42deg'
-                    }
+                    },
+                    force3D: isGPU
                 })
             );
             timeline.add( //p6 = t/3
@@ -158,7 +166,8 @@
                         xPercent: '+=8%',
                         yPercent: '+=2.5%',
                         rotation: '+=24deg'
-                    }
+                    },
+                    force3D: isGPU
                 })
             );
             timeline.add( //p7 = t
@@ -167,7 +176,8 @@
                         xPercent: '+=3%',
                         yPercent: '+=2.2%',
                         rotation: '+=15deg'
-                    }
+                    },
+                    force3D: isGPU
                 })
             );
             timeline.add( //p8 = t -> bridge
@@ -177,7 +187,8 @@
                         yPercent: '-=9%',
                         rotation: '-=20deg'
                     },
-                    ease: Linear.easeNone
+                    ease: Linear.easeNone,
+                    force3D: isGPU
                 })
             );
             timeline.add( //p9 = t/2 -> bridge
@@ -187,7 +198,8 @@
                         yPercent: '-=1.5%',
                         rotation: '-=17deg'
                     },
-                    ease: Linear.easeNone
+                    ease: Linear.easeNone,
+                    force3D: isGPU
                 })
             );
             timeline.add( //p10 = t/2
@@ -196,7 +208,8 @@
                         xPercent: '-=7.5%',
                         yPercent: '+=2%',
                         rotation: '-=30deg'
-                    }
+                    },
+                    force3D: isGPU
                 })
             );
             timeline.add( //p11 = t
@@ -205,7 +218,8 @@
                         xPercent: '-=3%',
                         yPercent: '+=9%',
                         rotation: '-=26deg'
-                    }
+                    },
+                    force3D: isGPU
                 })
             );
             timeline.add( //p12 = t/2
@@ -214,7 +228,8 @@
                         xPercent: '-=9%',
                         yPercent: '+=19%',
                         rotation: '-=38deg'
-                    }
+                    },
+                    force3D: isGPU
                 })
             );
             timeline.add( //p13 = t/3
@@ -225,7 +240,8 @@
                         xPercent: '+=10%',
                         yPercent: '-=18%',
                         rotation: '+=53deg'
-                    }
+                    },
+                    force3D: isGPU
                 })
             );
             timeline.add( //p14 = t
@@ -234,7 +250,8 @@
                         xPercent: '+=15%',
                         yPercent: '-=4.5%',
                         rotation: '+=38deg'
-                    }
+                    },
+                    force3D: isGPU
                 })
             );
             timeline.add( //p15 = t/3
@@ -245,7 +262,8 @@
                         xPercent: '+=8%',
                         yPercent: '+=2.5%',
                         rotation: '+=24deg'
-                    }
+                    },
+                    force3D: isGPU
                 })
             );
             timeline.add( //p7 = t
@@ -254,7 +272,8 @@
                         xPercent: '+=3%',
                         yPercent: '+=1%',
                         rotation: '+=15deg'
-                    }
+                    },
+                    force3D: isGPU
                 })
             );
             timeline.play();

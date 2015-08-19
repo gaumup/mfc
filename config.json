@@ -114,7 +114,7 @@
         }
     ],
     "sentence": {
-        "phase": "In a word, love is {keyword}",
-        "keyword": "internationalization"
+        "phase": "My favourite to do is {keyword}",
+        "keyword": "i am happy"
     }
 }

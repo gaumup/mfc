@@ -533,6 +533,7 @@
                     isStarted = true;
                     stage.removeClass('invisible');
                     sound = MFC.Video.soundManager.currentPlaying = MFC.Video.soundManager.createInstance('scene01_sound01');
+                    sound.muted = MFC.Video.soundManager.muted;
                     sound.play();
                 })
             ] );
@@ -755,7 +756,7 @@
             var _kHeight = kaleidoscope.height();
             var _height = _kHeight*parseInt(arrTxt[i].fontSize)/100;
             kaleidoscopeText.css({
-                fontSize: _height + 'px',
+                fontSize: _height*.9 + 'px',
                 lineHeight: _kHeight + 'px',
             });
 
@@ -1102,7 +1103,7 @@
                             var $this = $(this);
                             var originW = $(this).outerWidth(true);
                             var outerW = originW - reduceBlockWordWidth;
-                            if ( outerW < 0 ) {
+                            if ( outerW < stageWidth*.1 ) {
                                 //set block word min = 10%
                                 $this.width(stageWidth*.1);
                                 var _newWidth = Math.ceil( $this.outerWidth(true) );

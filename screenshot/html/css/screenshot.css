@@ -1,14 +1,5 @@
-@font-face {
-    font-family: 'Noto Sans Regular';
-    src: url('../fonts/notosans-regular-webfont.eot');
-    src: url('../fonts/notosans-regular-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/notosans-regular-webfont.woff2') format('woff2'),
-         url('../fonts/notosans-regular-webfont.woff') format('woff'),
-         url('../fonts/notosans-regular-webfont.ttf') format('truetype'),
-         url('../fonts/notosans-regular-webfont.svg#noto_sansregular') format('svg');
-    font-weight: normal;
-    font-style: normal;
-}
+@import url(http://fonts.googleapis.com/css?family=Noto+Sans);
+@import url(http://fonts.googleapis.com/css?family=Oswald);
 
 html,
 body {
@@ -146,7 +137,7 @@ strong {
             right: 0;
             bottom: 0;
             color: #fff;
-            font-family: 'Noto Sans Regular';
+            font-family: 'Oswald';
             text-align: center;
             text-transform: uppercase;
         }
@@ -205,6 +196,8 @@ strong {
                 margin: 0 2%;
                 position: relative;
                 float: left;
+                overflow: hidden;
+                font-family: 'Oswald';
             }
             .scene-03 .block-space {
                 width: 0;

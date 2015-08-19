@@ -51,7 +51,7 @@
                                 .addClass('color-style-03')
                                 .css({
                                     height: rowHeight,
-                                    fontSize: rowHeight,
+                                    fontSize: initialFontSize,
                                     lineHeight: rowHeight + 'px'
                                 });
                             $rows.eq(rowIndex).append( _block );
@@ -92,6 +92,7 @@
                         });
 
                         //set space width
+                        if (1) {
                         var spaceWidth = Math.floor( ( stageWidth - w)/rowBlockSpaces.length );
                         if ( spaceWidth < stageWidth*0.1 ) { //set space = 10%
                             var reduceBlockWordWidth = Math.ceil( (rowBlockSpaces.length*stageWidth*0.1)/rowBlockWords.length );
@@ -103,7 +104,7 @@
                                 var $this = $(this);
                                 var originW = $(this).outerWidth(true);
                                 var outerW = originW - reduceBlockWordWidth;
-                                if ( outerW < 0 ) {
+                                if ( outerW < stageWidth*.1 ) {
                                     //set block word min = 10%
                                     $this.width(stageWidth*.1);
                                     var _newWidth = Math.ceil( $this.outerWidth(true) );
@@ -129,6 +130,7 @@
                             spaceWidth = Math.floor( ( stageWidth - _w)/rowBlockSpaces.length );
                         }
                         rowBlockSpaces.css({ width: spaceWidth + 'px' });
+                        }
 
                         //exceptional for last row, 1 word block only
                         if ( rowBlocks.length == 1 && rowIndex == 2 ) {

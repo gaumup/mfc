@@ -98,6 +98,11 @@
             });
         }
 
+        //--img-name
+        if ( params.img_name === undefined ) {
+            params.img_name = [];
+        }
+
         //create a casperjs
         if ( params.mode === undefined || params.mode.length == 0 ) {
             params.mode = 'dev'; //default to the most quiet mode

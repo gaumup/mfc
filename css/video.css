@@ -1,14 +1,5 @@
-/*@font-face {
-    font-family: 'Noto Sans Regular';
-    src: url('../fonts/notosans-regular-webfont.eot');
-    src: url('../fonts/notosans-regular-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/notosans-regular-webfont.woff2') format('woff2'),
-         url('../fonts/notosans-regular-webfont.woff') format('woff'),
-         url('../fonts/notosans-regular-webfont.ttf') format('truetype'),
-         url('../fonts/notosans-regular-webfont.svg#noto_sansregular') format('svg');
-    font-weight: normal;
-    font-style: normal;
-}*/
+@import url(http://fonts.googleapis.com/css?family=Noto+Sans);
+@import url(http://fonts.googleapis.com/css?family=Oswald);
 
 html,
 body {
@@ -468,6 +459,7 @@ strong {
             vertical-align: middle;
             text-transform: uppercase;
             cursor: default;
+            font-family: 'Oswald';
         }
         .scene-02 .kaleidoscope-sentence {
             text-transform: uppercase;
@@ -479,6 +471,7 @@ strong {
             font-weight: bold;
             color: #fff;
             cursor: default;
+            font-family: 'Oswald';
         }
 
     /* scene 03 */
@@ -495,6 +488,7 @@ strong {
                 margin: 0 2%;
                 position: relative;
                 float: left;
+                font-family: 'Oswald';
             }
             .scene-03 .block-space {
                 width: 0;
@@ -537,6 +531,7 @@ strong {
                 .scene-03 .sentence-row .block span .scene-03__keyword {
                     visibility: hidden;
                     font-style: normal;
+                    white-space: nowrap;
                 }
                 .scene-03 .sentence-row .block span .scene-03__keyword.visible {
                     visibility: visible;
@@ -568,10 +563,15 @@ strong {
                     font-weight: bold;
                     text-align: center;
                     position: relative;
+                    font-family: 'Oswald';
+                    box-sizing: border-box;
+                    -moz-box-sizing: border-box;
+                    -webkit-box-sizing: border-box;
                 }
                 .scene-03 .word-block-01 {
                     text-align: right;
                     width: 42%;
+                    padding-right: 1%;
                 }
                 .scene-03 .word-block-02 {
                     width: 26%;
@@ -580,6 +580,7 @@ strong {
                     text-align: left;
                     float: right;
                     width: 32%;
+                    padding-left: 1%;
                 }
                     .scene-03 .word-block span {
                         display: block;
@@ -628,6 +629,7 @@ strong {
                 color: #fff;
                 font-style: italic;
                 font-weight: bold;
+                font-family: 'Noto Sans';
             }
             .scene-03 .mfc-big-day {
                 text-align: center;
@@ -656,6 +658,7 @@ strong {
                     background-size: contain;
                 }
                 .scene-03 .mfc-copyright {
+                    font-family: 'Noto Sans';
                     position: absolute;
                     bottom: 10%;
                     left: 0;

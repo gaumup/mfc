@@ -29,7 +29,7 @@
                 var staticBlock01Height = staticBlock01.height();
                 staticBlock01
                     .css({
-                        fontSize: staticBlock01Height*.2 + 'px',
+                        fontSize: staticBlock01Height*.3 + 'px',
                         lineHeight: staticBlock01Height + 'px'
                     });
             })
