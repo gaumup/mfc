@@ -1,7 +1,7 @@
 {
     "name": "MFC",
     "theme": "love",
-    "frontCover": "screenshot/php/screenshots/1439378340931_524179.0893487632.jpg",
+    "frontCover": "screenshot/php/screenshots/screenshot-01.jpg",
     "assetsPath": {
         "sound": "sound",
         "images": "images"
@@ -63,6 +63,16 @@
             "themeSound": "message_sound01"
         },
         {
+            "text": "",
+            "fontSize": "90%",
+            "fontColor": "#fff",
+            "themeBgColor": "#311036",
+            "themeBgImg": "message_idol01",
+            "themeBgKaleidoscope": "message_idol01",
+            "themeBgKaleidoscopeColor": "#6B3571",
+            "themeSound": "message_sound01"
+        },
+        {
             "text": "n",
             "fontSize": "95%",
             "fontColor": "#fff",
@@ -74,6 +84,16 @@
         },
         {
             "text": "t",
+            "fontSize": "60%",
+            "fontColor": "#fff",
+            "themeBgColor": "#1E214C",
+            "themeBgImg": "message_idol03",
+            "themeBgKaleidoscope": "message_idol03",
+            "themeBgKaleidoscopeColor": "#404587",
+            "themeSound": "message_sound03"
+        },
+        {
+            "text": "         ",
             "fontSize": "60%",
             "fontColor": "#fff",
             "themeBgColor": "#1E214C",

@@ -1,5 +1,20 @@
-@import url(http://fonts.googleapis.com/css?family=Noto+Sans);
-@import url(http://fonts.googleapis.com/css?family=Oswald);
+@font-face {
+    font-family: 'Noto Sans Regular';
+    src: url('../fonts/noto-sans-regular.woff2') format('woff2'),
+        url('../fonts/noto-sans-regular.woff') format('woff'),
+        url('../fonts/noto-sans-regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Oswald Regular';
+    src: url('../fonts/oswald-regular.woff2') format('woff2'),
+        url('../fonts/oswald-regular.woff') format('woff'),
+        url('../fonts/oswald-regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
 
 html,
 body {
@@ -137,7 +152,7 @@ strong {
             right: 0;
             bottom: 0;
             color: #fff;
-            font-family: 'Oswald';
+            font-family: 'Oswald Regular';
             text-align: center;
             text-transform: uppercase;
         }
@@ -197,7 +212,7 @@ strong {
                 position: relative;
                 float: left;
                 overflow: hidden;
-                font-family: 'Oswald';
+                font-family: 'Oswald Regular';
             }
             .scene-03 .block-space {
                 width: 0;

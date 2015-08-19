@@ -821,7 +821,9 @@
                         duration: 500
                     });
                     kaleidoscope.mfcKaleidos = kaleidoscope.data('mfcKaleidos');
-                    _updateMessage( arrTxt[0] );
+                    if ( arrTxt[0].text.trim() !== '' ) {
+                        _updateMessage( arrTxt[0] );
+                    }
                 })
             );
             timeline.add( [
@@ -847,21 +849,31 @@
         //loop message by word
         MFC.Video.sub( 'MFC.Video.scene02:preparePart02', function() {
             var t2 = 3;
-            var loopMessageTween = [];
-            $.each(arrTxt, function(index, message) {
-                if ( index == 0 ) { return true; } //continue
-                loopMessageTween.push(
-                    (function() {
-                        if ( i < arrTxt.length - 1 ) { i++; }
-                        kaleidoscopeSentence.append( arrTxt[index-1].text );
-                        kaleidoscope.mfcKaleidos.clear();
-                        _updateMessage( message );
-                    })
-                );
-            });
             var timeline = MFC.Video.timeline;
             //loop message
-            timeline.add( loopMessageTween, '+=' + t2, 'sequence', t2 );
+            $.each(arrTxt, function(index, message) {
+                if ( index == 0 ) { return true; } //continue, ignore 1st letter
+                if ( message.text.trim() === '' ) {
+                    timeline.add(
+                        (function() {
+                            if ( i < arrTxt.length - 1 ) { i++; }
+                            kaleidoscopeSentence.append( arrTxt[index-1].text );
+                        }),
+                        '+=' + t2
+                    );    
+                }
+                else {
+                    timeline.add(
+                        (function() {
+                            if ( i < arrTxt.length - 1 ) { i++; }
+                            kaleidoscopeSentence.append( arrTxt[index-1].text.trim() === '' ? '&nbsp;' : arrTxt[index-1].text );
+                            kaleidoscope.mfcKaleidos.clear();
+                            _updateMessage( message );
+                        }),
+                        '+=' + ( arrTxt[index-1].text.trim() === '' ? 0 : t2 )
+                    );
+                }
+            });
             //last word
             timeline.add(
                 (function() {

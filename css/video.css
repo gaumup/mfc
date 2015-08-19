@@ -1,5 +1,20 @@
-@import url(http://fonts.googleapis.com/css?family=Noto+Sans);
-@import url(http://fonts.googleapis.com/css?family=Oswald);
+@font-face {
+    font-family: 'Noto Sans Regular';
+    src: url('../fonts/noto-sans-regular.woff2') format('woff2'),
+        url('../fonts/noto-sans-regular.woff') format('woff'),
+        url('../fonts/noto-sans-regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Oswald Regular';
+    src: url('../fonts/oswald-regular.woff2') format('woff2'),
+        url('../fonts/oswald-regular.woff') format('woff'),
+        url('../fonts/oswald-regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
 
 html,
 body {
@@ -459,7 +474,7 @@ strong {
             vertical-align: middle;
             text-transform: uppercase;
             cursor: default;
-            font-family: 'Oswald';
+            font-family: 'Oswald Regular';
         }
         .scene-02 .kaleidoscope-sentence {
             text-transform: uppercase;
@@ -471,7 +486,7 @@ strong {
             font-weight: bold;
             color: #fff;
             cursor: default;
-            font-family: 'Oswald';
+            font-family: 'Oswald Regular';
         }
 
     /* scene 03 */
@@ -488,7 +503,7 @@ strong {
                 margin: 0 2%;
                 position: relative;
                 float: left;
-                font-family: 'Oswald';
+                font-family: 'Oswald Regular';
             }
             .scene-03 .block-space {
                 width: 0;
@@ -563,7 +578,7 @@ strong {
                     font-weight: bold;
                     text-align: center;
                     position: relative;
-                    font-family: 'Oswald';
+                    font-family: 'Oswald Regular';
                     box-sizing: border-box;
                     -moz-box-sizing: border-box;
                     -webkit-box-sizing: border-box;
@@ -629,7 +644,7 @@ strong {
                 color: #fff;
                 font-style: italic;
                 font-weight: bold;
-                font-family: 'Noto Sans';
+                font-family: 'Noto Sans Regular';
             }
             .scene-03 .mfc-big-day {
                 text-align: center;
@@ -658,7 +673,7 @@ strong {
                     background-size: contain;
                 }
                 .scene-03 .mfc-copyright {
-                    font-family: 'Noto Sans';
+                    font-family: 'Noto Sans Regular';
                     position: absolute;
                     bottom: 10%;
                     left: 0;
