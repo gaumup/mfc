@@ -281,6 +281,13 @@ strong {
             font-weight: bold;
             font-style: italic;
         }
+    .mfc-video__content.mfc-video__resizing {
+        background: url(../images/icon-loading.gif) no-repeat center center !important;
+        background-size: contain;
+    }
+        .mfc-video__content.mfc-video__resizing .stage {
+            visibility: hidden !important;
+        }
     .stage {
         position: absolute;
         z-index: 1;

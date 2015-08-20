@@ -28,6 +28,7 @@
     //MFC Video class
     var MFC = {};
     MFC.Video = {};
+    MFC.Video.available = false; //true only when load config ready
     MFC.Video.config = {
         allowFullscreen: false,
         canPause: false, //90% tested work stability on Chrome, FF, Safari, IE9+
@@ -35,6 +36,8 @@
     };
     MFC.Video.controls = {};
     MFC.Video.soundManager = createjs.Sound;
+    MFC.Video.soundManager.currentPlayingId;
+    MFC.Video.soundManager.currentPlayingPosition = 0;
     MFC.Video.imageManager = (function() {
         var store = {};
         var _set = function(id, value) {
@@ -49,7 +52,7 @@
     })();
     TweenLite.defaultEase = Quad.easeOut;
     MFC.Video.init = function($video, $configUrl, opts) {
-        MFC.Video.player = $video.removeClass('hidden');
+        MFC.Video.player = $video.removeClass('hidden').addClass('invisible');
 
         //common vars
             var playPauseReplayBtn = MFC.Video.controls.playPauseReplayBtn = $('#mfc-play-pause-replay').removeClass('hidden');
@@ -104,7 +107,7 @@
             })();
 
         //set video dimension with ratio 2:1
-            var _setVideoHeightLazy = Helpers.throttle( function(e) {
+            var _setVideoHeightLazy = Helpers.debounce( function(e) {
                 $video.css({width: '100%'});
                 //video size
                 var windowHeight = Math.round( $(window).height() );
@@ -118,15 +121,27 @@
                 else {
                     $video.css({ height: videoHeight });
                 }
+                //publish resize event to video
+                MFC.Video.pub( 'MFC.Video:resize' );
 
                 //kaleidoscope wrapper size
                 $('.kaleidoscope__wrapper').each(function() {
                     var $this = $(this);
                     $this.css({ width: $this.height() });
                 });
+
+                $video.removeClass('invisible');
             }, 250 );
             _setVideoHeightLazy();
-            $(window).on( 'resize', _setVideoHeightLazy );
+            $(window).on( 'resize', function() {
+                if ( MFC.Video.available 
+                    && MFC.Video.timeline !== undefined
+                    && MFC.Video.timeline.progress() > 0
+                ) {
+                    $video.addClass('mfc-video__resizing');
+                }
+                _setVideoHeightLazy();
+            });
 
         //apply pub/sub to 'MFC.Video'
             Pattern.Mediator.installTo(MFC.Video);
@@ -180,6 +195,8 @@
 
         //2- bind buttons events & preparing assets: images and sounds
             MFC.Video.sub( 'MFC.Video.config:ready', function() {
+                MFC.Video.available = true;
+
                 $video.addClass( Themes[ MFC.Video.config.theme ] ).css({
                     backgroundImage: 'url(' + MFC.Video.config.frontCover + ')'
                 });
@@ -375,6 +392,29 @@
                     }
                 );
             } );
+            MFC.Video.sub( 'MFC.Video:resize', function() {
+                if ( MFC.Video.available 
+                    && MFC.Video.timeline !== undefined
+                    && MFC.Video.timeline.progress() > 0
+                ) {
+                    var currentTimePosition = MFC.Video.timeline.time();
+                    var currentSoundId = MFC.Video.soundManager.currentPlaying.id;
+                    var currentSoundPosition = MFC.Video.soundManager.currentPlaying.position;
+                    MFC.Video.timeline.clear(true);
+                    MFC.Video.timeline = undefined;
+                    MFC.Video.player.find('.stage').empty().addClass('invisible');
+                    MFC.Video.soundManager.stop()
+                    MFC.Video.prepareLayout(false);
+                    //resume
+                    $video.removeClass('mfc-video__resizing');
+                    if ( MFC.Video.soundManager.currentPlayingId != currentSoundId ) {
+                        MFC.Video.soundManager.currentPlayingPosition = 0;
+                        MFC.Video.soundManager.currentPlayingId = currentSoundId;
+                    }
+                    MFC.Video.soundManager.currentPlayingPosition += currentSoundPosition;
+                    MFC.Video.timeline.time( currentTimePosition ).play();
+                }
+            } );
 
         //handling error
             MFC.Video.sub( 'MFC.Video.config:error', function() {
@@ -384,7 +424,7 @@
                     .css({
                         fontSize: $video.height()*.03 + 'px',
                         lineHeight: $video.height() + 'px'
-                    })
+                    });
             } );
     };
     MFC.Video.stop = function() {
@@ -447,7 +487,9 @@
             MFC.Video.prepareLayout();
         } catch(ex) {}
     }
-    MFC.Video.prepareLayout = function() {
+    MFC.Video.prepareLayout = function(autoplay) {
+        autoplay = autoplay === undefined ? true : autoplay;
+
         MFC.Video.timeline = new TimelineLite({
             paused: true,
             onUpdate: function() {
@@ -461,7 +503,9 @@
         MFC.Video.prepareScene02();
         MFC.Video.prepareScene03();
 
-        MFC.Video.pub( 'MFC.Video.layout:ready' );
+        if ( autoplay ) {
+            MFC.Video.pub( 'MFC.Video.layout:ready' );
+        }
     }
     MFC.Video.prepareScene01 = function() {
         //html template
@@ -532,9 +576,16 @@
                 (function() { //start play scene 1
                     isStarted = true;
                     stage.removeClass('invisible');
-                    sound = MFC.Video.soundManager.currentPlaying = MFC.Video.soundManager.createInstance('scene01_sound01');
-                    sound.muted = MFC.Video.soundManager.muted;
-                    sound.play();
+                    var soundId = 'scene01_sound01';
+                    if ( MFC.Video.soundManager.currentPlayingId === undefined
+                        || MFC.Video.soundManager.currentPlayingId == soundId
+                    ) {
+                        sound = MFC.Video.soundManager.currentPlaying = MFC.Video.soundManager.createInstance( soundId );
+                        MFC.Video.soundManager.currentPlaying.id = soundId;
+                        sound.muted = MFC.Video.soundManager.muted;
+                        sound.startTime = MFC.Video.soundManager.currentPlayingPosition;
+                        sound.play();
+                    }
                 })
             ] );
             //animations
@@ -550,7 +601,8 @@
                 } ),
                 TweenLite.to( imgPlaceHolder02, t1/3, {
                     yPercent: 105,
-                    delay: t1/2
+                    delay: t1/2,
+                    force3D: false
                 } )
             ] );
         } );
@@ -707,7 +759,11 @@
         //end of scene 01
         MFC.Video.sub( 'MFC.Video.scene01:end', function() {
             if ( isStarted ) {
-                sound.stop();
+                if ( sound !== undefined ) {
+                    sound.stop();
+                    MFC.Video.soundManager.currentPlayingId = undefined;
+                    MFC.Video.soundManager.currentPlayingPosition = 0;
+                };
                 stage.empty().addClass('invisible');
                 MFC.Video.pub( 'MFC.Video.scene01:completed' );
             }
@@ -772,10 +828,18 @@
             //get/play sound
             if ( sound !== undefined ) {
                 sound.stop();
+                MFC.Video.soundManager.currentPlayingId = undefined;
+                MFC.Video.soundManager.currentPlayingPosition = 0;
             }
-            sound = MFC.Video.soundManager.currentPlaying = MFC.Video.soundManager.createInstance( message.themeSound );
-            sound.muted = MFC.Video.soundManager.muted;
-            sound.play();
+            if ( MFC.Video.soundManager.currentPlayingId === undefined
+                || MFC.Video.soundManager.currentPlayingId == message.themeSound
+            ) {
+                sound = MFC.Video.soundManager.currentPlaying = MFC.Video.soundManager.createInstance( message.themeSound );
+                MFC.Video.soundManager.currentPlaying.id = message.themeSound;
+                sound.muted = MFC.Video.soundManager.muted;
+                sound.startTime = MFC.Video.soundManager.currentPlayingPosition;
+                sound.play();
+            }
 
             //set theme color/img
             kaleidoscope.mfcKaleidos.play(
@@ -892,7 +956,11 @@
         //end of scene 02
         MFC.Video.sub( 'MFC.Video.scene02:end', function() {
             if ( isStarted ) {
-                sound.stop();
+                if ( sound !== undefined ) {
+                    sound.stop();
+                    MFC.Video.soundManager.currentPlayingId = undefined;
+                    MFC.Video.soundManager.currentPlayingPosition = 0;
+                };
                 stage.empty().addClass('invisible');
                 MFC.Video.pub( 'MFC.Video.scene02:completed' );
             }
@@ -1009,9 +1077,21 @@
          * - delay for 3s before go to part 2
          */
         MFC.Video.sub( 'MFC.Video.scene03:startPart01', function() {
-            sound = MFC.Video.soundManager.currentPlaying = MFC.Video.soundManager.createInstance( 'scene03_sound01' );
-            sound.muted = MFC.Video.soundManager.muted;
-            sound.play();
+            if ( sound !== undefined ) {
+                sound.stop();
+                MFC.Video.soundManager.currentPlayingId = undefined;
+                MFC.Video.soundManager.currentPlayingPosition = 0;
+            }
+            var soundId = 'scene03_sound01';
+            if ( MFC.Video.soundManager.currentPlayingId === undefined
+                || MFC.Video.soundManager.currentPlayingId == soundId
+            ) {
+                sound = MFC.Video.soundManager.currentPlaying = MFC.Video.soundManager.createInstance( soundId );
+                MFC.Video.soundManager.currentPlaying.id = soundId;
+                sound.muted = MFC.Video.soundManager.muted;
+                sound.startTime = MFC.Video.soundManager.currentPlayingPosition;
+                sound.play();
+            }
 
             currentPart = scene03Part01.removeClass('invisible');
         });
@@ -1160,10 +1240,21 @@
          * - delay for 3s before go to part 3
          */
         MFC.Video.sub( 'MFC.Video.scene03:startPart02', function() {
-            sound.stop();
-            sound = MFC.Video.soundManager.currentPlaying = MFC.Video.soundManager.createInstance( 'scene03_sound02' );
-            sound.muted = MFC.Video.soundManager.muted;
-            sound.play();
+            if ( sound !== undefined ) {
+                sound.stop();
+                MFC.Video.soundManager.currentPlayingId = undefined;
+                MFC.Video.soundManager.currentPlayingPosition = 0;
+            }
+            var soundId = 'scene03_sound02';
+            if ( MFC.Video.soundManager.currentPlayingId === undefined
+                || MFC.Video.soundManager.currentPlayingId == soundId
+            ) {
+                sound = MFC.Video.soundManager.currentPlaying = MFC.Video.soundManager.createInstance( soundId );
+                MFC.Video.soundManager.currentPlaying.id = soundId;
+                sound.muted = MFC.Video.soundManager.muted;
+                sound.startTime = MFC.Video.soundManager.currentPlayingPosition;
+                sound.play();
+            }
 
             if ( currentPart !== undefined ) {
                 currentPart.remove();
@@ -1193,10 +1284,21 @@
          * - display the ending scene
          */
         MFC.Video.sub( 'MFC.Video.scene03:startPart03', function() {
-            sound.stop();
-            sound = MFC.Video.soundManager.currentPlaying = MFC.Video.soundManager.createInstance( 'scene03_sound03' );
-            sound.muted = MFC.Video.soundManager.muted;
-            sound.play();
+            if ( sound !== undefined ) {
+                sound.stop();
+                MFC.Video.soundManager.currentPlayingId = undefined;
+                MFC.Video.soundManager.currentPlayingPosition = 0;
+            }
+            var soundId = 'scene03_sound03';
+            if ( MFC.Video.soundManager.currentPlayingId === undefined
+                || MFC.Video.soundManager.currentPlayingId == soundId
+            ) {
+                sound = MFC.Video.soundManager.currentPlaying = MFC.Video.soundManager.createInstance( soundId );
+                MFC.Video.soundManager.currentPlaying.id = soundId;
+                sound.muted = MFC.Video.soundManager.muted;
+                sound.startTime = MFC.Video.soundManager.currentPlayingPosition;
+                sound.play();
+            }
 
             if ( currentPart !== undefined ) {
                 currentPart.remove();
