@@ -108,6 +108,9 @@ strong {
             background: rgba(0, 0, 0, .6);
             cursor: pointer;
         }
+            .mfc-svg-btn > svg {
+                display: block;
+            }
             .mfc-svg-btn .ytp-svg-fill {
                 fill: #fff;
             }
