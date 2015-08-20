@@ -120,17 +120,18 @@
                     delay: 100,
                     duration: 750
                 });
-                kaleidoscope.mfcKaleidos.play(
+                var kaleidoscopeApi = kaleidoscope.data('mfcKaleidos');
+                kaleidoscopeApi.play(
                     '../../images/idol-07.jpg'
                 );
-                setTimeout(function() {
-                    alert('pause');
-                    kaleidoscope.mfcKaleidos.pause();
-                }, 3000);
-                setTimeout(function() {
-                    alert('resume');
-                    kaleidoscope.mfcKaleidos.resume();
-                }, 6000);
+                // setTimeout(function() {
+                //     alert('pause');
+                //     kaleidoscopeApi.pause();
+                // }, 3000);
+                // setTimeout(function() {
+                //     alert('resume');
+                //     kaleidoscopeApi.resume();
+                // }, 6000);
             });
         })(jQuery);
     </script>

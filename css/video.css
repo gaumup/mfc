@@ -183,6 +183,7 @@ strong {
 
                 transform: scale(1);
                 -webkit-transform: scale(1);
+                -ms-transform: scale(1);
 
                 opacity: 1;
                 -moz-opacity: 1;
@@ -207,6 +208,7 @@ strong {
 
                 transform: scale(2);
                 -webkit-transform: scale(2);
+                -ms-transform: scale(2);
 
                 opacity: 0;
                 -moz-opacity: 0;
@@ -307,6 +309,7 @@ strong {
         -moz-border-radius: 100%;
         -webkit-border-radius: 100%;
 
+        -ms-transform: rotate(-30deg);
         -webkit-transform: rotate(-30deg);
         transform: rotate(-30deg);
 
@@ -343,6 +346,7 @@ strong {
             left: 48%;
             transform: translate(0, -105%);
             -webkit-transform: translate(0, -105%);
+            -ms-transform: translate(0, -105%);
             /* just for demo */
             background-repeat: no-repeat;
             background-position: center center;
@@ -356,6 +360,7 @@ strong {
 
             transform: translate(0, -100%);
             -webkit-transform: translate(0, -100%);
+            -ms-transform: translate(0, -100%);
         }
         .scene-01 .img-placeholder-03 {
             width: 14%;
@@ -401,6 +406,7 @@ strong {
 
                 transform: translate(105%, 0);
                 -webkit-transform: translate(105%, 0);
+                -ms-transform: translate(105%, 0);
             }
         .scene-01 .static-block-01 {
             width: 52%;
@@ -416,6 +422,7 @@ strong {
 
             transform: translate(100%, 0);
             -webkit-transform: translate(100%, 0);
+            -ms-transform: translate(100%, 0);
         }
 
     /* scene 02 */
@@ -427,6 +434,7 @@ strong {
 
             transform: translate(-100%, 0);
             -webkit-transform: translate(-100%, 0);
+            -ms-transform: translate(-100%, 0);
         }
         .scene-02 .img-placeholder-01 {
             width: 19%;
@@ -439,6 +447,7 @@ strong {
 
             transform: translate(100%, 0);
             -webkit-transform: translate(100%, 0);
+            -ms-transform: translate(100%, 0);
         }
             .scene-02 .img-placeholder-01 .block__inner {
                 position: absolute;
@@ -457,6 +466,7 @@ strong {
 
             transform: translate(100%, 0);
             -webkit-transform: translate(100%, 0);
+            -ms-transform: translate(100%, 0);
         }
         .scene-02 .kaleidoscope-text {
             font-weight: bold;

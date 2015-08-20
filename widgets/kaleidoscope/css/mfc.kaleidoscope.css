@@ -30,8 +30,10 @@
         left: 0;
         transform-origin: right bottom;
         -webkit-transform-origin: right bottom;
+        -ms-transform-origin: right bottom;
         transform: rotate(90deg);
         -webkit-transform: rotate(90deg);
+        -ms-transform: rotate(90deg);
     }
     .t1 {
         top: 0;
@@ -42,8 +44,10 @@
         right: 0;
         transform-origin: left bottom;
         -webkit-transform-origin: left bottom;
+        -ms-transform-origin: left bottom;
         transform: rotate(90deg);
         -webkit-transform: rotate(90deg);
+        -ms-transform: rotate(90deg);
     }
     .t4 {
         bottom: 0;
@@ -54,8 +58,10 @@
         right: 0;
         transform-origin: left top;
         -webkit-transform-origin: left top;
+        -ms-transform-origin: left top;
         transform: rotate(90deg);
         -webkit-transform: rotate(90deg);
+        -ms-transform: rotate(90deg);
     }
     .t5 {
         bottom: 0;
@@ -66,8 +72,10 @@
         left: 0;
         transform-origin: right top;
         -webkit-transform-origin: right top;
+        -ms-transform-origin: right top;
         transform: rotate(90deg);
         -webkit-transform: rotate(90deg);
+        -ms-transform: rotate(90deg);
     }
 
 .mfc__kaleidoscope-tile .tile-helper {
@@ -98,57 +106,73 @@
     .mfc__kaleidoscope-tile.t2 .tile-helper {
         transform-origin: right bottom;
         -webkit-transform-origin: right bottom;
+        -ms-transform-origin: right bottom;
         transform: rotate(45deg);
         -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
     }
         .mfc__kaleidoscope-tile.t0 .mfc__kaleidoscope-image,
         .mfc__kaleidoscope-tile.t2 .mfc__kaleidoscope-image {
             transform-origin: right bottom;
             -webkit-transform-origin: right bottom;
+            -ms-transform-origin: right bottom;
             transform: rotate(45deg) scale(-1, 1) translate(100%, 100%);
             -webkit-transform: rotate(45deg) scale(-1, 1) translate(100%, 100%);
+            -ms-transform: rotate(45deg) scale(-1, 1) translate(100%, 100%);
         }
     .mfc__kaleidoscope-tile.t1 .tile-helper,
     .mfc__kaleidoscope-tile.t3 .tile-helper {
         transform-origin: left bottom;
         -webkit-transform-origin: left bottom;
+        -ms-transform-origin: left bottom;
         transform: rotate(-45deg);
         -webkit-transform: rotate(-45deg);
+        -ms-transform: rotate(-45deg);
     }
         .mfc__kaleidoscope-tile.t1 .mfc__kaleidoscope-image,
         .mfc__kaleidoscope-tile.t3 .mfc__kaleidoscope-image {
             transform-origin: left bottom;
             -webkit-transform-origin: left bottom;
+            -ms-transform-origin: left bottom;
             transform: rotate(-45deg) translate(0, 100%);
             -webkit-transform: rotate(-45deg) translate(0, 100%);
+            -ms-transform: rotate(-45deg) translate(0, 100%);
         }
     .mfc__kaleidoscope-tile.t4 .tile-helper,
     .mfc__kaleidoscope-tile.t6 .tile-helper {
         transform-origin: left top;
         -webkit-transform-origin: left top;
+        -ms-transform-origin: left top;
         transform: rotate(45deg);
         -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
     }
         .mfc__kaleidoscope-tile.t4 .mfc__kaleidoscope-image,
         .mfc__kaleidoscope-tile.t6 .mfc__kaleidoscope-image {
             transform-origin: left top;
             -webkit-transform-origin: left top;
+            -ms-transform-origin: left top;
             transform: rotate(45deg) scale(1, -1);
             -webkit-transform: rotate(45deg) scale(1, -1);
+            -ms-transform: rotate(45deg) scale(1, -1);
         }
     .mfc__kaleidoscope-tile.t5 .tile-helper,
     .mfc__kaleidoscope-tile.t7 .tile-helper {
         transform-origin: right top;
         -webkit-transform-origin: right top;
+        -ms-transform-origin: right top;
         transform: rotate(-45deg);
         -webkit-transform: rotate(-45deg);
+        -ms-transform: rotate(-45deg);
     }
         .mfc__kaleidoscope-tile.t5 .mfc__kaleidoscope-image,
         .mfc__kaleidoscope-tile.t7 .mfc__kaleidoscope-image {
             transform-origin: right top;
             -webkit-transform-origin: right top;
+            -ms-transform-origin: right top;
             transform: rotate(-45deg) scale(-1, -1) translate(100%, 0);
             -webkit-transform: rotate(-45deg) scale(-1, -1) translate(100%, 0);
+            -ms-transform: rotate(-45deg) scale(-1, -1) translate(100%, 0);
         }
 
 .mfc__kaleidoscope-tile .ct {
@@ -172,7 +196,9 @@
 
     transform-origin: center center;
     -webkit-transform-origin: center center;
+    -ms-transform-origin: center center;
 
     transform: translate(-3%, 7%) scale(-1, 1) rotate(2deg);
     -webkit-transform: translate(-3%, 7%) scale(-1, 1) rotate(2deg);
+    -ms-transform: translate(-3%, 7%) scale(-1, 1) rotate(2deg);
 }

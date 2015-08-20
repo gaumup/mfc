@@ -63,7 +63,7 @@
             "themeSound": "message_sound01"
         },
         {
-            "text": "",
+            "text": "y",
             "fontSize": "90%",
             "fontColor": "#fff",
             "themeBgColor": "#311036",
@@ -111,6 +111,16 @@
             "themeBgKaleidoscope": "message_idol04",
             "themeBgKaleidoscopeColor": "#1EB4CF",
             "themeSound": "message_sound04"
+        },
+        {
+            "text": " ",
+            "fontSize": "100%",
+            "fontColor": "#fff",
+            "themeBgColor": "#06616E",
+            "themeBgImg": "message_idol05",
+            "themeBgKaleidoscope": "message_idol05",
+            "themeBgKaleidoscopeColor": "#0093B4",
+            "themeSound": "message_sound05"
         },
         {
             "text": "R",
