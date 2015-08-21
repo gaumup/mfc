@@ -103,7 +103,10 @@
             var t = opts.duration/1000;
             TweenLite.defaultEase = Linear.easeOut;
             timeline = new TimelineLite({
-                paused: true
+                paused: true,
+                onComplete: function() {
+                    timeline.seek(0).play(); //loop
+                }
             });
 
             timeline.add( //p1 = t

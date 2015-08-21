@@ -342,6 +342,7 @@
                 });
 
                 //preload sound
+                var d1 = $.Deferred();
                 var soundLoaded = 0;
                 MFC.Video.sub( 'MFC.Video.sound:load', function() {
                     _log( '<span style="color:#6D9F43">Done: ' + arguments[0] + '": ' + arguments[1] + '</span>' );
@@ -349,6 +350,7 @@
                     _setLoadingProgress();
                     if ( soundLoaded == MFC.Video.config.sound.total ) {
                         isAllSoundLoaded = true;
+                        d1.resolve();
                         MFC.Video.pub( 'MFC.Video.assets:load' );
                     }
                 } );
@@ -369,15 +371,17 @@
                     $.each(sounds, function(_subkey, _sound) {
                         var _soundPath = assetsPath.sound + '/' + _sound;
                         _log('Loading: "' + (key + '_' + _subkey) + '": ' + _soundPath);
-                        createjs.Sound.registerSound( _soundPath, (key + '_' + _subkey) );
+                        MFC.Video.soundManager.registerSound( _soundPath, (key + '_' + _subkey) );
                     });
                 });
 
                 //prepare layouts
-                MFC.Video.sub( 'MFC.Video.layout:ready', function() {
-                    isLayoutReady = true;
+                $.when( d1 ).done(function() {
+                    MFC.Video.sub( 'MFC.Video.layout:ready', function() {
+                        isLayoutReady = true;
+                    });
+                    MFC.Video.prepareLayout();
                 });
-                MFC.Video.prepareLayout();
             } );
 
         //3- start playing video
@@ -912,11 +916,12 @@
 
         //loop message by word
         MFC.Video.sub( 'MFC.Video.scene02:preparePart02', function() {
-            var t2 = 3;
             var timeline = MFC.Video.timeline;
             //loop message
+            var t2;
             $.each(arrTxt, function(index, message) {
                 if ( index == 0 ) { return true; } //continue, ignore 1st letter
+                t2 = MFC.Video.soundManager.createInstance( arrTxt[index-1].themeSound ).duration/1000;
                 if ( message.text.trim() === '' ) {
                     timeline.add(
                         (function() {

@@ -22,7 +22,7 @@
                 "sound_a": "Love/A_Sym1 L1.mp3",
                 "sound_c": "Love/C_Sym1 L3.mp3",
                 "sound_e": "Love/E_Kiss 2.mp3",
-                "sound_i": "Love/I_Heartbeat (trim to 1.8s).mp3",
+                "sound_i": "Love/K_Sym6 L7.mp3",
                 "sound_l": "Love/L_Sym6 L8.mp3",
                 "sound_m": "Love/M_Sym6 L9.mp3",
                 "sound_r": "Love/R_Sym8 L3.mp3"
@@ -78,11 +78,22 @@
 
             "fontSize": "98%",
             "fontColor": "#fff",
-            "themeBgColor": "#06616E",
+            "themeBgColor": "#073664",
             "themeBgImg": "message_idol06",
             "themeBgKaleidoscope": "message_idol06",
             "themeBgKaleidoscopeColor": "#0093B4",
             "text": "r",
+            "themeSound": "message_sound_r"
+        },
+        {
+
+            "fontSize": "98%",
+            "fontColor": "#fff",
+            "themeBgColor": "#073664",
+            "themeBgImg": "message_idol06",
+            "themeBgKaleidoscope": "message_idol06",
+            "themeBgKaleidoscopeColor": "#0093B4",
+            "text": "",
             "themeSound": "message_sound_r"
         },
         {
@@ -107,9 +118,19 @@
             "themeSound": "message_sound_c"
         },
         {
+            "fontSize": "60%",
+            "fontColor": "#fff",
+            "themeBgColor": "#1E214C",
+            "themeBgImg": "message_idol03",
+            "themeBgKaleidoscope": "message_idol03",
+            "themeBgKaleidoscopeColor": "#404587",
+            "text": "    ",
+            "themeSound": "message_sound_c"
+        },
+        {
             "fontSize": "98%",
             "fontColor": "#fff",
-            "themeBgColor": "#06616E",
+            "themeBgColor": "#073664",
             "themeBgImg": "message_idol06",
             "themeBgKaleidoscope": "message_idol06",
             "themeBgKaleidoscopeColor": "#0093B4",
