@@ -823,7 +823,7 @@
             //sentence
             kaleidoscopeSentenceHeight = kaleidoscopeSentence.height();
             kaleidoscopeSentence.css({
-                fontSize: kaleidoscopeSentenceHeight + 'px',
+                fontSize: kaleidoscopeSentenceHeight*.95 + 'px',
                 lineHeight: kaleidoscopeSentenceHeight + 'px',
             });
         }, 250);
