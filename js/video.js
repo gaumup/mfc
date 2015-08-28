@@ -163,7 +163,7 @@
                     backgroundImage: 'none'
                 });
                 $body.attr('data-state', 'playing');
-                MFC.Video.timeline.seek('scene-02').play();
+                MFC.Video.timeline.play();
             });
             MFC.Video.sub( 'MFC.Video:end', function() {
                 MFC.Video.stop();
