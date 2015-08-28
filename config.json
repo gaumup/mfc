@@ -53,8 +53,8 @@
     },
     "message": [
         {
-            "text": "I",
-            "fontSize": "90%",
+            "text": "W",
+            "fontSize": "20%",
             "fontColor": "#fff",
             "themeBgColor": "#311036",
             "themeBgImg": "message_idol01",
@@ -74,7 +74,7 @@
         },
         {
             "text": "n",
-            "fontSize": "95%",
+            "fontSize": "100%",
             "fontColor": "#fff",
             "themeBgColor": "#242860",
             "themeBgImg": "message_idol02",

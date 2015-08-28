@@ -7,5 +7,8 @@
         "image": "images/cover-01.png",
         "color": "#ffffff"
     },
-    "sentence": "In a word, love is testing"
+    "sentence": {
+        "phase": "My dream is to {keyword}.",
+        "keyword": "sleep"
+    }
 }

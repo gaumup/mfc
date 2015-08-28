@@ -4,15 +4,27 @@
     $(document).ready(function() {
         $.getJSON(configUrl)
             .done(function(response) {
+                $('.font-preload').remove();
+
                 var $video = $('#mfc-video').addClass( response.theme );
                 var stage = $('#scene-03');
                 var sentence = response.sentence;
                 //remove , ! . and space more than 1
-                sentence = sentence.replace( new RegExp('[,.!]', 'g'), '' ).replace( new RegExp('\\s+', 'g'), ' ' );
+                sentence.phase = sentence.phase.replace( new RegExp('[,.!]', 'g'), '' ).replace( new RegExp('\\s+', 'g'), ' ' );
+                //prepare keyword
+                var keyword = [];
+                $.each(sentence.keyword.split(''), function(index, char) {
+                    keyword.push(
+                        char == ' '
+                        ? char
+                        : '<strong>' + char + '</strong>'
+                    );
+                });
+
                 var $rows = $('.sentence-row');
                 (function() {
                     var stageWidth = stage.width();
-                    var sentenceBreakdown = sentence.split(' ');
+                    var sentenceBreakdown = sentence.phase.split(' ');
                     var totalBlocks = sentenceBreakdown.length;
                     var rows = [ [], [], [] ];
                     var wordsPerRow = Math.round(totalBlocks/3); //excluding spacing
@@ -45,7 +57,7 @@
                             var _block = $(_blockTpl)
                                 .html('<span>' + (function() {
                                     return word == '{keyword}'
-                                        ? '<em class="scene-03__keyword ' + (isKeywordHidden ? '' : 'visible') + '">' + sentence.keyword + '</em>'
+                                        ? '<em class="scene-03__keyword">' + keyword.join('') + '</em>'
                                         : word;
                                 })() + '</span>')
                                 .addClass('color-style-03')
@@ -64,6 +76,10 @@
                             }
                             if ( rowIndex == 1 && words.length == 1 ) {
                                 $rows.eq(rowIndex).prepend( _spaceBlock(rowIndex, rowHeight, initialFontSize, wordIndex) );
+                            }
+                            //always add a spacing at the last word of the 3rd line
+                            if ( rowIndex == 2 && wordIndex == words.length-1 ) {
+                                $rows.eq(rowIndex).append( _spaceBlock(rowIndex, rowHeight, initialFontSize, wordIndex) );
                             }
                         });
 
@@ -92,7 +108,6 @@
                         });
 
                         //set space width
-                        if (1) {
                         var spaceWidth = Math.floor( ( stageWidth - w)/rowBlockSpaces.length );
                         if ( spaceWidth < stageWidth*0.1 ) { //set space = 10%
                             var reduceBlockWordWidth = Math.ceil( (rowBlockSpaces.length*stageWidth*0.1)/rowBlockWords.length );
@@ -130,7 +145,6 @@
                             spaceWidth = Math.floor( ( stageWidth - _w)/rowBlockSpaces.length );
                         }
                         rowBlockSpaces.css({ width: spaceWidth + 'px' });
-                        }
 
                         //exceptional for last row, 1 word block only
                         if ( rowBlocks.length == 1 && rowIndex == 2 ) {
@@ -138,7 +152,8 @@
                         }
                     });
 
-                    $('.block-space').eq(0).css({
+                    //insert logo nfc on last space block of last row
+                    $('.block-space').last().css({
                         backgroundImage: 'url(' + response.logo + ')'
                     });
                 })();

@@ -41,7 +41,23 @@ strong {
     cursor: default;
 }
 .hidden {
-    display: none;
+    display: none !important;
+}
+.invisible {
+    visibility: none !important;
+}
+.font-preload {
+    position: absolute;
+    top: -1000em;
+    left: -1000em;
+    visibility: hidden;
+    z-index: 0;
+}
+.font-noto-sans {
+    font-family: 'Noto Sans Regular';
+}
+.font-oswald {
+    font-family: 'Oswald Regular';
 }
 .mfc-video__wrapper {
     position: absolute;
@@ -211,7 +227,6 @@ strong {
                 margin: 0 2%;
                 position: relative;
                 float: left;
-                overflow: hidden;
                 font-family: 'Oswald Regular';
             }
             .scene-03 .block-space {
@@ -228,6 +243,7 @@ strong {
                 box-sizing: border-box;
                 -moz-box-sizing: border-box;
                 -webkit-box-sizing: border-box;
+                overflow: hidden;
             }
                 .scene-03 .sentence-row.sentence-row-01 .block:first-child,
                 .scene-03 .sentence-row.sentence-row-02 .block:first-child,
@@ -242,17 +258,23 @@ strong {
             .scene-03 .sentence-row.sentence-row-01,
             .scene-03 .sentence-row.sentence-row-02 {
                 top: 0;
-                height: 25%;
+                height: 33%;
                 padding: 0 0 2%;
             }
             .scene-03 .sentence-row.sentence-row-02 {
-                top: 25%;
+                top: 33%;
             }
             .scene-03 .sentence-row.sentence-row-03 {
                 bottom: 0;
-                height: 50%;
+                height: 33%;
             }
                 .scene-03 .sentence-row .block span .scene-03__keyword {
-                    visibility: hidden;
                     font-style: normal;
+                    white-space: nowrap;
                 }
+                    .scene-03 .sentence-row .block span .scene-03__keyword > strong {
+                        background: rgba(0,0,0,.5);
+                        margin: 0 2px;
+                        padding: 0 0.05em;
+                        font-weight: normal;
+                    }

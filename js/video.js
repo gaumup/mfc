@@ -1,6 +1,8 @@
 'use strict';
 
 (function($) {
+    $('.font-preload').remove();
+
     var queryString = window.location.search;
     queryString = queryString.substring( queryString.indexOf('?')+1 );
     var configUrl = queryString.split('=')[1];
@@ -29,6 +31,7 @@
     var MFC = {};
     MFC.Video = {};
     MFC.Video.available = false; //true only when load config ready
+    MFC.Video.isStop = false; //true only when video play then stop by user or reach the end
     MFC.Video.config = {
         allowFullscreen: false,
         canPause: false, //90% tested work stability on Chrome, FF, Safari, IE9+
@@ -122,7 +125,13 @@
                     $video.css({ height: videoHeight });
                 }
                 //publish resize event to video
-                MFC.Video.pub( 'MFC.Video:resize' );
+                if ( MFC.Video.isStop ) {
+                    $video.find('.stage').empty().addClass('invisible');
+                    MFC.Video.prepareLayout();
+                }
+                else {
+                    MFC.Video.pub( 'MFC.Video:resize' );
+                }
 
                 //kaleidoscope wrapper size
                 $('.kaleidoscope__wrapper').each(function() {
@@ -136,6 +145,7 @@
             $(window).on( 'resize', function() {
                 if ( MFC.Video.available 
                     && MFC.Video.timeline !== undefined
+                    && !MFC.Video.timeline.pause()
                     && MFC.Video.timeline.progress() > 0
                 ) {
                     $video.addClass('mfc-video__resizing');
@@ -397,8 +407,9 @@
                 );
             } );
             MFC.Video.sub( 'MFC.Video:resize', function() {
-                if ( MFC.Video.available 
+                if ( MFC.Video.available
                     && MFC.Video.timeline !== undefined
+                    && !MFC.Video.timeline.paused()
                     && MFC.Video.timeline.progress() > 0
                 ) {
                     var currentTimePosition = MFC.Video.timeline.time();
@@ -433,6 +444,7 @@
     };
     MFC.Video.stop = function() {
         if ( MFC.Video.timeline === undefined ) { return false; }
+        MFC.Video.isStop = true;
         try {
         //1- set progress = zero
             $('#mfc-video-progress').css({
@@ -780,18 +792,18 @@
     MFC.Video.prepareScene02 = function() {
         //html template
         var _template = (function() {/*!
-            <div class="block anim-block-01 color-style-default" id="scene-02__anim-block-01">
+            <div class="block anim-block-01" id="scene-02__anim-block-01">
                 <div class="kaleidoscope" id="scene-02__kaleidoscope"></div>
                 <p id="scene-02__kaleidoscope-text" class="kaleidoscope-text"></p>
             </div>
 
             <div class="block img-placeholder-01" id="scene-02__img-placeholder-01">
-                <div class="block__inner color-style-default">
+                <div class="block__inner">
                     <!-- dynamic img -->
                 </div>
             </div>
 
-            <div class="block anim-block-02 color-style-default" id="scene-02__anim-block-02">
+            <div class="block anim-block-02" id="scene-02__anim-block-02">
                 <p id="scene-02__kaleidoscope-sentence" class="kaleidoscope-sentence"></p>
             </div>
         */}).toString().match(reCommentContents)[1];
@@ -811,10 +823,10 @@
         var arrTxt = MFC.Video.config.message;
 
         var i = 0;
-        var _ajustKaleidoscopeFont = Helpers.throttle(function() {
+        var _ajustKaleidoscopeFont = (function(message) {
             //word in kaleidoscope
             var _kHeight = kaleidoscope.height();
-            var _height = _kHeight*parseInt(arrTxt[i].fontSize)/100;
+            var _height = _kHeight*parseInt(message.fontSize)/100;
             kaleidoscopeText.css({
                 fontSize: _height*.9 + 'px',
                 lineHeight: _kHeight + 'px',
@@ -823,11 +835,14 @@
             //sentence
             kaleidoscopeSentenceHeight = kaleidoscopeSentence.height();
             kaleidoscopeSentence.css({
-                fontSize: kaleidoscopeSentenceHeight*.95 + 'px',
+                fontSize: kaleidoscopeSentenceHeight*.9 + 'px',
                 lineHeight: kaleidoscopeSentenceHeight + 'px',
             });
+        });
+        var _ajustKaleidoscopeFontLazy = Helpers.throttle(function() {
+            _ajustKaleidoscopeFont(arrTxt[i]);
         }, 250);
-        $(window).on( 'resize', _ajustKaleidoscopeFont );
+        $(window).on( 'resize', _ajustKaleidoscopeFontLazy );
         var _updateMessage = function(message) {
             //get/play sound
             if ( sound !== undefined ) {
@@ -851,13 +866,14 @@
             );
             //load new text to kaleidoscope
             kaleidoscopeText.text( message.text );
-            _ajustKaleidoscopeFont();
+            _ajustKaleidoscopeFont(message);
 
             //set theme color
             animBlock01.add(animBlock02).css({
                 backgroundColor: message.themeBgColor
             });
             imgPlaceHolder01.css({
+                backgroundColor: message.themeBgKaleidoscopeColor,
                 backgroundImage: 'url(' + MFC.Video.imageManager.get( message.themeBgImg ) + ')'
             });
         }
@@ -1031,6 +1047,15 @@
         var sentence = MFC.Video.config.sentence;
         //remove , ! . and space more than 1
         sentence.phase = sentence.phase.replace( new RegExp('[,.!]', 'g'), '' ).replace( new RegExp('\\s+', 'g'), ' ' );
+        //prepare keyword
+        var keyword = [];
+        $.each(sentence.keyword.split(''), function(index, char) {
+            keyword.push(
+                char == ' '
+                ? char
+                : '<strong>' + char + '</strong>'
+            );
+        });
 
         //do something before start scene 03
         //...
@@ -1142,7 +1167,7 @@
                         var _block = $(_blockTpl)
                             .html('<span>' + (function() {
                                 return word == '{keyword}'
-                                    ? '<em class="scene-03__keyword ' + (isKeywordHidden ? '' : 'visible') + '">' + sentence.keyword + '</em>'
+                                    ? '<em class="scene-03__keyword ' + (isKeywordHidden ? '' : 'visible') + '">' + keyword.join('') + '</em>'
                                     : word;
                             })() + '</span>')
                             .addClass('color-style-03')
@@ -1161,6 +1186,10 @@
                         }
                         if ( rowIndex == 1 && words.length == 1 ) {
                             $rows.eq(rowIndex).prepend( _spaceBlock(rowIndex, rowHeight, initialFontSize, wordIndex) );
+                        }
+                        //always add a spacing at the last word of the 3rd line
+                        if ( rowIndex == 2 && wordIndex == words.length-1 ) {
+                            $rows.eq(rowIndex).append( _spaceBlock(rowIndex, rowHeight, initialFontSize, wordIndex) );
                         }
                     });
 
@@ -1231,6 +1260,10 @@
                     if ( rowBlocks.length == 1 && rowIndex == 2 ) {
                         rowBlocks.outerWidth( stageWidth, true );
                     }
+                });
+                //insert logo nfc on last space block of last row
+                $('.block-space').last().css({
+                    backgroundImage: 'url(' + MFC.Video.imageManager.get( 'logo_normal' ) + ')'
                 });
             }, 250 );
             $(window).on( 'resize', _preparingContent );
