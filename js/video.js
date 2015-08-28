@@ -163,7 +163,7 @@
                     backgroundImage: 'none'
                 });
                 $body.attr('data-state', 'playing');
-                MFC.Video.timeline.play();
+                MFC.Video.timeline.seek('scene-02').play();
             });
             MFC.Video.sub( 'MFC.Video:end', function() {
                 MFC.Video.stop();
@@ -878,6 +878,7 @@
                 backgroundImage: 'url(' + MFC.Video.imageManager.get( message.themeBgImg ) + ')'
             });
         }
+        var part1Duration;
         MFC.Video.sub( 'MFC.Video.scene02:preparePart01', function() {
             //sentence at bottom
             kaleidoscopeSentence
@@ -922,13 +923,16 @@
                 } )
             ] );
             //block contains img move left
+            var t1Delay = 0.2;
             timeline.add(
                 TweenLite.to( imgPlaceHolder01Wrapper, t1/2, {
                     xPercent: -100,
-                    delay: 0.2,
+                    delay: t1Delay,
                     ease: Sine.easeIn
                 } )
             );
+
+            part1Duration = t1+t1/2+t1Delay;
         } );
 
         //loop message by word
@@ -939,6 +943,9 @@
             $.each(arrTxt, function(index, message) {
                 if ( index == 0 ) { return true; } //continue, ignore 1st letter
                 t2 = MFC.Video.soundManager.createInstance( arrTxt[index-1].themeSound ).duration/1000;
+                if ( index == 1 ) {
+                    t2 -= part1Duration;
+                }
                 if ( message.text.trim() === '' ) {
                     timeline.add(
                         (function() {
