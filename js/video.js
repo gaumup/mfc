@@ -372,6 +372,7 @@
                 } );
                 //SoundJS
                 createjs.Sound.addEventListener('fileload', function(e) {
+                    MFC.Video.soundManager.setDefaultPlayProps(e.src, {pan: 0.0001}); //fix sound play on 1 channel on Chrome link [https://github.com/CreateJS/SoundJS/issues/182]
                     MFC.Video.pub( 'MFC.Video.sound:load', e.id, e.src );
                 });
                 createjs.Sound.addEventListener('fileerror', function(e) {
