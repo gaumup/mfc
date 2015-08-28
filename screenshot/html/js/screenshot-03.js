@@ -11,15 +11,6 @@
                 var sentence = response.sentence;
                 //remove , ! . and space more than 1
                 sentence.phase = sentence.phase.replace( new RegExp('[,.!]', 'g'), '' ).replace( new RegExp('\\s+', 'g'), ' ' );
-                //prepare keyword
-                var keyword = [];
-                $.each(sentence.keyword.split(''), function(index, char) {
-                    keyword.push(
-                        char == ' '
-                        ? char
-                        : '<strong>' + char + '</strong>'
-                    );
-                });
 
                 var $rows = $('.sentence-row');
                 (function() {
@@ -57,10 +48,10 @@
                             var _block = $(_blockTpl)
                                 .html('<span>' + (function() {
                                     return word == '{keyword}'
-                                        ? '<em class="scene-03__keyword">' + keyword.join('') + '</em>'
+                                        ? '<em class="scene-03__keyword">' + sentence.keyword + '</em>'
                                         : word;
                                 })() + '</span>')
-                                .addClass('color-style-03')
+                                .addClass( word =='{keyword}' ? 'color-style-04' : 'color-style-03')
                                 .css({
                                     height: rowHeight,
                                     fontSize: initialFontSize,
@@ -153,9 +144,10 @@
                     });
 
                     //insert logo nfc on last space block of last row
-                    $('.block-space').last().css({
-                        backgroundImage: 'url(' + response.logo + ')'
-                    });
+                    $('.block-space').last()
+                        .html('<span class="mfc-logo"></span>')
+                        .removeClass('color-style-02')
+                        .addClass('color-style-01');
                 })();
             })
             .fail(function() {

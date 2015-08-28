@@ -8,7 +8,7 @@
         "color": "#ffffff"
     },
     "sentence": {
-        "phase": "My dream is to {keyword}.",
+        "phase": "My dream is to {keyword} share.",
         "keyword": "sleep"
     }
 }

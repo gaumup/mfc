@@ -542,10 +542,21 @@ strong {
                 width: 0;
                 padding: 0;
                 margin: 0;
-                background-repeat: no-repeat;
-                background-position: center center;
-                background-size: contain;
             }
+                .scene-03 .block-space span.mfc-logo {
+                    display: block;
+                    width: 60%;
+                    height: 60%;
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    margin: auto;
+                    z-index: 1;
+                    background: url(../images/logo.png) no-repeat center center;
+                    background-size: contain;
+                }
             .scene-03 .sentence-row {
                 position: absolute;
                 width: 100%;
@@ -582,12 +593,6 @@ strong {
                     font-style: normal;
                     white-space: nowrap;
                 }
-                    .scene-03 .sentence-row .block span .scene-03__keyword > strong {
-                        background: rgba(0,0,0,.5);
-                        margin: 0 2px;
-                        padding: 0 0.05em;
-                        font-weight: normal;
-                    }
                 .scene-03 .sentence-row .block span .scene-03__keyword.visible {
                     visibility: visible;
                 }
