@@ -25,7 +25,9 @@
             '--url=' . implode(',', $urls) . ' ' .
             '--img-path=' . implode(',', $imgPath) . ' ' .
             '--img-name=' . implode(',', $imgName) . ' ' .
-            '--mode=prod';
+            '--mode=prod' . ' ' .
+            '--ssl-protocol=any --ignore-ssl-errors=true';
+
 
         //execute and process response data
         $rawResults = shell_exec($cmd);

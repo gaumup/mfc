@@ -31,6 +31,7 @@
     var MFC = {};
     MFC.Video = {};
     MFC.Video.available = false; //true only when load config ready
+    MFC.Video.canPlay = false; //true only when all assets is loaded and can play immediately
     MFC.Video.isStop = false; //true only when video play then stop by user or reach the end
     MFC.Video.config = {
         allowFullscreen: false,
@@ -156,14 +157,30 @@
         //apply pub/sub to 'MFC.Video'
             Pattern.Mediator.installTo(MFC.Video);
             MFC.Video.sub( 'MFC.Video:init', function() {
-                if ( MFC.Video.config.showProgress ) {
-                    $('#mfc-video-progress-wrapper').removeClass('hidden');
+                if ( !MFC.Video.isStop ) {
+                    if ( MFC.Video.config.showProgress ) {
+                        $('#mfc-video-progress-wrapper').removeClass('hidden');
+                    }
+                    $video.css({
+                        backgroundImage: 'none'
+                    });
+                    $body.attr('data-state', 'playing');
+                    MFC.Video.timeline.play();
                 }
-                $video.css({
-                    backgroundImage: 'none'
-                });
-                $body.attr('data-state', 'playing');
-                MFC.Video.timeline.play();
+                else {
+                    //1- update <body> state
+                        $body.attr('data-state', 'stop replay');
+                        MFC.Video.player.addClass('mfc-video__waiting');
+
+                    //2- update buttons state & display
+                        MFC.Video.controls.playPauseReplayBtn.setStatus('stop');
+                        MFC.Video.controls.stopBtn.addClass('hidden');
+
+                    //3- update cover
+                        MFC.Video.player.addClass( Themes[ MFC.Video.config.theme ] ).css({
+                            backgroundImage: 'url(' + MFC.Video.config.frontCover + ')'
+                        });
+                }
             });
             MFC.Video.sub( 'MFC.Video:end', function() {
                 MFC.Video.stop();
@@ -229,6 +246,7 @@
                     if ( playPauseReplayBtn.attr('data-play') == 0 ) {
                         if ( $body.attr('data-state').indexOf('replay') > 0 ) {
                             _log('Replay video...');
+                            MFC.Video.isStop = false;
                             MFC.Video.pub( 'MFC.Video:init' );
                         }
                         else {
@@ -397,6 +415,7 @@
 
         //3- start playing video
             MFC.Video.sub( 'MFC.Video:ready', function() {
+                MFC.Video.canPlay = true;
                 loadingProgress.animate(
                     {
                         opacity: 0
@@ -444,64 +463,81 @@
             } );
     };
     MFC.Video.stop = function() {
-        if ( MFC.Video.timeline === undefined ) { return false; }
         MFC.Video.isStop = true;
         try {
         //1- set progress = zero
-            $('#mfc-video-progress').css({
-                width: 0
-            });
+            if ( MFC.Video.canPlay ) {
+                $('#mfc-video-progress').css({
+                    width: 0
+                });
+            }
 
         //2- clear all subscribes
-            //scene 1
-            MFC.Video.unsub( 'MFC.Video.scene01:preparePart01' );
-            MFC.Video.unsub( 'MFC.Video.scene01:preparePart02' );
-            MFC.Video.unsub( 'MFC.Video.scene01:preparePart03' );
-            MFC.Video.unsub( 'MFC.Video.scene01:prepareLayout' );
-            MFC.Video.unsub( 'MFC.Video.scene01:end' );
-            MFC.Video.unsub( 'MFC.Video.scene01:completed' );
-            //scene 2
-            MFC.Video.unsub( 'MFC.Video.scene02:prepareLayout' );
-            MFC.Video.unsub( 'MFC.Video.scene02:preparePart01' );
-            MFC.Video.unsub( 'MFC.Video.scene02:preparePart02' );
-            MFC.Video.unsub( 'MFC.Video.scene02:end' );
-            MFC.Video.unsub( 'MFC.Video.scene02:completed' );
-            //scene 3
-            MFC.Video.unsub( 'MFC.Video.scene03:startPart01' );
-            MFC.Video.unsub( 'MFC.Video.scene03:preparePart01' );
-            MFC.Video.unsub( 'MFC.Video.scene03:startPart02' );
-            MFC.Video.unsub( 'MFC.Video.scene03:preparePart02' );
-            MFC.Video.unsub( 'MFC.Video.scene03:startPart03' );
-            MFC.Video.unsub( 'MFC.Video.scene03:preparePart03' );
-            MFC.Video.unsub( 'MFC.Video.scene03:prepareLayout' );
-            MFC.Video.unsub( 'MFC.Video.scene03:end' );
-            MFC.Video.unsub( 'MFC.Video.scene03:completed' );
+            if ( MFC.Video.canPlay && MFC.Video.timeline !== undefined ) {
+                //scene 1
+                MFC.Video.unsub( 'MFC.Video.scene01:preparePart01' );
+                MFC.Video.unsub( 'MFC.Video.scene01:preparePart02' );
+                MFC.Video.unsub( 'MFC.Video.scene01:preparePart03' );
+                MFC.Video.unsub( 'MFC.Video.scene01:prepareLayout' );
+                MFC.Video.unsub( 'MFC.Video.scene01:end' );
+                MFC.Video.unsub( 'MFC.Video.scene01:completed' );
+                //scene 2
+                MFC.Video.unsub( 'MFC.Video.scene02:prepareLayout' );
+                MFC.Video.unsub( 'MFC.Video.scene02:preparePart01' );
+                MFC.Video.unsub( 'MFC.Video.scene02:preparePart02' );
+                MFC.Video.unsub( 'MFC.Video.scene02:end' );
+                MFC.Video.unsub( 'MFC.Video.scene02:completed' );
+                //scene 3
+                MFC.Video.unsub( 'MFC.Video.scene03:startPart01' );
+                MFC.Video.unsub( 'MFC.Video.scene03:preparePart01' );
+                MFC.Video.unsub( 'MFC.Video.scene03:startPart02' );
+                MFC.Video.unsub( 'MFC.Video.scene03:preparePart02' );
+                MFC.Video.unsub( 'MFC.Video.scene03:startPart03' );
+                MFC.Video.unsub( 'MFC.Video.scene03:preparePart03' );
+                MFC.Video.unsub( 'MFC.Video.scene03:prepareLayout' );
+                MFC.Video.unsub( 'MFC.Video.scene03:end' );
+                MFC.Video.unsub( 'MFC.Video.scene03:completed' );
+            }
 
         //3- stop all animation, return timeline position to zero
-            MFC.Video.timeline.clear(true);
-            MFC.Video.timeline = undefined;
+            if ( MFC.Video.canPlay && MFC.Video.timeline !== undefined ) {
+                MFC.Video.timeline.clear(true);
+                MFC.Video.timeline = undefined;
+            }
 
         //4- empties all generated contents
-            MFC.Video.player.find('.stage').empty().addClass('invisible');
+            if ( MFC.Video.canPlay ) {
+                MFC.Video.player.find('.stage').empty().addClass('invisible');
+            }
 
         //5- stop all sounds, note: stop but not remove sound registers
-            MFC.Video.soundManager.stop();
+            if ( MFC.Video.soundManager !== undefined ) {
+                MFC.Video.soundManager.stop();
+            }
 
         //6- update <body> state
-            $('body').attr('data-state', 'stop replay');
-            MFC.Video.player.addClass('mfc-video__waiting');
+            if ( MFC.Video.canPlay ) {
+                $('body').attr('data-state', 'stop replay');
+                MFC.Video.player.addClass('mfc-video__waiting');
+            }
 
         //7- update buttons state & display
-            MFC.Video.controls.playPauseReplayBtn.setStatus('stop');
-            MFC.Video.controls.stopBtn.addClass('hidden');
+            if ( MFC.Video.canPlay ) {
+                MFC.Video.controls.playPauseReplayBtn.setStatus('stop');
+                MFC.Video.controls.stopBtn.addClass('hidden');
+            }
 
         //8- update cover
-            MFC.Video.player.addClass( Themes[ MFC.Video.config.theme ] ).css({
-                backgroundImage: 'url(' + MFC.Video.config.frontCover + ')'
-            });
+            if ( MFC.Video.canPlay ) {
+                MFC.Video.player.addClass( Themes[ MFC.Video.config.theme ] ).css({
+                    backgroundImage: 'url(' + MFC.Video.config.frontCover + ')'
+                });
+            }
 
         //9- ... finally, preparing content for replay
-            MFC.Video.prepareLayout();
+            if ( MFC.Video.canPlay && MFC.Video.timeline === undefined ) {
+                MFC.Video.prepareLayout();
+            }
         } catch(ex) {}
     }
     MFC.Video.prepareLayout = function(autoplay) {
@@ -1055,6 +1091,18 @@
         var sentence = MFC.Video.config.sentence;
         //remove , ! . and space more than 1
         sentence.phase = sentence.phase.replace( new RegExp('[,.!]', 'g'), '' ).replace( new RegExp('\\s+', 'g'), ' ' );
+        var times = function(char, times) {
+            var result = '';
+            for ( var i=0; i < times; i++ ) {
+                result += '*';
+            }
+            return result;
+        }
+        var keyword = [];
+        $.each(sentence.keyword.split(' '), function(index, word) {
+            keyword.push( times('*', word.length) );
+        });
+        var sentenceWithKeyword = sentence.phase.replace( new RegExp('{keyword}', 'g'), keyword.join(' ') );
 
         //do something before start scene 03
         //...
@@ -1131,17 +1179,139 @@
             var _preparingContent = Helpers.throttle( function() { //need responsively update
                 $rows.empty();
                 var stageWidth = stage.width();
-                var sentenceBreakdown = sentence.phase.split(' ');
-                var totalBlocks = sentenceBreakdown.length;
-                var rows = [ [], [], [] ];
-                var wordsPerRow = Math.round(totalBlocks/3); //excluding spacing
-                rows[0] = sentenceBreakdown.slice(0, wordsPerRow);
-                rows[1] = sentenceBreakdown.slice(wordsPerRow, wordsPerRow*2);
-                rows[2] = sentenceBreakdown.slice(wordsPerRow*2);
-                //ensure 3 rows: row's height: 25%, 25%, 50%
-                var _blockTpl = (function() {/*!
-                    <div class="block"></div>
-                */}).toString().match(reCommentContents)[1];
+
+                //distribute words into 3 rows
+                var _getWordsRow = function(rowString, offset) {
+                    var lastSpacing = rowString.lastIndexOf(' ');
+                    var nextSpacing = rowString.length;
+                    if ( sentenceWithKeyword.lastIndexOf(' ') < offset+nextSpacing ) {
+                        return sentenceWithKeyword.substr(offset, lastSpacing);
+                    }
+                    else {
+                        while ( offset+nextSpacing < sentenceWithKeyword.length
+                            && sentenceWithKeyword.charAt(offset+nextSpacing) !== ' '
+                        ) {
+                            nextSpacing++;
+                        }
+                        if ( rowString.length - lastSpacing - 1 > nextSpacing - rowString.length + 1 ) {
+                            return sentenceWithKeyword.substr(offset, nextSpacing);
+                        }
+                        else {
+                            return sentenceWithKeyword.substr(offset, lastSpacing);
+                        }
+                    }
+                }
+                var _doMaskingKeyword = function(rowStr) {
+                    var asterikRegExp = new RegExp('(\\s)*(\\*)+(\\s)*', 'g');
+                    var keywordMask = '{*}';
+                    return rowStr.trim().replace( asterikRegExp, '$1' + keywordMask + '$3' );
+                }
+                var rows = (function() {
+                    var charsPerRow = Math.round(sentenceWithKeyword.length/3);
+                    var firstRow = sentenceWithKeyword.substr(0, charsPerRow);
+                    firstRow = _getWordsRow( firstRow, 0 );
+
+                    charsPerRow = Math.round(sentenceWithKeyword.substr(firstRow.length).trim().length/2);
+                    var secondRow = sentenceWithKeyword.substr(firstRow.length, charsPerRow).trim();
+                    secondRow = _getWordsRow( secondRow, firstRow.length+1 );
+
+                    var thirdRow = sentenceWithKeyword.substr(firstRow.length + secondRow.length + 1).trim();
+
+                    firstRow = _doMaskingKeyword(firstRow);
+                    secondRow = _doMaskingKeyword(secondRow);
+                    thirdRow = _doMaskingKeyword(thirdRow);
+
+                    return [ firstRow.split(' '), secondRow.split(' '), thirdRow.split(' ') ];
+                })();
+                // console.log( rows[0], rows[0].join(' ').length );
+                // console.log( rows[1], rows[1].join(' ').length );
+                // console.log( rows[2], rows[2].join(' ').length );
+
+                //re-flow keyword, make sure on 1 line
+                var keywordDistibution = [
+                    rows[0].indexOf('{*}') > -1 ? rows[0].join(' ').match(/{\*}/g).length : 0,
+                    rows[1].indexOf('{*}') > -1 ? rows[1].join(' ').match(/{\*}/g).length : 0,
+                    rows[2].indexOf('{*}') > -1 ? rows[2].join(' ').match(/{\*}/g).length : 0
+                ];
+                var max = 0;
+                var keywordInRow = 0;
+                $.each(keywordDistibution, function(index, count) {
+                    if ( count > max ) {
+                        max = count;
+                        keywordInRow = index;
+                    }
+                });
+                var _distributeRows = function(row1, row2) {
+                    if ( Math.abs(row1.length - row2.length) > 1 ) {
+                        var tmp = row1.concat(row2);
+                        var mid = (function() {
+                            var _m = Math.floor(tmp.length/2);
+                            var _offset1 = tmp.slice( 0, _m ).join('').length - tmp.slice( _m ).join('').length;
+                            var _offset2 = tmp.slice( 0, _m+1 ).join('').length - tmp.slice( _m+1 ).join('').length;
+
+                            return _offset1 < _offset2 ? _m : _m+1;
+                        })();
+                        return [ tmp.slice( 0, mid ), tmp.slice( mid ) ];
+                    }
+                    return [row1, row2];
+                }
+                var keywordRegExp = new RegExp('({\\*}(\\s{\\*})*)+', 'g');
+                switch( keywordInRow ) {
+                    case 0: //row 1, words count ascending
+                        if ( keywordDistibution[1] > 0 ) {
+                            var split2 = rows[1].slice( 0, rows[1].lastIndexOf('{*}')+1 );
+                            rows[0] = rows[0].concat( split2 );
+                            rows[1] = rows[1].slice( rows[1].lastIndexOf('{*}')+1 );
+                        }
+                        rows[0] = rows[0].join(' ').replace(keywordRegExp, '{keyword}').split(' ');
+                        var _dist = _distributeRows( rows[1], rows[2] );
+                        rows[1] = _dist[0];
+                        rows[2] = _dist[1];
+
+                        break;
+                    case 1: //row 2
+                        if ( keywordDistibution[0] > 0 ) {
+                            var split1 = rows[0].slice( 0, rows[0].indexOf('{*}') );
+                            rows[1] = rows[0].slice( split1.length ).concat(rows[1]);
+                            rows[0] = split1;
+                        }
+
+                        if ( keywordDistibution[2]  > 0 ) {
+                            var split3 = rows[2].slice( 0, rows[2].lastIndexOf('{*}')+1 );
+                            rows[1] = rows[1].concat( split3 );
+                            rows[2] = rows[2].slice( rows[2].lastIndexOf('{*}')+1 );
+                        }
+                        rows[1] = rows[1].join(' ').replace(keywordRegExp, '{keyword}').split(' ');
+                        break;
+                    case 2: //row 3, words count desending
+                        if ( keywordDistibution[1] > 0 ) {
+                            var split2 = rows[1].slice( 0, rows[1].indexOf('{*}') );
+                            rows[2] = rows[1].slice( split2.length ).concat(rows[2]);
+                            rows[1] = split2;
+                        }
+
+                        rows[2] = rows[2].join(' ').replace(keywordRegExp, '{keyword}').split(' ');
+                        var _dist = _distributeRows( rows[0], rows[1] );
+                        rows[0] = _dist[0];
+                        rows[1] = _dist[1];
+
+                        while ( rows[2].length - 1 + sentence.keyword.split(' ').length - rows[1].length >= 1
+                            && rows[2].length > 1
+                        ) {
+                            rows[1] = rows[1].concat( rows[2].shift() );
+                            if ( rows[0].length < rows[1].length ) {
+                                rows[0] = rows[0].concat( rows[1].shift() );
+                            }
+                        }
+
+                        break;
+                }
+                // console.log( rows[0] );
+                // console.log( rows[1] );
+                // console.log( rows[2] );
+
+                //set width/spaces
+                var _blockTpl = '<div class="block"></div>';
                 var _spaceBlock = (function(rowIndex, rowHeight, initialFontSize, wordIndex) {
                     var colorClass = (function() {
                         return ( wordIndex%2 == 0
@@ -1166,13 +1336,13 @@
                         var _block = $(_blockTpl)
                             .html('<span>' + (function() {
                                 return word == '{keyword}'
-                                    ? '<em class="scene-03__keyword ' + (isKeywordHidden ? '' : 'visible') + '">' + sentence.keyword + '</em>'
+                                    ? '<em class="scene-03__keyword">' + sentence.keyword + '</em>'
                                     : word;
                             })() + '</span>')
                             .addClass( word =='{keyword}' ? 'color-style-04' : 'color-style-03')
                             .css({
                                 height: rowHeight,
-                                fontSize: rowHeight,
+                                fontSize: initialFontSize,
                                 lineHeight: rowHeight + 'px'
                             });
                         $rows.eq(rowIndex).append( _block );
@@ -1182,9 +1352,6 @@
                             || ( words.length == 1 && rowIndex < 2 )
                         ) {
                             $rows.eq(rowIndex).append( _spaceBlock(rowIndex, rowHeight, initialFontSize, wordIndex) );
-                        }
-                        if ( rowIndex == 1 && words.length == 1 ) {
-                            $rows.eq(rowIndex).prepend( _spaceBlock(rowIndex, rowHeight, initialFontSize, wordIndex) );
                         }
                         //always add a spacing at the last word of the 3rd line
                         if ( rowIndex == 2 && wordIndex == words.length-1 ) {
@@ -1218,25 +1385,45 @@
 
                     //set space width
                     var spaceWidth = Math.floor( ( stageWidth - w)/rowBlockSpaces.length );
-                    if ( spaceWidth < stageWidth*0.1 ) { //set space = 10%
-                        var reduceBlockWordWidth = Math.ceil( (rowBlockSpaces.length*stageWidth*0.1)/rowBlockWords.length );
-                        if ( w > stageWidth ) {
-                            reduceBlockWordWidth += Math.ceil( (w - stageWidth)/rowBlockWords.length );
+                    if ( rowIndex == 2 ) {
+                        var lastSpaceMinWidth = stageWidth*0.1;
+                        var lastSpaceBlock = rowBlockSpaces.last();
+                        if ( spaceWidth < lastSpaceMinWidth ) {
+                            spaceWidth = Math.floor( ( stageWidth - w - lastSpaceMinWidth )/( rowBlockSpaces.length - 1 ) );
+                            lastSpaceBlock
+                                .addClass('block-space--fixed')
+                                .css({ width: lastSpaceMinWidth + 'px' });
+                        }
+                    }
+                    var spaceMin = stageWidth*0.1;
+                    if ( spaceWidth < spaceMin ) {
+                        var _stageWidth = stageWidth;
+                        var totalSpacesBlock = rowBlockSpaces.length;
+                        if ( rowIndex == 2 ) {
+                            totalSpacesBlock--;
+                            _stageWidth -= rowBlockSpaces.last().outerWidth();
+                        }
+                        var reduceBlockWordWidth = Math.ceil( (totalSpacesBlock*spaceMin)/rowBlockWords.length )
+                        if ( w > _stageWidth ) {
+                            reduceBlockWordWidth += Math.ceil( (w - _stageWidth)/rowBlockWords.length );
                         }
                         var _w = 0;
                         $.each(rowBlockWordsSortAsc, function(index, item) {
+                            var min = _stageWidth*0.15;
                             var $this = $(this);
                             var originW = $(this).outerWidth(true);
                             var outerW = originW - reduceBlockWordWidth;
-                            if ( outerW < stageWidth*.1 ) {
+                            if ( outerW < min ) {
                                 //set block word min = 10%
-                                $this.width(stageWidth*.1);
+                                $this.width(min);
                                 var _newWidth = Math.ceil( $this.outerWidth(true) );
                                 _w += _newWidth;
 
                                 //recalculate reduce block word space
-                                reduceBlockWordWidth = Math.ceil( (rowBlockSpaces.length*stageWidth*0.1)/(rowBlockWords.length - (index + 1)) );
-                                reduceBlockWordWidth += Math.ceil( ( (w - originW) - (stageWidth - _newWidth) )/(rowBlockWords.length - (index + 1)) );
+                                reduceBlockWordWidth = totalSpacesBlock == 0
+                                    ? rowBlockSpaces.last().outerWidth()
+                                    : Math.ceil( (totalSpacesBlock*min)/(rowBlockWords.length - (index + 1)) );
+                                reduceBlockWordWidth += Math.ceil( ( (w - originW) - (_stageWidth - _newWidth) )/(rowBlockWords.length - (index + 1)) );
                             }
                             else {
                                 $this.outerWidth( Math.floor(outerW), true );
@@ -1251,15 +1438,11 @@
                                 });
                             }
                         });
-                        spaceWidth = Math.floor( ( stageWidth - _w)/rowBlockSpaces.length );
+                        spaceWidth = totalSpacesBlock == 0 ? 0 : Math.floor( ( _stageWidth - _w)/totalSpacesBlock );
                     }
-                    rowBlockSpaces.css({ width: spaceWidth + 'px' });
-
-                    //exceptional for last row, 1 word block only
-                    if ( rowBlocks.length == 1 && rowIndex == 2 ) {
-                        rowBlocks.outerWidth( stageWidth, true );
-                    }
+                    rowBlockSpaces.not('.block-space--fixed').css({ width: spaceWidth + 'px' });
                 });
+
                 //insert logo nfc on last space block of last row
                 $('.block-space').last()
                     .html('<span class="mfc-logo"></span>')
@@ -1410,5 +1593,5 @@
     };
 
     //export to global
-    window[ns + 'Video_stop'] = MFC.Video.stop; //MFC_Video_stop
+    window[ns + 'Video_stop'] = MFC.Video.stop;
 })(jQuery);
