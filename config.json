@@ -144,7 +144,7 @@
         }
     ],
     "sentence": {
-        "phase": "My favourite to do is {keyword}",
-        "keyword": "i am happy"
+        "phase": "I think your {keyword} will lead you to success.",
+        "keyword": "sense of humours"
     }
 }

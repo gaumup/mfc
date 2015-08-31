@@ -11,7 +11,7 @@
                 var sentence = response.sentence;
                 //remove , ! . and space more than 1
                 sentence.phase = sentence.phase.replace( new RegExp('[,.!]', 'g'), '' ).replace( new RegExp('\\s+', 'g'), ' ' );
-                var times = function(char, times) {
+                var _times = function(char, times) {
                     var result = '';
                     for ( var i=0; i < times; i++ ) {
                         result += '*';
@@ -20,7 +20,7 @@
                 }
                 var keyword = [];
                 $.each(sentence.keyword.split(' '), function(index, word) {
-                    keyword.push( times('*', word.length) );
+                    keyword.push( _times('*', word.length) );
                 });
                 var sentenceWithKeyword = sentence.phase.replace( new RegExp('{keyword}', 'g'), keyword.join(' ') );
                 // console.log( sentenceWithKeyword )

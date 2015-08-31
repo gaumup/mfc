@@ -146,7 +146,7 @@
             $(window).on( 'resize', function() {
                 if ( MFC.Video.available 
                     && MFC.Video.timeline !== undefined
-                    && !MFC.Video.timeline.pause()
+                    && !MFC.Video.timeline.paused()
                     && MFC.Video.timeline.progress() > 0
                 ) {
                     $video.addClass('mfc-video__resizing');
@@ -413,7 +413,7 @@
                 });
             } );
 
-        //3- start playing video
+        //3- start playing video/bind resize event
             MFC.Video.sub( 'MFC.Video:ready', function() {
                 MFC.Video.canPlay = true;
                 loadingProgress.animate(
@@ -1089,20 +1089,6 @@
         var sound;
         var isStarted = false;
         var sentence = MFC.Video.config.sentence;
-        //remove , ! . and space more than 1
-        sentence.phase = sentence.phase.replace( new RegExp('[,.!]', 'g'), '' ).replace( new RegExp('\\s+', 'g'), ' ' );
-        var times = function(char, times) {
-            var result = '';
-            for ( var i=0; i < times; i++ ) {
-                result += '*';
-            }
-            return result;
-        }
-        var keyword = [];
-        $.each(sentence.keyword.split(' '), function(index, word) {
-            keyword.push( times('*', word.length) );
-        });
-        var sentenceWithKeyword = sentence.phase.replace( new RegExp('{keyword}', 'g'), keyword.join(' ') );
 
         //do something before start scene 03
         //...
@@ -1173,13 +1159,21 @@
             currentPart = scene03Part01.removeClass('invisible');
         });
         MFC.Video.sub( 'MFC.Video.scene03:preparePart01', function() {
-            stage.html(_templatePart01);
-
-            var $rows = $('.sentence-row');
-            var _preparingContent = Helpers.throttle( function() { //need responsively update
-                $rows.empty();
-                var stageWidth = stage.width();
-
+            var distributedRows = (function() {
+                //remove , ! . and space more than 1
+                sentence.phase = sentence.phase.replace( new RegExp('[,.!]', 'g'), '' ).replace( new RegExp('\\s+', 'g'), ' ' );
+                var _times = function(char, times) {
+                    var result = '';
+                    for ( var i=0; i < times; i++ ) {
+                        result += '*';
+                    }
+                    return result;
+                }
+                var keyword = [];
+                $.each(sentence.keyword.split(' '), function(index, word) {
+                    keyword.push( _times('*', word.length) );
+                });
+                var sentenceWithKeyword = sentence.phase.replace( new RegExp('{keyword}', 'g'), keyword.join(' ') );
                 //distribute words into 3 rows
                 var _getWordsRow = function(rowString, offset) {
                     var lastSpacing = rowString.lastIndexOf(' ');
@@ -1310,6 +1304,15 @@
                 // console.log( rows[1] );
                 // console.log( rows[2] );
 
+                return rows;
+            })();
+
+            stage.html(_templatePart01);
+            var $rows = $('.sentence-row');
+            var _preparingContent = Helpers.throttle( function() { //need responsively update
+                $rows.empty();
+                var stageWidth = stage.width();
+
                 //set width/spaces
                 var _blockTpl = '<div class="block"></div>';
                 var _spaceBlock = (function(rowIndex, rowHeight, initialFontSize, wordIndex) {
@@ -1327,7 +1330,7 @@
                             height: rowHeight
                         });
                 });
-                $.each(rows, function(rowIndex, words) {
+                $.each(distributedRows, function(rowIndex, words) {
                     var rowHeight = $rows.eq(rowIndex).height();
                     var initialFontSize = Math.floor(rowHeight);
                     //generate word block and space block
