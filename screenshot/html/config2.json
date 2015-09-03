@@ -8,7 +8,7 @@
         "color": "#ffffff"
     },
     "sentence": {
-        "phase": "Y O {keyword}",
-        "keyword": "aaaaaaaaaaaaaaaaaaaa"
+        "phase": "{keyword} = Happiness",
+        "keyword": "happy family"
     }
 }

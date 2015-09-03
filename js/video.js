@@ -22,7 +22,7 @@
         fun: 'mfc-video__content--theme-02',
         idol: 'mfc-video__content--theme-03',
         success: 'mfc-video__content--theme-04'
-    }
+    };
     // start matching after: comment start block => ! or @preserve => optional whitespace => newline
     // stop matching before: last newline => optional whitespace => comment end block
     var reCommentContents = /\/\*!?(?:\@preserve)?[ \t]*(?:\r\n|\n)([\s\S]*?)(?:\r\n|\n)[ \t]*\*\//;
@@ -46,13 +46,13 @@
         var store = {};
         var _set = function(id, value) {
             store[id] = value;
-        }
-        var _get = function(id) { return store[id]; }
+        };
+        var _get = function(id) { return store[id]; };
 
         return {
             set: _set,
             get: _get
-        }
+        };
     })();
     TweenLite.defaultEase = Quad.easeOut;
     MFC.Video.init = function($video, $configUrl, opts) {
@@ -73,12 +73,12 @@
                                 // .text('Pause')
                                 .attr('data-play', 1)
                                 .attr('data-pause', 0)
-                                .addClass('playing')
+                                .addClass('playing');
                             break;
                         case 'pause':
                             playPauseReplayBtn
                                 // .text('Resume')
-                                .attr('data-pause', 1)
+                                .attr('data-pause', 1);
                             break;
                         case 'stop':
                         case 'replay':
@@ -87,9 +87,9 @@
                                 .attr('data-play', 0)
                                 .attr('data-pause', 0)
                                 .attr('data-replay', 1)
-                                .removeClass('playing')
+                                .removeClass('playing');
                         case 'replay':
-                            playPauseReplayBtn
+                            //playPauseReplayBtn
                                 // .text('Replay')
                             break;
                     }
@@ -106,7 +106,7 @@
                     });
                 }
                 else {
-                    return (function() {});
+                    return (function() { $.noop(); });
                 }
             })();
 
@@ -144,7 +144,7 @@
             }, 250 );
             _setVideoHeightLazy();
             $(window).on( 'resize', function() {
-                if ( MFC.Video.available 
+                if ( MFC.Video.available
                     && MFC.Video.timeline !== undefined
                     && !MFC.Video.timeline.paused()
                     && MFC.Video.timeline.progress() > 0
@@ -202,7 +202,7 @@
             var _setLoadingProgressFont = Helpers.throttle(function() {
                 loadingProgressHeight = loadingProgress.height();
                 loadingProgress.css({
-                    fontSize: loadingProgressHeight*.08 + 'px',
+                    fontSize: loadingProgressHeight*0.08 + 'px',
                     lineHeight: loadingProgressHeight + 'px'
                 });
             }, 250);
@@ -457,7 +457,7 @@
                 $('<p class="mfc-video-error-text">Sorry, this video is no longer exists!</p>')
                     .appendTo($video)
                     .css({
-                        fontSize: $video.height()*.03 + 'px',
+                        fontSize: $video.height()*0.03 + 'px',
                         lineHeight: $video.height() + 'px'
                     });
             } );
@@ -865,14 +865,14 @@
             var _kHeight = kaleidoscope.height();
             var _height = _kHeight*parseInt(message.fontSize)/100;
             kaleidoscopeText.css({
-                fontSize: _height*.9 + 'px',
+                fontSize: _height*0.9 + 'px',
                 lineHeight: _kHeight + 'px',
             });
 
             //sentence
             kaleidoscopeSentenceHeight = kaleidoscopeSentence.height();
             kaleidoscopeSentence.css({
-                fontSize: kaleidoscopeSentenceHeight*.9 + 'px',
+                fontSize: kaleidoscopeSentenceHeight*0.9 + 'px',
                 lineHeight: kaleidoscopeSentenceHeight + 'px',
             });
         });
@@ -920,7 +920,7 @@
             kaleidoscopeSentence
                 .empty()
                 .css({
-                    fontSize: parseInt(kaleidoscopeSentenceHeight)*.9 + 'px',
+                    fontSize: parseInt(kaleidoscopeSentenceHeight)*0.9 + 'px',
                     lineHeight: kaleidoscopeSentenceHeight + 'px'
                 });
 
@@ -989,7 +989,7 @@
                             kaleidoscopeSentence.append( arrTxt[index-1].text );
                         }),
                         '+=' + t2
-                    );    
+                    );
                 }
                 else {
                     timeline.add(
@@ -1170,6 +1170,7 @@
                     return result;
                 }
                 var keyword = [];
+                var keywordMask = '{*}';
                 $.each(sentence.keyword.split(' '), function(index, word) {
                     keyword.push( _times('*', word.length) );
                 });
@@ -1197,7 +1198,6 @@
                 }
                 var _doMaskingKeyword = function(rowStr) {
                     var asterikRegExp = new RegExp('(\\s)*(\\*)+(\\s)*', 'g');
-                    var keywordMask = '{*}';
                     return rowStr.trim().replace( asterikRegExp, '$1' + keywordMask + '$3' );
                 }
                 var rows = (function() {
@@ -1222,19 +1222,14 @@
                 // console.log( rows[2], rows[2].join(' ').length );
 
                 //re-flow keyword, make sure on 1 line
+                var keywordMaskRegExp = new RegExp('{\\*}', 'g');
                 var keywordDistibution = [
-                    rows[0].indexOf('{*}') > -1 ? rows[0].join(' ').match(/{\*}/g).length : 0,
-                    rows[1].indexOf('{*}') > -1 ? rows[1].join(' ').match(/{\*}/g).length : 0,
-                    rows[2].indexOf('{*}') > -1 ? rows[2].join(' ').match(/{\*}/g).length : 0
+                    rows[0].indexOf(keywordMask) > -1 ? rows[0].join(' ').match(keywordMaskRegExp).length : 0,
+                    rows[1].indexOf(keywordMask) > -1 ? rows[1].join(' ').match(keywordMaskRegExp).length : 0,
+                    rows[2].indexOf(keywordMask) > -1 ? rows[2].join(' ').match(keywordMaskRegExp).length : 0
                 ];
-                var max = 0;
-                var keywordInRow = 0;
-                $.each(keywordDistibution, function(index, count) {
-                    if ( count > max ) {
-                        max = count;
-                        keywordInRow = index;
-                    }
-                });
+                //always get the first most row have when more than 1 row has the same number of keyword
+                var keywordInRow = keywordDistibution.indexOf( Math.max.apply( null, keywordDistibution ) );
                 var _distributeRows = function(row1, row2) {
                     if ( Math.abs(row1.length - row2.length) > 1 ) {
                         var tmp = row1.concat(row2);
@@ -1253,9 +1248,14 @@
                 switch( keywordInRow ) {
                     case 0: //row 1, words count ascending
                         if ( keywordDistibution[1] > 0 ) {
-                            var split2 = rows[1].slice( 0, rows[1].lastIndexOf('{*}')+1 );
+                            var split2 = rows[1].slice( 0, rows[1].lastIndexOf(keywordMask)+1 );
                             rows[0] = rows[0].concat( split2 );
-                            rows[1] = rows[1].slice( rows[1].lastIndexOf('{*}')+1 );
+                            rows[1] = rows[1].slice( rows[1].lastIndexOf(keywordMask)+1 );
+                        }
+                        if ( keywordDistibution[2] > 0 ) {
+                            var split3 = rows[2].slice( 0, rows[2].lastIndexOf(keywordMask)+1 );
+                            rows[0] = rows[0].concat( split3 );
+                            rows[2] = rows[2].slice( rows[2].lastIndexOf(keywordMask)+1 );
                         }
                         rows[0] = rows[0].join(' ').replace(keywordRegExp, '{keyword}').split(' ');
                         var _dist = _distributeRows( rows[1], rows[2] );
@@ -1265,21 +1265,52 @@
                         break;
                     case 1: //row 2
                         if ( keywordDistibution[0] > 0 ) {
-                            var split1 = rows[0].slice( 0, rows[0].indexOf('{*}') );
+                            var split1 = rows[0].slice( 0, rows[0].indexOf(keywordMask) );
                             rows[1] = rows[0].slice( split1.length ).concat(rows[1]);
                             rows[0] = split1;
                         }
-
-                        if ( keywordDistibution[2]  > 0 ) {
-                            var split3 = rows[2].slice( 0, rows[2].lastIndexOf('{*}')+1 );
-                            rows[1] = rows[1].concat( split3 );
-                            rows[2] = rows[2].slice( rows[2].lastIndexOf('{*}')+1 );
+                        if ( keywordDistibution[2] > 0 ) {
+                            var split3 = rows[2].slice( 0, rows[2].lastIndexOf(keywordMask)+1 );
+                            if ( split3.length == rows[2].length ) {
+                                var split2 = rows[1].slice( rows[1].lastIndexOf(keywordMask) );
+                                if ( split2.length == rows[1].length ) {
+                                    if ( rows[0].length > 1 ) { //keyword should go on line #3
+                                        rows[2] = rows[1].concat( rows[2] );
+                                        rows[1] = [];
+                                        var _dist = _distributeRows( rows[0], rows[1] );
+                                        rows[0] = _dist[0];
+                                        rows[1] = _dist[1];
+                                        rows[2] = rows[2].join(' ').replace(keywordRegExp, '{keyword}').split(' ');
+                                    }
+                                    else { //keyword should go on line #2
+                                        rows[2] = ['&nbsp;'];
+                                        rows[1] = rows[1].join(' ').replace(keywordRegExp, '{keyword}').split(' ');
+                                    }
+                                }
+                                else { //keyword should go on line #3
+                                    rows[2] = split2.concat( rows[2] );
+                                    rows[1] = rows[1].slice( 0, rows[1].indexOf(keywordMask) );
+                                    rows[2] = rows[2].join(' ').replace(keywordRegExp, '{keyword}').split(' ');
+                                }
+                            }
+                            else { //keyword should go on line #2
+                                rows[1] = rows[1].concat( split3 );
+                                rows[2] = rows[2].slice( rows[2].lastIndexOf(keywordMask)+1 );
+                                rows[1] = rows[1].join(' ').replace(keywordRegExp, '{keyword}').split(' ');
+                            }
                         }
-                        rows[1] = rows[1].join(' ').replace(keywordRegExp, '{keyword}').split(' ');
+                        else {
+                            rows[1] = rows[1].join(' ').replace(keywordRegExp, '{keyword}').split(' ');
+                        }
                         break;
                     case 2: //row 3, words count desending
+                        if ( keywordDistibution[0] > 0 ) {
+                            var split1 = rows[0].slice( 0, rows[0].indexOf(keywordMask) );
+                            rows[2] = rows[0].slice( split1.length ).concat(rows[2]);
+                            rows[0] = split1;
+                        }
                         if ( keywordDistibution[1] > 0 ) {
-                            var split2 = rows[1].slice( 0, rows[1].indexOf('{*}') );
+                            var split2 = rows[1].slice( 0, rows[1].indexOf(keywordMask) );
                             rows[2] = rows[1].slice( split2.length ).concat(rows[2]);
                             rows[1] = split2;
                         }
@@ -1539,19 +1570,19 @@
 
                 var bannerHeight = banner.height();
                 banner.css({
-                    fontSize: bannerHeight*.6 + 'px',
+                    fontSize: bannerHeight*0.6 + 'px',
                     lineHeight: bannerHeight + 'px'
                 });
 
                 var bigDayHeight = bigDay.height();
                 bigDay.css({
-                    fontSize: bigDayHeight*.7 + 'px',
+                    fontSize: bigDayHeight*0.7 + 'px',
                     lineHeight: bigDayHeight + 'px'
                 });
 
                 var copyrightHeight = copyright.height();
                 copyright.css({
-                    fontSize: copyrightHeight*.75 + 'px',
+                    fontSize: copyrightHeight*0.75 + 'px',
                     lineHeight: copyrightHeight + 'px'
                 });
             }, 250);

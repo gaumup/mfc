@@ -28,7 +28,6 @@
             '--mode=prod' . ' ' .
             '--ssl-protocol=any --ignore-ssl-errors=true';
 
-
         //execute and process response data
         $rawResults = shell_exec($cmd);
         $results = json_decode( $rawResults, true );

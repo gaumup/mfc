@@ -19,6 +19,7 @@
                     return result;
                 }
                 var keyword = [];
+                var keywordMask = '{*}';
                 $.each(sentence.keyword.split(' '), function(index, word) {
                     keyword.push( _times('*', word.length) );
                 });
@@ -49,7 +50,6 @@
                 }
                 var _doMaskingKeyword = function(rowStr) {
                     var asterikRegExp = new RegExp('(\\s)*(\\*)+(\\s)*', 'g');
-                    var keywordMask = '{*}';
                     return rowStr.trim().replace( asterikRegExp, '$1' + keywordMask + '$3' );
                 }
                 var rows = (function() {
@@ -74,19 +74,14 @@
                 // console.log( rows[2], rows[2].join(' ').length );
 
                 //re-flow keyword, make sure on 1 line
+                var keywordMaskRegExp = new RegExp('{\\*}', 'g');
                 var keywordDistibution = [
-                    rows[0].indexOf('{*}') > -1 ? rows[0].join(' ').match(/{\*}/g).length : 0,
-                    rows[1].indexOf('{*}') > -1 ? rows[1].join(' ').match(/{\*}/g).length : 0,
-                    rows[2].indexOf('{*}') > -1 ? rows[2].join(' ').match(/{\*}/g).length : 0
+                    rows[0].indexOf(keywordMask) > -1 ? rows[0].join(' ').match(keywordMaskRegExp).length : 0,
+                    rows[1].indexOf(keywordMask) > -1 ? rows[1].join(' ').match(keywordMaskRegExp).length : 0,
+                    rows[2].indexOf(keywordMask) > -1 ? rows[2].join(' ').match(keywordMaskRegExp).length : 0
                 ];
-                var max = 0;
-                var keywordInRow = 0;
-                $.each(keywordDistibution, function(index, count) {
-                    if ( count > max ) {
-                        max = count;
-                        keywordInRow = index;
-                    }
-                });
+                //always get the first most row have when more than 1 row has the same number of keyword
+                var keywordInRow = keywordDistibution.indexOf( Math.max.apply( null, keywordDistibution ) );
                 var _distributeRows = function(row1, row2) {
                     if ( Math.abs(row1.length - row2.length) > 1 ) {
                         var tmp = row1.concat(row2);
@@ -105,9 +100,14 @@
                 switch( keywordInRow ) {
                     case 0: //row 1, words count ascending
                         if ( keywordDistibution[1] > 0 ) {
-                            var split2 = rows[1].slice( 0, rows[1].lastIndexOf('{*}')+1 );
+                            var split2 = rows[1].slice( 0, rows[1].lastIndexOf(keywordMask)+1 );
                             rows[0] = rows[0].concat( split2 );
-                            rows[1] = rows[1].slice( rows[1].lastIndexOf('{*}')+1 );
+                            rows[1] = rows[1].slice( rows[1].lastIndexOf(keywordMask)+1 );
+                        }
+                        if ( keywordDistibution[2] > 0 ) {
+                            var split3 = rows[2].slice( 0, rows[2].lastIndexOf(keywordMask)+1 );
+                            rows[0] = rows[0].concat( split3 );
+                            rows[2] = rows[2].slice( rows[2].lastIndexOf(keywordMask)+1 );
                         }
                         rows[0] = rows[0].join(' ').replace(keywordRegExp, '{keyword}').split(' ');
                         var _dist = _distributeRows( rows[1], rows[2] );
@@ -117,21 +117,52 @@
                         break;
                     case 1: //row 2
                         if ( keywordDistibution[0] > 0 ) {
-                            var split1 = rows[0].slice( 0, rows[0].indexOf('{*}') );
+                            var split1 = rows[0].slice( 0, rows[0].indexOf(keywordMask) );
                             rows[1] = rows[0].slice( split1.length ).concat(rows[1]);
                             rows[0] = split1;
                         }
-
-                        if ( keywordDistibution[2]  > 0 ) {
-                            var split3 = rows[2].slice( 0, rows[2].lastIndexOf('{*}')+1 );
-                            rows[1] = rows[1].concat( split3 );
-                            rows[2] = rows[2].slice( rows[2].lastIndexOf('{*}')+1 );
+                        if ( keywordDistibution[2] > 0 ) {
+                            var split3 = rows[2].slice( 0, rows[2].lastIndexOf(keywordMask)+1 );
+                            if ( split3.length == rows[2].length ) {
+                                var split2 = rows[1].slice( rows[1].lastIndexOf(keywordMask) );
+                                if ( split2.length == rows[1].length ) {
+                                    if ( rows[0].length > 1 ) { //keyword should go on line #3
+                                        rows[2] = rows[1].concat( rows[2] );
+                                        rows[1] = [];
+                                        var _dist = _distributeRows( rows[0], rows[1] );
+                                        rows[0] = _dist[0];
+                                        rows[1] = _dist[1];
+                                        rows[2] = rows[2].join(' ').replace(keywordRegExp, '{keyword}').split(' ');
+                                    }
+                                    else { //keyword should go on line #2
+                                        rows[2] = ['&nbsp;'];
+                                        rows[1] = rows[1].join(' ').replace(keywordRegExp, '{keyword}').split(' ');
+                                    }
+                                }
+                                else { //keyword should go on line #3
+                                    rows[2] = split2.concat( rows[2] );
+                                    rows[1] = rows[1].slice( 0, rows[1].indexOf(keywordMask) );
+                                    rows[2] = rows[2].join(' ').replace(keywordRegExp, '{keyword}').split(' ');
+                                }
+                            }
+                            else { //keyword should go on line #2
+                                rows[1] = rows[1].concat( split3 );
+                                rows[2] = rows[2].slice( rows[2].lastIndexOf(keywordMask)+1 );
+                                rows[1] = rows[1].join(' ').replace(keywordRegExp, '{keyword}').split(' ');
+                            }
                         }
-                        rows[1] = rows[1].join(' ').replace(keywordRegExp, '{keyword}').split(' ');
+                        else {
+                            rows[1] = rows[1].join(' ').replace(keywordRegExp, '{keyword}').split(' ');
+                        }
                         break;
                     case 2: //row 3, words count desending
+                        if ( keywordDistibution[0] > 0 ) {
+                            var split1 = rows[0].slice( 0, rows[0].indexOf(keywordMask) );
+                            rows[2] = rows[0].slice( split1.length ).concat(rows[2]);
+                            rows[0] = split1;
+                        }
                         if ( keywordDistibution[1] > 0 ) {
-                            var split2 = rows[1].slice( 0, rows[1].indexOf('{*}') );
+                            var split2 = rows[1].slice( 0, rows[1].indexOf(keywordMask) );
                             rows[2] = rows[1].slice( split2.length ).concat(rows[2]);
                             rows[1] = split2;
                         }

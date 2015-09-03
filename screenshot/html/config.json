@@ -1,10 +1,10 @@
 {
     "name": "MFC",
-    "theme": "mfc-video__content--theme-01",
+    "theme": "mfc-video__content--theme-03",
     "logo": "images/logo.png",
     "image": "images/kaka.jpg",
     "idol": {
-        "image": "images/cover-01.png",
+        "image": "images/kaka.jpg",
         "color": "#ffffff"
     },
     "sentence": {
